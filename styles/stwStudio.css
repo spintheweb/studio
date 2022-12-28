@@ -1,0 +1,110 @@
+:root {
+    --specialColor: orange;
+
+    font-family: sans-serif;
+    font-size: 10pt;
+    color-scheme: dark;
+}
+
+html,
+body {
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: 0;
+}
+
+h2 {
+    font-size: 1em;
+    font-weight: normal;
+    text-transform: uppercase;
+    padding: 0.5em;
+    margin: 0;    
+}
+
+body {
+    display: grid;
+    grid-template-columns: auto 20em 0.25em 1fr;
+    grid-template-rows: auto 2em;
+}
+
+section {
+    position: relative;
+    bottom: 0;
+    right: 0;
+}
+
+iframe {
+    position: relative;
+    right: 0;
+    bottom: 0;
+    border: none;
+}
+
+.stwsToolbar {
+    background-color: rgba(127, 127, 127, 0.3);
+    display: grid;
+    grid-template-rows: auto auto auto auto auto 1fr auto auto;
+}
+
+.stwsToolbar i {
+    border-left: thin solid transparent;
+    padding: 0.25em;
+    cursor: pointer;
+    font-size: 2em;
+}
+
+.stwsToolbar i[selected] {
+    border-left: thin solid;
+}
+
+.stwsToolbar i:hover {
+    background-color: rgba(127, 127, 127, 0.4);
+}
+
+.stwsStatusbar {
+    grid-column: 1 / 5;
+    grid-row: 2;
+    background-color: var(--specialColor);
+}
+
+.stwsTree {
+    background-color: rgba(127, 127, 127, 0.2);
+}
+
+.stwsTabs {
+    background-color: rgba(127, 127, 127, 0.1);
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.stwsTabLabel {
+    display: inline-block;
+    background-color: rgba(127, 127, 127, 0.3);
+    padding: 0.5em 1em;
+    white-space: nowrap;
+}
+
+.stwsTabLabel::after {
+    content: "\0000D7";
+    float: right;
+    padding-left: 1em;
+    cursor: pointer;
+    font-size: larger;
+}
+
+.swtpTabLabel:hover {
+    color-scheme: dark;
+}
+
+.stwsTab:not([selected]) {
+    display: none;
+}
+
+.stwsVSplitter:hover {
+    background-color: var(--specialColor) !important;
+    cursor: ew-resize;
+}

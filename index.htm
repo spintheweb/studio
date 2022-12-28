@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STW Studio</title>
+    <link rel="stylesheet" href="styles/stwStudio.css">
+    <link rel="stylesheet" href="styles/fontawesome/css/all.css">
+</head>
+
+<body>
+    <section class="stwsToolbar">
+        <i class="fa-thin fa-fw fa-sitemap" title="Webbase" selected></i>
+        <i class="fa-thin fa-fw fa-search" title="Search"></i>
+        <i class="fa-thin fa-fw fa-database" title="Datasources"></i>
+        <i class="fa-thin fa-fw fa-shield" title="Security"></i>
+        <i class="fa-thin fa-fw fa-copy" title="Files"></i>
+        <span></span>
+        <i class="fa-thin fa-fw fa-circle-user" title="Account"></i>
+        <i class="fa-thin fa-fw fa-cog" title="Settings"></i>
+    </section>
+    <section class="stwsAside">
+        <article>
+            <h2>Webbase</h2>
+            <ul class="stwsTree">
+            </ul>
+        </article>
+        <article>
+            <h2>Properties</h2>
+        </article>
+    </section>
+    <div class="stwsVSplitter"></div>
+    <section>
+        <ul class="stwsTabs">
+            <li class="stwsTabLabel" selected ><i class="fa-thin fa-fw fa-browsers"></i> Browser</li>
+            <li class="stwsTabLabel"><i class="fa-thin fa-fw fa-file-code"></i> index.htm</li>
+            <li class="stwsTabLabel"><i class="fa-thin fa-fw fa-file-code"></i> stwsStudio.js</li>
+            <li class="stwsTabLabel"><i class="fa-thin fa-fw fa-file-code"></i> stwsStudio.css</li>
+            <li class="stwsTab" selected>
+                <iframe title="Site" src="https://www.keyvisions.it"></iframe>
+            </li>
+            <li class="stwsTab">
+            </li>
+            <li class="stwsTab">
+            </li>
+            <li class="stwsTab">
+            </li>
+        </ul>
+    </section>
+    <section class="stwsStatusbar"></section>
+
+    <script src="scripts/stwStudio.js"></script>
+</body>
+
+</html>

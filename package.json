@@ -1,0 +1,14 @@
+{
+  "name": "stwpstudio",
+  "version": "1.0.0",
+  "description": "Spin the Web Studio is designed to ease web development",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "nodejs"
+  ],
+  "author": "Giancarlo Trevisan",
+  "license": "MIT"
+}
