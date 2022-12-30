@@ -25,6 +25,19 @@ function managePanel(event) {
     }
 }
 
+function manageBrowse(event) {
+    let target = event.target;
+    switch (target.dataset.action) {
+        case "back":
+            break;
+        case "refresh":
+            document.querySelector("").documentWindow.location;
+            break;
+        case "home":
+            break;
+    }
+}
+
 function setURL(event) {
     let target = event.target;
     if (target.tagName === "INPUT")
@@ -45,4 +58,6 @@ window.addEventListener("load", () => {
             }
         })
     });
+
+    document.querySelector(".stwPanels").firstChild.setAttribute("selected", null);
 });

@@ -8,8 +8,6 @@ const port = 3000;
 const server = http.createServer((req, res) => {
     if (req.method == "GET")
         getRequest(req, res);
-    else if (req.method == "POST")
-        postRequest(req, res);
 });
 
 function getRequest(req, res) {
@@ -25,8 +23,7 @@ function getRequest(req, res) {
                 res.statusCode = 200;
                 res.end(data);
             } else if (err.code === 'ENOENT') {
-                res.statusCode = 200;
-                // API request
+                getAPI(req, res);
             } else {
                 res.statusCode = 400;
                 console.log(err.code);
@@ -35,8 +32,9 @@ function getRequest(req, res) {
         });
 }
 
-function postRequest(req, res) {
-
+function getAPI(req, res) {
+    // WBDL and File system
+    res.statusCode = 200;
 }
 
 server.listen(port, hostname, () => {
