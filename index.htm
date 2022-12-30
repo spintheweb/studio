@@ -11,7 +11,7 @@
 </head>
 
 <body>
-    <section class="stwsToolbar">
+    <section class="stwToolbar">
         <i class="fa-thin fa-fw fa-sitemap" title="Webbase" selected></i>
         <i class="fa-thin fa-fw fa-search" title="Search"></i>
         <i class="fa-thin fa-fw fa-database" title="Datasources"></i>
@@ -21,35 +21,38 @@
         <i class="fa-thin fa-fw fa-circle-user" title="Account"></i>
         <i class="fa-thin fa-fw fa-cog" title="Settings"></i>
     </section>
-    <section class="stwsAside">
+    <section class="stwAside">
         <article>
             <h2>Webbase</h2>
-            <ul class="stwsTree">
+            <ul class="stwTree">
             </ul>
         </article>
         <article>
             <h2>Properties</h2>
         </article>
     </section>
-    <div class="stwsVSplitter"></div>
-    <section>
-        <ul class="stwsTabs">
-            <li class="stwsTabLabel" selected ><i class="fa-thin fa-fw fa-browsers"></i> Browser</li>
-            <li class="stwsTabLabel"><i class="fa-thin fa-fw fa-file-code"></i> index.htm</li>
-            <li class="stwsTabLabel"><i class="fa-thin fa-fw fa-file-code"></i> stwsStudio.js</li>
-            <li class="stwsTabLabel"><i class="fa-thin fa-fw fa-file-code"></i> stwsStudio.css</li>
-            <li class="stwsTab" selected>
-                <iframe title="Site" src="https://www.keyvisions.it"></iframe>
-            </li>
-            <li class="stwsTab">
-            </li>
-            <li class="stwsTab">
-            </li>
-            <li class="stwsTab">
-            </li>
-        </ul>
+    <div class="stwVSplitter"></div>
+    <section class="stwTabs">
+        <div>
+            <label selected><i class="fa-thin fa-fw fa-browsers"></i> Browser</label>
+            <label><i class="fa-thin fa-fw fa-file-code"></i> index.htm</label>
+            <label><i class="fa-thin fa-fw fa-file-code"></i> stwStudio.js</label>
+            <label><i class="fa-thin fa-fw fa-file-code"></i> stwStudio.css</label>
+        </div>
+        <div class="stwTab" selected>
+            <div style="font-size:1.5em; display: flex;">
+                <i class="fa-thin fa-fw fa-arrow-left"></i>&nbsp;
+                <i class="fa-thin fa-fw fa-arrow-rotate-right"></i>&nbsp;
+                <i class="fa-thin fa-fw fa-house"></i>&nbsp;&nbsp;
+                <input type="url" name="url" style="flex:2" placeholder="url" onchange="setURL(event)">
+            </div>
+            <iframe title="Site" src="/template.htm" onload="setURL(event)"></iframe>
+        </div>
+        <textarea class="stwTab" src="/index.htm"></textarea>
+        <textarea class="stwTab" src="/scripts/stwStudio.js"></textarea>
+        <textarea class="stwTab" src="/styles/stwStudio.css"></textarea>
     </section>
-    <section class="stwsStatusbar"></section>
+    <section class="stwStatusbar"></section>
 
     <script src="scripts/stwStudio.js"></script>
 </body>
