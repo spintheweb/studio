@@ -2,14 +2,14 @@
   "name": "stwpstudio",
   "version": "1.0.0",
   "description": "Spin the Web Studio is designed to ease development of Spin the Web sites",
-  "main": "studio.js",
+  "main": "index.js",
   "scripts": {
     "start": "node .",
     "debug": "nodemon .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "stwp", "development", "studio", "wbdl"
+    "stwp", "studio", "wbdl"
   ],
   "author": "Giancarlo Trevisan",
   "license": "MIT",

@@ -7,4 +7,4 @@ The WBDL (Webbase Description Language) file describes the site [Todo]
 
 ## Versions
 * STW Studio Ver. 1.x.x 
-* STW Studio Ver. 2.x.x (Will be Spin the Web site)
+* STW Studio Ver. 2.x.x (Will be a Spin the Web site)
