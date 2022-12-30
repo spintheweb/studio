@@ -1,15 +1,31 @@
-<div>
-    <h2><i class="fa-thin fa-fw"></i> Security</h2>
-    <ul>
-        <li><i class="fa-thin fa-user-group"></i> Guests</li>
-        <li><i class="fa-thin fa-user-group"></i> Users</li>
-        <li><i class="fa-thin fa-user-group"></i> Translators</li>
-        <li><i class="fa-thin fa-user-group"></i> Developers</li>
-        <li><i class="fa-thin fa-user-group"></i> Administrators</li>
-    </ul>
+<div onclick="manageSecurity(event)">
+    <h2><i class="fa-thin fa-fw"></i> security
+        <span>
+            <i class="fa-thin fa-fw fa-plus" title="Add group" data-action="addGroup"></i>
+        </span>
+    </h2>
+    <table>
+        <tbody>
+            <tr>
+                <td data-group="guests"><i class="fa-solid fa-fw fa-users"></i> Guests</td>
+            </tr>
+            <tr>
+                <td data-group="users"><i class="fa-solid fa-fw fa-users"></i> Users</td>
+            </tr>
+            <tr>
+                <td data-group="translators"><i class="fa-solid fa-fw fa-users"></i> Translators</td>
+            </tr>
+            <tr>
+                <td data-group="developers"><i class="fa-solid fa-fw fa-users"></i> Developers</td>
+            </tr>
+            <tr>
+                <td data-group="administrators"><i class="fa-solid fa-fw fa-users"></i> Administrators</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 <div>
-    <h2><i class="fa-thin fa-fw fa-angle-right"></i> Properties</h2>
+    <h2><i class="fa-thin fa-fw fa-angle-right"></i> properties</h2>
     <form name="properties">
     </form>
 </div>

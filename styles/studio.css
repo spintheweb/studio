@@ -1,5 +1,9 @@
 :root {
     --specialColor: orange;
+    --dark: rgba(127, 127, 127, 0.2);
+    --medium: rgba(127, 127, 127, 0.3);
+    --light: rgba(127, 127, 127, 0.4);
+    --highlite: rgba(127, 127, 127, 0.5);
 
     font-family: sans-serif;
     font-size: 10pt;
@@ -16,12 +20,26 @@ body {
     margin: 0;
 }
 
-h2 {
+td {
+    padding: 0.25em 0.5em;
+}
+
+.stwPanel h2 {
+    border-top: thin solid var(--light);
     font-size: 1em;
+    font-variant: small-caps;
     font-weight: normal;
-    text-transform: uppercase;
     padding: 0.5em;
-    margin: none;
+    margin: 0;
+}
+
+.stwPanel h2>span {
+    float: right;
+}
+
+.stwPanel h2>span>i:hover {
+    background-color: var(--light);
+    cursor: pointer;
 }
 
 textarea {
@@ -47,9 +65,9 @@ iframe {
 }
 
 .stwPanels {
-    background-color: rgba(127, 127, 127, 0.3);
+    background-color: var(--light);
     display: grid;
-    grid-template-rows: auto auto auto auto auto 1fr auto auto;
+    grid-template-rows: repeat(5, auto) 1fr repeat(1, auto);
 }
 
 .stwPanels i {
@@ -64,17 +82,30 @@ iframe {
 }
 
 .stwPanels i:hover {
-    background-color: rgba(127, 127, 127, 0.4);
+    background-color: var(--highlite);
 }
 
 .stwPanel {
     display: grid;
     grid-template-rows: 1fr auto auto;
-    background-color: rgba(127, 127, 127, 0.2);
+    background-color: var(--medium);
 }
 
-.stwPanel:empty {
-    display: none;
+.stwPanel:not(:empty) {
+    width: 20em;
+}
+
+.stwPanel i {
+    padding: 0.25em 0;
+}
+
+.stwPanel table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.stwPanel tr:hover {
+    background-color: var(--highlite);
+    cursor: pointer;
 }
 
 .stwStatusbar {
@@ -94,12 +125,13 @@ iframe {
 .stwMain {
     display: grid;
     grid-template-rows: 2.5em 1fr;
-    background-color: rgba(127, 127, 127, 0.1);
+    background-color: var(--dark);
+    white-space: nowrap;
 }
 
 .stwTabLabel {
     display: inline-block;
-    background-color: rgba(127, 127, 127, 0.3);
+    background-color: var(--light);
     padding: 0.5em 1em;
     white-space: nowrap;
 }
@@ -125,6 +157,10 @@ iframe {
 
 .stwTab:not([selected]) {
     display: none;
+}
+
+.stwVSplitter {
+    background-color: var(--medium);
 }
 
 .stwVSplitter:hover {

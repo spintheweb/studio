@@ -13,28 +13,32 @@ const server = http.createServer((req, res) => {
 function getRequest(req, res) {
     let pathname = req.url === "/" ? "/index.html" : url.parse(req.url, true).pathname;
 
-    // paths which contain /. are off limit
-    if (pathname.indexOf("/.") !== -1) {
+    if (pathname.indexOf("/.") !== -1) // paths that contain /. are off limit
         res.statusCode = 403;
-        res.end();
-    } else
+    else if (pathname.startsWith("/api/")) // paths that start with /api/ are API calls
+        getAPI(req, res);
+    else
         fs.readFile(`${__dirname}${pathname}`, null, (err, data) => {
             if (err == null) {
                 res.statusCode = 200;
-                res.end(data);
-            } else if (err.code === 'ENOENT') {
-                getAPI(req, res);
-            } else {
+                res.write(data);
+            } else if (err.code !== "ENOENT") {
                 res.statusCode = 400;
-                console.log(err.code);
-                res.end();
+                console.error(err.code);
             }
+            res.end();
         });
 }
 
+// There are two types of API GET calls: WBDL and File System
 function getAPI(req, res) {
-    // WBDL and File system
+    let pathname = url.parse(req.url, true).pathname;
     res.statusCode = 200;
+    res.end();
+}
+// There are two types of API POST calls: WBDL and File System
+function postAPI(req, res) {
+    res.end();
 }
 
 server.listen(port, hostname, () => {

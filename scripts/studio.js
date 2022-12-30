@@ -25,6 +25,14 @@ function managePanel(event) {
     }
 }
 
+function manageSecurity(event) {
+    
+}
+
+function manageDatasource(event) {
+    
+}
+
 function manageBrowse(event) {
     let target = event.target;
     switch (target.dataset.action) {
