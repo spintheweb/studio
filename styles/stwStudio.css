@@ -21,7 +21,7 @@ h2 {
     font-weight: normal;
     text-transform: uppercase;
     padding: 0.5em;
-    margin: none;    
+    margin: none;
 }
 
 textarea {
@@ -37,7 +37,7 @@ iframe {
 
 body {
     display: grid;
-    grid-template-columns: auto 20em 0.25em 1fr;
+    grid-template-columns: auto 20em 0.5em 1fr;
     grid-template-rows: auto 2em;
 }
 
@@ -54,7 +54,7 @@ iframe {
 
 .stwToolbar i {
     border-left: thin solid transparent;
-    padding: 0.25em;
+    padding: 0.5em 0.25em;
     cursor: pointer;
     font-size: 2em;
 }
@@ -67,30 +67,44 @@ iframe {
     background-color: rgba(127, 127, 127, 0.4);
 }
 
+.stwExplorer {
+    display: grid;
+    grid-template-rows: 1fr auto auto;
+    background-color: rgba(127, 127, 127, 0.2);
+}
+
 .stwStatusbar {
     grid-column: 1 / 5;
     grid-row: 2;
     background-color: var(--specialColor);
 }
 
-.stwTree {
-    background-color: rgba(127, 127, 127, 0.2);
+.stwBrowsebar {
+    font-size: 1.5em;
+    padding: 0.25em;
+    display: grid;
+    gap: 0.5em;
+    grid-template-columns: repeat(3, min-content) 1fr;
 }
 
-.stwTabs {
+.stwMainTabs {
     display: grid;
-    grid-template-rows: 3em 1fr;
+    grid-template-rows: 2.5em 1fr;
     background-color: rgba(127, 127, 127, 0.1);
 }
 
-.stwTabs label {
+.stwMainTabs label {
     display: inline-block;
     background-color: rgba(127, 127, 127, 0.3);
     padding: 0.5em 1em;
     white-space: nowrap;
 }
 
-.stwTabs label::after {
+.stwMainTabs label[selected] {
+    background-color: inherit;
+}
+
+.stwMainTabs label::after {
     content: "\0000D7";
     float: right;
     padding-left: 1em;

@@ -21,36 +21,39 @@
         <i class="fa-thin fa-fw fa-circle-user" title="Account"></i>
         <i class="fa-thin fa-fw fa-cog" title="Settings"></i>
     </section>
-    <section class="stwAside">
-        <article>
-            <h2>Webbase</h2>
+    <section class="stwExplorer">
+        <div>
+            <h2><i class="fa-thin fa-fw fa-angle-down"></i> Webbase</h2>
             <ul class="stwTree">
             </ul>
-        </article>
-        <article>
-            <h2>Properties</h2>
-        </article>
+        </div>
+        <div>
+            <h2><i class="fa-thin fa-fw fa-angle-right"></i> Properties</h2>
+            <form name="properties">
+                <label>Name<input></label>
+            </form>
+        </div>
     </section>
     <div class="stwVSplitter"></div>
-    <section class="stwTabs">
+    <section class="stwMainTabs">
         <div>
-            <label selected><i class="fa-thin fa-fw fa-browsers"></i> Browser</label>
+            <label selected><i class="fa-thin fa-fw fa-browsers"></i> Browse</label>
             <label><i class="fa-thin fa-fw fa-file-code"></i> index.htm</label>
             <label><i class="fa-thin fa-fw fa-file-code"></i> stwStudio.js</label>
             <label><i class="fa-thin fa-fw fa-file-code"></i> stwStudio.css</label>
         </div>
         <div class="stwTab" selected>
-            <div style="font-size:1.5em; display: flex;">
-                <i class="fa-thin fa-fw fa-arrow-left"></i>&nbsp;
-                <i class="fa-thin fa-fw fa-arrow-rotate-right"></i>&nbsp;
-                <i class="fa-thin fa-fw fa-house"></i>&nbsp;&nbsp;
-                <input type="url" name="url" style="flex:2" placeholder="url" onchange="setURL(event)">
+            <div class="stwBrowsebar">
+                <i class="fa-thin fa-fw fa-arrow-left"></i>
+                <i class="fa-thin fa-fw fa-arrow-rotate-right"></i>
+                <i class="fa-thin fa-fw fa-house"></i>
+                <input type="url" name="url" placeholder="URL" onchange="setURL(event)">
             </div>
-            <iframe title="Site" src="/template.htm" onload="setURL(event)"></iframe>
+            <iframe title="Site" src="template.html" onload="setURL(event)"></iframe>
         </div>
-        <textarea class="stwTab" src="/index.htm"></textarea>
-        <textarea class="stwTab" src="/scripts/stwStudio.js"></textarea>
-        <textarea class="stwTab" src="/styles/stwStudio.css"></textarea>
+        <textarea class="stwTab" src="index.html" placeholder="text/html"></textarea>
+        <textarea class="stwTab" src="scripts/stwStudio.js" placeholder="text/javascript"></textarea>
+        <textarea class="stwTab" src="styles/stwStudio.css" placeholder="text/css"></textarea>
     </section>
     <section class="stwStatusbar"></section>
 

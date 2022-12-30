@@ -9,8 +9,10 @@ function loadFile(path, destination) {
             return response.text();
         })
         .then(data => {
-            if (destination && destination.tagName == "textarea")
+            if (destination && destination.tagName == "textarea") {
+//                destination.setAttribute("placeholder", `text/${path}`)
                 document.getElementById(elementId).value = data;
+            }
         });
 }
 

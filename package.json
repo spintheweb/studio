@@ -2,13 +2,26 @@
   "name": "stwpstudio",
   "version": "1.0.0",
   "description": "Spin the Web Studio is designed to ease web development",
-  "main": "index.js",
+  "main": "studio.js",
   "scripts": {
+    "start": "node .",
+    "debug": "nodemon .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "nodejs"
+    "stwp", "development", "studio", "wbdl"
   ],
   "author": "Giancarlo Trevisan",
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spintheweb/studio.git"
+  },
+  "bugs": {
+    "url": "https://github.com/spintheweb/studio/issues"
+  },
+  "homepage": "https://github.com/spintheweb/studio#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
 }
