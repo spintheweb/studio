@@ -11,36 +11,24 @@
 </head>
 
 <body>
-    <section class="stwToolbar">
-        <i class="fa-thin fa-fw fa-sitemap" title="Webbase" selected></i>
-        <i class="fa-thin fa-fw fa-search" title="Search"></i>
-        <i class="fa-thin fa-fw fa-database" title="Datasources"></i>
-        <i class="fa-thin fa-fw fa-shield" title="Security"></i>
-        <i class="fa-thin fa-fw fa-copy" title="Files"></i>
+    <section class="stwPanels" onclick="managePanel(event)">
+        <i class="fa-thin fa-fw fa-sitemap" title="Webbase" data-panel="/panels/webbase.html"></i>
+        <i class="fa-thin fa-fw fa-search" title="Search" data-panel="/panels/search.html"></i>
+        <i class="fa-thin fa-fw fa-database" title="Datasources" data-panel="/panels/datasources.html"></i>
+        <i class="fa-thin fa-fw fa-shield" title="Security" data-panel="/panels/security.html"></i>
+        <i class="fa-thin fa-fw fa-copy" title="Files" data-panel="/panels/files.html"></i>
         <span></span>
-        <i class="fa-thin fa-fw fa-circle-user" title="Account"></i>
-        <i class="fa-thin fa-fw fa-cog" title="Settings"></i>
+        <i class="fa-thin fa-fw fa-circle-user" title="Account" data-panel="/panels/account.html"></i>
+        <i class="fa-thin fa-fw fa-cog" title="Settings" data-panel="/panels/settings.html"></i>
     </section>
-    <section class="stwExplorer">
-        <div>
-            <h2><i class="fa-thin fa-fw fa-angle-down"></i> Webbase</h2>
-            <ul class="stwTree">
-            </ul>
-        </div>
-        <div>
-            <h2><i class="fa-thin fa-fw fa-angle-right"></i> Properties</h2>
-            <form name="properties">
-                <label>Name<input></label>
-            </form>
-        </div>
-    </section>
+    <section class="stwPanel"></section>
     <div class="stwVSplitter"></div>
-    <section class="stwMainTabs">
+    <section class="stwMain">
         <div>
-            <label selected><i class="fa-thin fa-fw fa-browsers"></i> Browse</label>
-            <label><i class="fa-thin fa-fw fa-file-code"></i> index.htm</label>
-            <label><i class="fa-thin fa-fw fa-file-code"></i> stwStudio.js</label>
-            <label><i class="fa-thin fa-fw fa-file-code"></i> stwStudio.css</label>
+            <span class="stwTabLabel" selected><i class="fa-thin fa-fw fa-browsers"></i> Browse</span>
+            <span class="stwTabLabel"><i class="fa-thin fa-fw fa-file-code"></i> index.htm</span>
+            <span class="stwTabLabel"><i class="fa-thin fa-fw fa-file-code"></i> stwStudio.js</span>
+            <span class="stwTabLabel"><i class="fa-thin fa-fw fa-file-code"></i> stwStudio.css</span>
         </div>
         <div class="stwTab" selected>
             <div class="stwBrowsebar">
@@ -57,7 +45,7 @@
     </section>
     <section class="stwStatusbar"></section>
 
-    <script src="scripts/stwStudio.js"></script>
+    <script src="scripts/stwStudio.js" defer></script>
 </body>
 
 </html>

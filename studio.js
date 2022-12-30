@@ -15,17 +15,24 @@ const server = http.createServer((req, res) => {
 function getRequest(req, res) {
     let pathname = req.url === "/" ? "/studio.html" : url.parse(req.url, true).pathname;
 
-    fs.readFile(`${__dirname}${pathname}`, null, (err, data) => {
-        if (err == null) {
-            res.statusCode = 200;
-            res.end(data);
-        } else if (err.code === 'ENOENT') {
-            // API request
-        } else {
-            console.log(err.code);
-            res.end();
-        }
-    });
+    // paths which contain /. are off limit
+    if (pathname.indexOf("/.") !== -1) {
+        res.statusCode = 403;
+        res.end();
+    } else
+        fs.readFile(`${__dirname}${pathname}`, null, (err, data) => {
+            if (err == null) {
+                res.statusCode = 200;
+                res.end(data);
+            } else if (err.code === 'ENOENT') {
+                res.statusCode = 200;
+                // API request
+            } else {
+                res.statusCode = 400;
+                console.log(err.code);
+                res.end();
+            }
+        });
 }
 
 function postRequest(req, res) {

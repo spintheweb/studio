@@ -37,7 +37,7 @@ iframe {
 
 body {
     display: grid;
-    grid-template-columns: auto 20em 0.5em 1fr;
+    grid-template-columns: auto auto 0.5em 1fr;
     grid-template-rows: auto 2em;
 }
 
@@ -46,31 +46,35 @@ iframe {
     height: 100%;
 }
 
-.stwToolbar {
+.stwPanels {
     background-color: rgba(127, 127, 127, 0.3);
     display: grid;
     grid-template-rows: auto auto auto auto auto 1fr auto auto;
 }
 
-.stwToolbar i {
+.stwPanels i {
     border-left: thin solid transparent;
     padding: 0.5em 0.25em;
     cursor: pointer;
     font-size: 2em;
 }
 
-.stwToolbar i[selected] {
+.stwPanels i[selected] {
     border-left: thin solid;
 }
 
-.stwToolbar i:hover {
+.stwPanels i:hover {
     background-color: rgba(127, 127, 127, 0.4);
 }
 
-.stwExplorer {
+.stwPanel {
     display: grid;
     grid-template-rows: 1fr auto auto;
     background-color: rgba(127, 127, 127, 0.2);
+}
+
+.stwPanel:empty {
+    display: none;
 }
 
 .stwStatusbar {
@@ -87,24 +91,24 @@ iframe {
     grid-template-columns: repeat(3, min-content) 1fr;
 }
 
-.stwMainTabs {
+.stwMain {
     display: grid;
     grid-template-rows: 2.5em 1fr;
     background-color: rgba(127, 127, 127, 0.1);
 }
 
-.stwMainTabs label {
+.stwTabLabel {
     display: inline-block;
     background-color: rgba(127, 127, 127, 0.3);
     padding: 0.5em 1em;
     white-space: nowrap;
 }
 
-.stwMainTabs label[selected] {
+.stwTabLabel[selected] {
     background-color: inherit;
 }
 
-.stwMainTabs label::after {
+.stwTabLabel::after {
     content: "\0000D7";
     float: right;
     padding-left: 1em;

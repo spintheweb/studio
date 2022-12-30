@@ -1,26 +1,35 @@
 function loadFile(path, destination) {
-    fetch(path, {
-        method: "GET",
-        headers: {
-            "Content-Type": "text/xml"
-        }
-    })
+    fetch(path)
         .then(response => {
             return response.text();
         })
         .then(data => {
-            if (destination && destination.tagName == "textarea") {
-//                destination.setAttribute("placeholder", `text/${path}`)
+            if (destination && destination.tagName === "TEXTAREA") {
                 document.getElementById(elementId).value = data;
+            } else if (destination && destination.tagName === "SECTION") {
+                destination.innerHTML = data;
             }
         });
 }
 
+function managePanel(event) {
+    let target = event.target;
+    if (target.tagName === "I" && target.getAttribute("selected")) {
+        target.removeAttribute("selected");
+        event.currentTarget.nextElementSibling.innerHTML = "";
+    } else if (target.tagName === "I") {
+        let selected = event.currentTarget.querySelector("[selected]");
+        if (selected) selected.removeAttribute("selected");
+        target.setAttribute("selected", null);
+        loadFile(target.dataset.panel, event.currentTarget.nextElementSibling);
+    }
+}
+
 function setURL(event) {
     let target = event.target;
-    if (target.tagName == "INPUT")
+    if (target.tagName === "INPUT")
         target.parentElement.nextElementSibling.contentWindow.location.href = target.value;
-    else if (target.tagName == "IFRAME")
+    else if (target.tagName === "IFRAME")
         target.previousElementSibling.querySelector("[name=url]").value = target.contentWindow.location.href;
 }
 
@@ -36,6 +45,4 @@ window.addEventListener("load", () => {
             }
         })
     });
-
-    // loadFile("/data/portale.csavi.it.xml");
 });
