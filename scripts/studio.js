@@ -25,12 +25,16 @@ function managePanel(event) {
     }
 }
 
-function manageSecurity(event) {
+function manageGroups(event) {
     
 }
 
 function manageDatasource(event) {
     
+}
+
+function manageProperties(event) {
+
 }
 
 function manageBrowse(event) {

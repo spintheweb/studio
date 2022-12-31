@@ -24,20 +24,20 @@ td {
     padding: 0.25em 0.5em;
 }
 
-.stwPanel h2 {
+.stwPanel h1 {
     border-top: thin solid var(--light);
-    font-size: 1em;
+    font-size: 1.1em;
     font-variant: small-caps;
     font-weight: normal;
     padding: 0.5em;
     margin: 0;
 }
 
-.stwPanel h2>span {
+.stwPanel h1>span {
     float: right;
 }
 
-.stwPanel h2>span>i:hover {
+.stwPanel h1>span>i:hover {
     background-color: var(--light);
     cursor: pointer;
 }
@@ -67,7 +67,7 @@ iframe {
 .stwPanels {
     background-color: var(--light);
     display: grid;
-    grid-template-rows: repeat(5, auto) 1fr repeat(1, auto);
+    grid-template-rows: repeat(6, auto) 1fr repeat(1, auto);
 }
 
 .stwPanels i {
@@ -140,7 +140,7 @@ iframe {
     background-color: inherit;
 }
 
-.stwTabLabel::after {
+.stwTabLabel:not(:first-of-type)::after {
     content: "\0000D7";
     float: right;
     padding-left: 1em;
@@ -166,4 +166,13 @@ iframe {
 .stwVSplitter:hover {
     background-color: var(--specialColor) !important;
     cursor: ew-resize;
+}
+
+.stwForm form {
+    display: grid;
+    grid-template-columns: 1fr;
+}
+.stwForm input, .stwForm select, .stwForm textarea {
+    margin: 0.25em;
+    padding: 0.25em;
 }

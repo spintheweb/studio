@@ -1,9 +1,9 @@
 <div onclick="manageDatasource(event)">
-    <h2><i class="fa-thin fa-fw"></i> datasources
+    <h1><i class="fa-thin fa-fw"></i> datasources
         <span>
             <i class="fa-thin fa-fw fa-plus" title="Add datasource" data-action="addSource"></i>
         </span>
-    </h2>
+    </h1>
     <table>
         <tbody>
             <tr data-source="wbdl">
@@ -12,8 +12,19 @@
         </tbody>
     </table>
 </div>
-<div>
-    <h2><i class="fa-thin fa-fw fa-angle-right"></i> Properties</h2>
+<div class="stwForm">
+    <h1><i class="fa-thin fa-fw fa-angle-down"></i> properties</h1>
     <form name="properties">
+        <input type="text" name="name" placeholder="Name" title="Name">
+        <select name="type" title="Type">
+            <option>SQL</option>
+            <option>No SQL</option>
+            <option>Webservice</option>
+            <option>JSON</option>
+            <option>CSV</option>
+            <option>XML</option>
+        </select>
+        <textarea name="cnn" placeholder="Connection string" title="Connection string"></textarea>
+        <label><input type="checkbox" name="disabled"> Disabled</label>
     </form>
 </div>

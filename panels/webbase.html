@@ -1,11 +1,71 @@
-<div>
-    <h2><i class="fa-thin fa-fw"></i> webbase</h2>
-    <ul class="stwTree">
-    </ul>
+<div class="stwTree">
+    <h1><i class="fa-thin fa-fw"></i> webbase
+        <span>
+            <i class="fa-thin fa-fw fa-arrow-rotate-right" title="Refresh" data-action="refresh"></i>
+            <i class="fa-thin fa-fw fa-folder-plus" title="Add area" data-action="addArea"></i>
+            <i class="fa-thin fa-fw fa-file-plus" title="Add page" data-action="addPage"></i>
+            <i class="fa-thin fa-fw fa-square-plus" title="Add content" data-action="addContent"></i>
+        </span>
+    </h1>
 </div>
-<div>
-    <h2><i class="fa-thin fa-fw fa-angle-right"></i> Properties</h2>
+<div class="stwForm">
+    <h1><i class="fa-thin fa-fw fa-angle-down"></i> properties</h1>
     <form name="properties">
-        <label>Name<input></label>
+        <input type="text" name="name" placeholder="Name" title="Name">
+        <div style="display: grid; grid-template-columns: 1fr 5em;">
+            <input type="text" name="section" placeholder="Section" title="Section">
+            <input type="number" name="sequence" placeholder="Seq." step="0.1" title="Sequence">
+        </div>
+        <input type="text" name="cssclass" placeholder="CSS class" title="CSS class">
+        <select name="type" title="Type">
+            <option>Text</option>
+            <option>Form</option>
+            <option>Table</option>
+            <option>List</option>
+            <option>Tree</option>
+            <option>Tabs</option>
+            <option>Calendar</option>
+            <option>Graph</option>
+            <option>Page links</option>
+            <option>Area links</option>
+            <option>Indexed links</option>
+            <option>Breadcrumb</option>
+            <option>Cliccable image</option>
+            <option>Shortcut</option>
+            <option>Client side code</option>
+            <option>Server side code</option>
+        </select>
+        <select name="DSN" title="Type">
+            <option></option>
+            <option>Webbase</option>
+        </select>
+        <textarea name="query" placeholder="Query" title="Query"></textarea>
+        <input type="text" name="parameters" placeholder="key=value" title="Parameters">
+        <textarea name="layout" placeholder="Layout" title="Layout"></textarea>
     </form>
+</div>
+<div class="stwForm">
+    <h1><i class="fa-thin fa-fw fa-angle-down"></i> authorizations</h1>
+    <table>
+        <tbody>
+            <tr>
+                <td data-group="guests"><i class="fa-solid fa-fw fa-users"></i> Guests</td><td><i class="fa-thin fa-fw fa-square-xmark"></i></td>
+            </tr>
+            <tr>
+                <td data-group="users"><i class="fa-solid fa-fw fa-users"></i> Users</td><td><i class="fa-thin fa-fw fa-square-check"></i></td>
+            </tr>
+            <tr>
+                <td data-group="translators"><i class="fa-solid fa-fw fa-users"></i> Translators</td><td><i class="fa-thin fa-fw fa-square"></i></td>
+            </tr>
+            <tr>
+                <td data-group="developers"><i class="fa-solid fa-fw fa-users"></i> Developers</td><td><i class="fa-thin fa-fw fa-square"></i></td>
+            </tr>
+            <tr>
+                <td data-group="administrators"><i class="fa-solid fa-fw fa-users"></i> Administrators</td><td><i class="fa-thin fa-fw fa-square"></i></td>
+            </tr>
+            <tr>
+                <td data-group="root"><i class="fa-solid fa-fw fa-users"></i> Root</td><td><i class="fa-thin fa-fw fa-square-check"></i></td>
+            </tr>
+        </tbody>
+    </table>
 </div>
