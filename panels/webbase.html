@@ -1,15 +1,18 @@
 <div class="stwTree">
     <h1><i class="fa-thin fa-fw"></i> webbase
-        <span>
+        <span onclick="stwStudio.manageWebbase(event)">
             <i class="fa-thin fa-fw fa-arrow-rotate-right" title="Refresh" data-action="refresh"></i>
-            <i class="fa-thin fa-fw fa-folder-plus" title="Add area" data-action="addArea"></i>
-            <i class="fa-thin fa-fw fa-file-plus" title="Add page" data-action="addPage"></i>
-            <i class="fa-thin fa-fw fa-square-plus" title="Add content" data-action="addContent"></i>
+            <i class="fa-thin fa-fw fa-folder-plus" title="New area" data-action="newArea"></i>
+            <i class="fa-thin fa-fw fa-file-plus" title="New page" data-action="newPage"></i>
+            <i class="fa-thin fa-fw fa-square-plus" title="New content" data-action="newContent"></i>
         </span>
     </h1>
+    <ul>
+        <li class="stwSite" selected><div>studio.spintheweb.org</div></li>
+    </ul>
 </div>
 <div class="stwForm">
-    <h1><i class="fa-thin fa-fw fa-angle-right"></i> properties</h1>
+    <h1><i id="properties" class="fa-thin fa-fw fa-angle-right"></i> properties</h1>
     <form name="properties">
         <input type="text" name="name" placeholder="Name" title="Name">
         <div style="display: grid; grid-template-columns: 1fr 5em;">
@@ -45,7 +48,7 @@
     </form>
 </div>
 <div class="stwForm">
-    <h1><i class="fa-thin fa-fw fa-angle-right"></i> authorizations</h1>
+    <h1><i id="authorizations" class="fa-thin fa-fw fa-angle-right"></i> authorizations</h1>
     <table>
         <tbody>
             <tr>

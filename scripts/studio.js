@@ -43,6 +43,21 @@ let stwStudio = {
             stwStudio.loadFile(target.dataset.panel, event.currentTarget.nextElementSibling);
         }
     },
+    manageWebbase: (event) => {
+        let tree = event.currentTarget.parentElement.nextElementSibling;
+        if (event.target.dataset.action === "refresh") {
+            // Reload webbase
+        } else {
+            let parent = tree.querySelector("li[selected]");
+            parent.removeAttribute("selected");
+            let li = `<li class="${event.target.dataset.action.replace("new", "stw")}" selected><div>${event.target.getAttribute("title")}</div></li>`
+            if (parent.querySelector("ul"))
+                parent.lastElementChild.insertAdjacentHTML("beforeend", li);
+            else
+                parent.insertAdjacentHTML("beforeend", `<ul>${li}</ul>`);
+            document.getElementById("properties").click();
+        }
+    },
     manageGroups: (event) => {
 
     },
