@@ -3,15 +3,14 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>STW Studio</title>
+    <link rel="shortcut icon" href="favicon.ico">
     <link rel="stylesheet" href="styles/studio.css">
-    <link rel="stylesheet" href="styles/fontawesome/css/all.css">
 </head>
 
 <body>
-    <section class="stwPanels" onclick="managePanel(event)">
+    <section class="stwPanels" onclick="stwStudio.managePanel(event)">
         <i class="fa-thin fa-fw fa-sitemap" title="Webbase" data-panel="/panels/webbase.html"></i>
         <i class="fa-thin fa-fw fa-search" title="Search" data-panel="/panels/search.html"></i>
         <i class="fa-thin fa-fw fa-database" title="Datasources" data-panel="/panels/datasources.html"></i>
@@ -25,25 +24,26 @@
     <section class="stwPanel"></section>
     <div class="stwVSplitter"></div>
     <section class="stwMain">
-        <div onclick="manageTab(event)">
+        <div onclick="stwStudio.manageTab(event)">
             <span class="stwTabLabel" selected>Browse</span>
         </div>
         <div class="stwTab" selected>
-            <div class="stwBrowsebar" onclick="manageBrowse(event)">
+            <div class="stwBrowsebar" onclick="stwStudio.manageBrowse(event)">
                 <i class="fa-thin fa-fw fa-arrow-left" title="Back" data-action="back"></i>
                 <i class="fa-thin fa-fw fa-arrow-rotate-right" title="Refresh" data-action="refresh"></i>
                 <i class="fa-thin fa-fw fa-house" title="Home" data-action="home"></i>
                 <input type="url" name="url" placeholder="URL" onchange="setURL(event)" list="sites">
                 <datalist id="sites">
-                    <option>https://studio.spintheweb.org</option>
+                    <option>http://studio.spintheweb.org</option>
                 </datalist>
             </div>
-            <iframe title="Site" src="http://www.spintheweb.org" onload="setURL(event)"></iframe>
+            <iframe title="Site" src="http://www.spintheweb.org" onload="stwStudio.setURL(event)"></iframe>
         </div>
     </section>
     <section class="stwStatusbar"><i class="fa-thin fa-fw fa-triangle-exclamation"></i> This site is under development</section>
 
     <script src="scripts/studio.js" defer></script>
+    <script src="https://kit.fontawesome.com/b7b91fea3f.js" crossorigin="anonymous"></script>
 </body>
 
 </html>

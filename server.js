@@ -2,8 +2,8 @@ const http = require("http");
 const fs = require("fs");
 const url = require("url");
 
-const hostname = "127.0.0.1";
-const port = 3000;
+const hostname = "studio.spintheweb.org"; // "127.0.0.1";
+const port = 80; // 3000;
 
 const server = http.createServer((req, res) => {
     if (req.method == "GET")
@@ -13,9 +13,7 @@ const server = http.createServer((req, res) => {
 function getRequest(req, res) {
     let pathname = req.url === "/" ? "/index.html" : url.parse(req.url, true).pathname;
 
-    if (pathname.indexOf("/.") !== -1) // paths that contain /. are off limit
-        res.statusCode = 403;
-    else if (pathname.startsWith("/api/")) // paths that start with /api/ are API calls
+    if (pathname.startsWith("/api/"))
         getAPI(req, res);
     else
         fs.readFile(`${__dirname}${pathname}`, null, (err, data) => {

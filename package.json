@@ -2,7 +2,7 @@
   "name": "stwpstudio",
   "version": "1.0.0",
   "description": "Spin the Web Studio is designed to ease development of Spin the Web sites",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "start": "node .",
     "debug": "nodemon .",

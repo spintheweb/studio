@@ -1,10 +1,10 @@
-<div class="stwTable" onclick="manageGroups(event)">
+<div class="stwTable">
     <h1><i class="fa-thin fa-fw"></i> groups
         <span>
             <i class="fa-thin fa-fw fa-plus" title="Add group" data-action="addGroup"></i>
         </span>
     </h1>
-    <table>
+    <table onclick="stwStudio.manageGroups(event)">
         <tbody>
             <tr>
                 <td data-group="guests"><i class="fa-solid fa-fw fa-users"></i> Guests</td>
@@ -27,9 +27,9 @@
         </tbody>
     </table>
 </div>
-<div class="stwForm" onclick="manageProperties(event)">
-    <h1><i class="fa-thin fa-fw fa-angle-down" data-action="collapse"></i> properties</h1>
-    <form name="properties">
+<div class="stwForm">
+    <h1><i class="fa-thin fa-fw fa-angle-right" data-action="collapse"></i> properties</h1>
+    <form name="properties" onclick="stwStudio.manageProperties(event)">
         <input type="text" name="name" placeholder="Name" title="Name" pattern="^[\p{L}]${3,25}">
         <label><input type="checkbox" name="disabled"> Disabled</label>
     </form>

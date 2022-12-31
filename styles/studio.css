@@ -177,3 +177,7 @@ iframe {
     margin: 0.25em;
     padding: 0.25em;
 }
+
+.fa-angle-right, .fa-angle-down {
+    cursor: pointer;
+}
