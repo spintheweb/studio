@@ -71,20 +71,17 @@ server.listen(port, hostname, () => {
 });
 
 function getDir(directory = ".") {
-    let response = { name: "root", children: [] };
+    let response = { name: "root", type: "dir", children: [] };
 
     const files = fs.readdirSync(directory);
     for (let file of files) {
-        if (file.startsWith(".") || ["node_modules", "pki"].includes(file))
+        if (file.startsWith(".") || ["node_modules", "pki", "package.json", "package-lock.json"].includes(file))
             continue;
 
-        if (fs.lstatSync(path.join(directory, file)).isDirectory()) {
-            response.children.push({ name: file, children: getDir(path.join(directory, file)).children });
-        } else {
-            response.children.push({ name: file });
-        }
+        if (fs.lstatSync(path.join(directory, file)).isDirectory())
+            response.children.push({ name: file, type: "dir", children: getDir(path.join(directory, file)).children });
+        else if (fs.lstatSync(path.join(directory, file)).isFile())
+            response.children.push({ name: file, type: "file" });
     }
     return response;
 }
-
-
