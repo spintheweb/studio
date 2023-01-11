@@ -1,4 +1,7 @@
 let stwStudio = {
+    settings: {
+        lang: "en"
+    },
     setup: () => {
         if (!document.querySelector(".stwPanels i[selected]"))
             document.querySelector(".stwPanels>i").click();
@@ -10,14 +13,20 @@ let stwStudio = {
         let target = event.target;
         if (target.classList.contains("fa-angle-down")) {
             target.classList.replace("fa-angle-down", "fa-angle-right");
-            target.parentElement.nextElementSibling.style.display = "none";
+            if (target.parentElement.tagName === "LI")
+                target.parentElement.querySelector("ul").style.display = "none";
+            else
+                target.parentElement.nextElementSibling.style.display = "none";
         } else if (target.classList.contains("fa-angle-right")) {
             target.classList.replace("fa-angle-right", "fa-angle-down");
-            target.parentElement.nextElementSibling.style.display = "";
+            if (target.parentElement.tagName === "LI")
+                target.parentElement.querySelector("ul").style.display = "";
+            else
+                target.parentElement.nextElementSibling.style.display = "";
         }
         // Closest stwTabLabel
     },
-    loadFile: (path, destination) => {
+    loadFile: (path, destination, callback) => {
         fetch(path)
             .then(response => {
                 return response.text();
@@ -28,25 +37,78 @@ let stwStudio = {
                 } else if (destination && destination.tagName === "SECTION") {
                     destination.innerHTML = data;
                     stwStudio.setup();
+                    callback(path);
                 }
             });
     },
     managePanel: (event) => {
         let target = event.target;
-        if (target.tagName === "I" && target.getAttribute("selected")) {
+        if (target.tagName === "I" && target.dataset.panel === "menu") {
+            // [TODO]
+
+        } else if (target.tagName === "I" && target.getAttribute("selected")) {
             target.removeAttribute("selected");
             event.currentTarget.nextElementSibling.innerHTML = "";
+
         } else if (target.tagName === "I") {
             let selected = event.currentTarget.querySelector("[selected]");
             if (selected) selected.removeAttribute("selected");
             target.setAttribute("selected", null);
-            stwStudio.loadFile(target.dataset.panel, event.currentTarget.nextElementSibling);
+            stwStudio.loadFile(target.dataset.panel, event.currentTarget.nextElementSibling, fillPanel);
+
+            function fillPanel(panel) {
+                switch (panel) {
+                    case "/panels/explorer.html":
+                        fetch('/api/dir')
+                            .then(res => {
+                                if (res.ok)
+                                    return res.json();
+                            })
+                            .then(json => {
+                                document.querySelector(".stwPanel .stwTree").insertAdjacentHTML("beforeend", `<ul onclick="stwStudio.manageTree(event)">${renderTree(json)}</ul>`);
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                            });
+                        break;
+                    case "/panels/outline.html":
+                        fetch('/api/outline')
+                            .then(res => {
+                                if (res.ok)
+                                    return res.json();
+                            })
+                            .then(json => {
+                                document.querySelector(".stwPanel .stwTree").insertAdjacentHTML("beforeend", `<ul>${renderTree(json)}</ul>`);
+                            })
+                            .catch((err) => {
+                                console.log(err);
+                            });
+                        break;
+                }
+            }
+        }
+
+        function renderTree(node, depth = 0) {
+            let html,
+                name = typeof (node.name) === "string" ? node.name : node.name[stwStudio.settings.lang];
+
+            if (node.children && node.children.length) {
+                if (depth)
+                    html = `<li><i class="fa-solid fa-fw fa-angle-right"></i><div>${name}</div><ul style="display:none">`;
+                else
+                    html = `<li><div>${name}</div><ul>`;
+                for (let child of node.children)
+                    html += renderTree(child, depth + 1);
+                html += "</ul>";
+            } else
+                html = `<li><div>${name}</div>`;
+            return `${html}</li>`;
         }
     },
-    manageWebbase: (event) => {
+    manageOutline: (event) => {
         let tree = event.currentTarget.parentElement.nextElementSibling;
         if (event.target.dataset.action === "refresh") {
-            // Reload webbase
+            // Reload outline
         } else {
             let parent = tree.querySelector("li[selected]");
             parent.removeAttribute("selected");
@@ -59,7 +121,11 @@ let stwStudio = {
         }
     },
     manageGroups: (event) => {
-
+        let target = event.target;
+        if (target.classList.contains("fa-plus")) {
+            let tr = `<tr><td><i class="fa-solid fa-fw fa-users"></i></td><td><div contenteditable>New group</div></td></tr>`;
+            target.closest("div").querySelector("tbody").insertAdjacentHTML("beforeend", tr);
+        }
     },
     manageDatasource: (event) => {
 

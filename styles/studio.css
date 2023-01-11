@@ -8,7 +8,7 @@
 
     font-family: sans-serif;
     font-size: 10pt;
-    color-scheme: dark;
+    color-scheme: light;
 }
 
 html,
@@ -68,7 +68,7 @@ iframe {
 .stwPanels {
     background-color: var(--light);
     display: grid;
-    grid-template-rows: repeat(6, auto) 1fr repeat(1, auto);
+    grid-template-rows: repeat(7, auto) 1fr repeat(1, auto);
 }
 
 .stwPanels i {
@@ -90,6 +90,8 @@ iframe {
     display: grid;
     grid-template-rows: 1fr auto auto;
     background-color: var(--medium);
+    animation: 3s infinite alternate slidein;
+
 }
 
 .stwPanel:not(:empty) {
@@ -125,7 +127,7 @@ iframe {
     grid-template-columns: repeat(3, min-content) 1fr;
 }
 
-.stwMain {
+.stwTabs {
     display: grid;
     grid-template-rows: 2.5em 1fr;
     background-color: var(--dark);
@@ -187,17 +189,109 @@ iframe {
 .stwTree ul {
     list-style: none;
     padding: 0;
+    cursor: pointer;
 }
 
-.stwTree li>div {
-    padding: 0.5em;
-    cursor: pointer;
+.stwTree ul>li>ul>li {
+    padding-left: 0.75em;
+}
+
+.stwTree li div {
+    display: inline-block;
+    padding: 0.25em;
+}
+
+.stwTree li div:hover {
+    background-color: var(--highlight);
+}
+
+.stwTree .fa-angle-down,
+.stwTree .fa-angle-right {
+    padding: 0.25em 0;
 }
 
 .stwTree li[selected]>div {
     background-color: var(--dark);
 }
 
-.stwTree li>div:hover {
-    background-color: var(--highlight);
+.stwSite:before {
+    font-family: "fontawesome";
+    content: "\f105";
+    cursor: pointer;
+    float: left;
+    padding: 0.5em;
+}
+
+.menu {
+    display: inline-block;
+}
+
+.menu ul {
+    display: flex;
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    padding: 0;
+}
+
+.menu div>span {
+    display: inline-block;
+    padding: 0 0 0 2em;
+}
+
+.menu ul>li>ul {
+    display: none;
+    border: thin solid;
+    position: absolute;
+    left: 0;
+}
+
+.menu ul>li>ul>li>ul {
+    left: 100%;
+    top: 0;
+}
+
+.menu ul>li:hover>ul {
+    display: block;
+}
+
+.menu li {
+    list-style: none;
+    position: relative;
+}
+
+.menu li>ul>li {
+    min-width: 12em;
+}
+
+.menu li>div {
+    padding: 0.75em 1em;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.menu div.checked:after {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    content: "\f00c";
+    float: right;
+}
+
+.menu li>ul>li>div:not(:last-child):after {
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900;
+    content: "\f0da";
+    float: right;
+}
+
+.menu li:hover>div {
+    background-color: var(--menu-background-color);
+    color: var(--menu-hover-color);
+    opacity: 1;
+}
+
+.menu ul {
+    background-color: var(--menu-background-color);
+    color: var(--menu-color);
+    opacity: 1;
 }

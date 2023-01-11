@@ -1,36 +1,31 @@
 <div class="stwTable">
     <h1><i class="fa-thin fa-fw"></i> groups
-        <span>
+        <span onclick="stwStudio.manageGroups(event)">
             <i class="fa-thin fa-fw fa-plus" title="Add group" data-action="addGroup"></i>
         </span>
     </h1>
-    <table onclick="stwStudio.manageGroups(event)">
+    <table>
         <tbody>
-            <tr>
-                <td data-group="guests"><i class="fa-solid fa-fw fa-users"></i> Guests</td>
+            <tr data-group="guests">
+                <td><i class="fa-solid fa-fw fa-users"></i></td>
+                <td>Guests</td>
             </tr>
-            <tr>
-                <td data-group="users"><i class="fa-solid fa-fw fa-users"></i> Users</td>
+            <tr data-group="users">
+                <td><i class="fa-solid fa-fw fa-users"></i></td>
+                <td>Users</td>
             </tr>
-            <tr>
-                <td data-group="translators"><i class="fa-solid fa-fw fa-users-slash"></i> Translators</td>
+            <tr data-group="translators">
+                <td><i class="fa-solid fa-fw fa-users"></i></td>
+                <td>Translators</td>
             </tr>
-            <tr>
-                <td data-group="developers"><i class="fa-solid fa-fw fa-users-slash"></i> Developers</td>
+            <tr data-group="developers">
+                <td><i class="fa-solid fa-fw fa-users"></i></td>
+                <td>Developers</td>
             </tr>
-            <tr>
-                <td data-group="administrators"><i class="fa-solid fa-fw fa-users"></i> Administrators</td>
-            </tr>
-            <tr>
-                <td data-group="root"><i class="fa-solid fa-fw fa-users"></i> Root</td>
+            <tr data-group="administrators">
+                <td><i class="fa-solid fa-fw fa-users"></i></td>
+                <td>Administrators</td>
             </tr>
         </tbody>
     </table>
-</div>
-<div class="stwForm">
-    <h1><i class="fa-thin fa-fw fa-angle-right" data-action="collapse"></i> properties</h1>
-    <form name="properties" onclick="stwStudio.manageProperties(event)">
-        <input type="text" name="name" placeholder="Name" title="Name" pattern="^[\p{L}]${3,25}">
-        <label><input type="checkbox" name="disabled"> Disabled</label>
-    </form>
 </div>

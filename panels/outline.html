@@ -1,15 +1,12 @@
 <div class="stwTree">
-    <h1><i class="fa-thin fa-fw"></i> webbase
-        <span onclick="stwStudio.manageWebbase(event)">
+    <h1><i class="fa-thin fa-fw"></i> outline
+        <span onclick="stwStudio.manageOutline(event)">
             <i class="fa-thin fa-fw fa-arrow-rotate-right" title="Refresh" data-action="refresh"></i>
             <i class="fa-thin fa-fw fa-folder-plus" title="New area" data-action="newArea"></i>
             <i class="fa-thin fa-fw fa-file-plus" title="New page" data-action="newPage"></i>
             <i class="fa-thin fa-fw fa-square-plus" title="New content" data-action="newContent"></i>
         </span>
     </h1>
-    <ul>
-        <li class="stwSite" selected><div>studio.spintheweb.org</div></li>
-    </ul>
 </div>
 <div class="stwForm">
     <h1><i id="properties" class="fa-thin fa-fw fa-angle-right"></i> properties</h1>
@@ -52,22 +49,19 @@
     <table>
         <tbody>
             <tr>
-                <td data-group="guests"><i class="fa-solid fa-fw fa-users"></i> Guests</td><td style="width: 1em;"><i class="fa-thin fa-fw fa-square-xmark"></i></td>
+                <td data-group="guests"><i class="fa-solid fa-fw fa-users"></i> Guests</td><td style="width: 1em;"><i class="fa-solid fa-fw fa-eye-slash"></i></td>
             </tr>
             <tr>
-                <td data-group="users"><i class="fa-solid fa-fw fa-users"></i> Users</td><td><i class="fa-thin fa-fw fa-square-check"></i></td>
+                <td data-group="users"><i class="fa-solid fa-fw fa-users"></i> Users</td><td><i class="fa-solid fa-fw fa-eye"></i></td>
             </tr>
             <tr>
-                <td data-group="translators"><i class="fa-solid fa-fw fa-users"></i> Translators</td><td><i class="fa-thin fa-fw fa-square"></i></td>
+                <td data-group="translators"><i class="fa-solid fa-fw fa-users"></i> Translators</td><td><i class="fa-thin fa-fw fa-eye-slash"></i></td>
             </tr>
             <tr>
-                <td data-group="developers"><i class="fa-solid fa-fw fa-users"></i> Developers</td><td><i class="fa-thin fa-fw fa-square"></i></td>
+                <td data-group="developers"><i class="fa-solid fa-fw fa-users"></i> Developers</td><td><i class="fa-thin fa-fw fa-eye-slash"></i></td>
             </tr>
             <tr>
-                <td data-group="administrators"><i class="fa-solid fa-fw fa-users"></i> Administrators</td><td><i class="fa-thin fa-fw fa-square"></i></td>
-            </tr>
-            <tr>
-                <td data-group="root"><i class="fa-solid fa-fw fa-users"></i> Root</td><td><i class="fa-thin fa-fw fa-square-check"></i></td>
+                <td data-group="administrators"><i class="fa-solid fa-fw fa-users"></i> Administrators</td><td><i class="fa-thin fa-fw fa-eye-slash"></i></td>
             </tr>
         </tbody>
     </table>

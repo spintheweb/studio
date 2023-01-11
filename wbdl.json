@@ -1,0 +1,65 @@
+{
+    "guid": "141a8b53-9aa0-4a6e-8f79-de97911df0f8",
+    "name": {
+        "en": "studio.spintheweb.org"
+    },
+    "lang": "en",
+    "url": "https://studio.spintheweb.org",
+    "homepage": "89a30afc-75ba-400e-965b-2e73ac4370eb",
+    "authorizations": {
+        "root": true,
+        "administrators": true
+    },
+    "icon": null,
+    "keywords": null,
+    "description": null,
+    "children": [
+        {
+            "guid": "9afffedf-d49e-417e-bbad-4cceba62339f",
+            "type": "area",
+            "name": {
+                "en": "Area"
+            },
+            "slug": {
+                "en": "area"
+            },
+            "authorizations": {
+                "users": true
+            },
+            "mainpage": null,
+            "children": [
+                {
+                    "guid": "89a30afc-75ba-400e-965b-2e73ac4370eb",
+                    "type": "page",
+                    "name": {
+                        "en": "Home page"
+                    },
+                    "slug": "",
+                    "template": "index.html",
+                    "visibility": null,
+                    "keywords": null,
+                    "description": null,
+                    "authorizations": null,
+                    "children": [
+                        {
+                            "guid": "ca5c92fc-dcc0-456b-bb6e-6c88acf43d41",
+                            "type": "content/text",
+                            "name": {
+                                "en": "Welcome"
+                            },
+                            "slug": "welcome",
+                            "section": "main",
+                            "sequence": 1,
+                            "dsn": null,
+                            "query": null,
+                            "parameters": null,
+                            "layout": {
+                                "en": "Welcome to Spin the Web Studio"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
