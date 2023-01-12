@@ -38,8 +38,10 @@ let stwStudio = {
                     destination.innerHTML = data;
                     stwStudio.setup();
                     callback(path);
-                } else if (destination)
+                } else if (destination) {
                     destination.setValue(data, -1);
+                    document.querySelector(`.stwTabs .stwTabLabel[title="${path}"]`).click();
+                }
             });
     },
     managePanel: (event) => {
@@ -134,39 +136,25 @@ let stwStudio = {
     manageProperties: (event) => {
 
     },
-    manageBrowse: (event) => {
-        let target = event.target;
-        switch (target.dataset.action) {
-            case "back":
-                break;
-            case "refresh":
-                document.querySelector("").documentWindow.location;
-                break;
-            case "home":
-                break;
-        }
-    },
     manageExplorer: (event) => {
         let target = event.target.parentElement;
         if (target.dataset.type === "file") {
-            document.querySelector(".stwTabs > div").insertAdjacentHTML("beforeend", `<span class="stwTabLabel">${target.innerText}</span>`);
-            document.querySelector(".stwTabs").insertAdjacentHTML("beforeend", `<div class="stwTab"><div>${target.innerText}</div><div id="${target.innerText}"></div></div>`);
+            let filename = target.innerText;
+            let path = filename;
+            for (let el = target.closest("li[data-type=dir]"); el.firstChild.tagName === "I"; el = el.parentElement.closest("li[data-type=dir]"))
+                path = el.children[1].innerText + "/" + path;
 
-            let editor = ace.edit(target.innerText);
-            stwStudio.loadFile(target.innerText, editor);
-            editor.setTheme("ace/theme/monokai");
-            editor.session.setMode("ace/mode/javascript");
+            if (!document.getElementById(path)) {
+                document.querySelector(".stwTabs > div").insertAdjacentHTML("beforeend", `<span class="stwTabLabel" title="${path}">${filename}</span>`);
+                document.querySelector(".stwTabs").insertAdjacentHTML("beforeend", `<div class="stwTab"><div></div><div id="${path}"></div></div>`);
+    
+                let editor = ace.edit(path);
+                // editor.setTheme("ace/theme/monokai");
+                // editor.session.setMode("ace/mode/javascript");
+                stwStudio.loadFile(path, editor);
+            } else
+                document.querySelector(`.stwTabs .stwTabLabel[title="${path}"]`).click();
         }
-    },
-    manageOutline: (event) => {
-
-    },
-    setURL: (event) => {
-        let target = event.target;
-        if (target.tagName === "INPUT")
-            target.parentElement.nextElementSibling.contentWindow.location.href = target.value;
-        else if (target.tagName === "IFRAME")
-            target.previousElementSibling.querySelector("[name=url]").value = target.contentWindow.location.href;
     },
     manageTab: (event) => {
         let target = event.target;
@@ -180,8 +168,27 @@ let stwStudio = {
             event.currentTarget.parentElement.querySelector(".stwTab[selected]").removeAttribute("selected");
             event.currentTarget.parentElement.children[i+1].setAttribute("selected", "");
         }
+    },
+    manageBrowse: (event) => {
+        let target = event.target;
+        switch (target.dataset.action) {
+            case "back":
+                break;
+            case "refresh":
+                document.querySelector("").documentWindow.location;
+                break;
+            case "home":
+                break;
+        }
+    },
+    setURL: (event) => {
+        let target = event.target;
+        if (target.tagName === "INPUT")
+            target.parentElement.nextElementSibling.contentWindow.location.href = target.value;
+        else if (target.tagName === "IFRAME")
+            target.previousElementSibling.querySelector("[name=url]").value = target.contentWindow.location.href;
     }
 }
 
-window.addEventListener("load", stwStudio.setup);
+window.addEventListener("load", stwStudio.setup, { once: true });
 window.addEventListener("click", stwStudio.click);

@@ -25,9 +25,7 @@
     </section>
     <section class="stwPanel"></section>
     <section class="stwTabs">
-        <div onclick="stwStudio.manageTab(event)">
-            <span class="stwTabLabel" selected><div>Browse <i class="fa-solid fa-fw"></i></div></span>
-        </div>
+        <div onclick="stwStudio.manageTab(event)"><span class="stwTabLabel" title="Browse" selected>Browse</span></div>
         <div class="stwTab" selected>
             <div class="stwBrowsebar" onclick="stwStudio.manageBrowse(event)">
                 <i class="fa-thin fa-fw fa-arrow-left" title="Back" data-action="back"></i>
@@ -38,7 +36,7 @@
                     <option>https://studio.spintheweb.org</option>
                 </datalist>
             </div>
-            <iframe title="Site" src="blank" onload="stwStudio.setURL(event)"></iframe>
+            <iframe title="Site" src="" onload="stwStudio.setURL(event)"></iframe>
         </div>
     </section>
     <section class="stwStatusbar"><i class="fa-thin fa-fw fa-triangle-exclamation"></i> This site is under development</section>
