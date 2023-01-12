@@ -7,7 +7,7 @@
     --padding: 0.5em;
 
     font-family: sans-serif;
-    font-size: 12pt;
+    font-size: 10pt;
     color-scheme: dark;
 }
 
@@ -143,12 +143,11 @@ iframe, .ace {
 }
 
 .stwTabLabel[selected] {
+    border-top: thin solid;
     background-color: inherit;
 }
 
-.stwTabLabel:not(:first-of-type)::after {
-    content: "\0000D7";
-    float: right;
+.stwTabLabel .fa-times {
     padding-left: 1em;
     cursor: pointer;
 }

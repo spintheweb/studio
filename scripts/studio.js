@@ -9,7 +9,7 @@ let stwStudio = {
             i.parentElement.nextElementSibling.style.display = "none";
         });
     },
-    click: (event) => {
+    click: (event, mode) => {
         let target = event.target;
         if (target.classList.contains("fa-angle-down")) {
             target.classList.replace("fa-angle-down", "fa-angle-right");
@@ -49,7 +49,7 @@ let stwStudio = {
         if (target.tagName === "I" && target.dataset.panel === "menu") {
             // [TODO]
 
-        } else if (target.tagName === "I" && target.getAttribute("selected")) {
+        } else if (target.tagName === "I" && target.hasAttribute("selected")) {
             target.removeAttribute("selected");
             event.currentTarget.nextElementSibling.innerHTML = "";
 
@@ -99,7 +99,7 @@ let stwStudio = {
                 if (depth)
                     html = `<li data-type="${node.type}"><i class="fa-solid fa-fw fa-angle-right"></i><div>${name}</div><ul style="display:none">`;
                 else
-                    html = `<li data-type="${node.type}"><div>${name}</div><ul>`;
+                    html = `<li data-type="${node.type}" selected><div>${name}</div><ul>`;
                 for (let child of node.children)
                     html += renderTree(child, depth + 1);
                 html += "</ul>";
@@ -109,18 +109,31 @@ let stwStudio = {
         }
     },
     manageOutline: (event) => {
-        let tree = event.currentTarget.parentElement.nextElementSibling;
-        if (event.target.dataset.action === "refresh") {
-            // Reload outline
-        } else {
-            let parent = tree.querySelector("li[selected]");
-            parent.removeAttribute("selected");
-            let li = `<li class="${event.target.dataset.action.replace("new", "stw")}" selected><div>${event.target.getAttribute("title")}</div></li>`
-            if (parent.querySelector("ul"))
-                parent.lastElementChild.insertAdjacentHTML("beforeend", li);
-            else
-                parent.insertAdjacentHTML("beforeend", `<ul>${li}</ul>`);
-            document.getElementById("properties").click();
+        switch (event.currentTarget.tagName) {
+            case "H1":
+                tree = event.currentTarget.nextElementSibling;
+
+                if (event.target.dataset.action === "refresh") {
+                    // Reload outline
+                } else {
+                    let parent = tree.querySelector("li[selected]") || tree.querySelector("li");
+                    parent.removeAttribute("selected");
+                    let li = `<li class="${event.target.dataset.action.replace("new", "stw")}" selected><div>${event.target.getAttribute("title")}</div></li>`
+                    if (parent.querySelector("ul"))
+                        parent.lastElementChild.insertAdjacentHTML("beforeend", li);
+                    else
+                        parent.insertAdjacentHTML("beforeend", `<ul>${li}</ul>`);
+                    document.getElementById("properties").click(null, "open");
+                }
+                break;
+
+            case "UL":
+                if (!event.target.parentElement.hasAttribute("selected")) {
+                    event.currentTarget.querySelector("li[selected]").removeAttribute("selected");
+                    event.target.parentElement.setAttribute("selected", "");
+                    document.getElementById("properties").click("close");
+                }
+                break;
         }
     },
     manageGroups: (event) => {
@@ -145,9 +158,9 @@ let stwStudio = {
                 path = el.children[1].innerText + "/" + path;
 
             if (!document.getElementById(path)) {
-                document.querySelector(".stwTabs > div").insertAdjacentHTML("beforeend", `<span class="stwTabLabel" title="${path}">${filename}</span>`);
+                document.querySelector(".stwTabs > div").insertAdjacentHTML("beforeend", `<span class="stwTabLabel" title="${path}">${filename}<i class="fa-thin fa-times"></i></span>`);
                 document.querySelector(".stwTabs").insertAdjacentHTML("beforeend", `<div class="stwTab"><div></div><div id="${path}"></div></div>`);
-    
+
                 let editor = ace.edit(path);
                 // editor.setTheme("ace/theme/monokai");
                 // editor.session.setMode("ace/mode/javascript");
@@ -158,16 +171,27 @@ let stwStudio = {
     },
     manageTab: (event) => {
         let target = event.target;
-        if (target.className === "stwTabLabel" && !target.getAttribute("selected")) {
+        if (target.classList.contains("fa-times")) {
+            let i;
+            for (i = 0; i < event.currentTarget.children.length && event.currentTarget.children[i] != target.parentElement; ++i);
+
+            if (target.parentElement.hasAttribute("selected"))
+                event.currentTarget.firstChild.click();
+
+            event.currentTarget.children[i].remove();
+            event.currentTarget.parentElement.children[i + 1].remove();
+
+        } else if (target.className === "stwTabLabel" && !target.hasAttribute("selected")) {
             event.currentTarget.querySelector(".stwTabLabel[selected]").removeAttribute("selected");
             target.setAttribute("selected", "");
 
             let i;
-            for (i = 0; i < event.currentTarget.children.length && event.currentTarget.children[i] != target ; ++i);
+            for (i = 0; i < event.currentTarget.children.length && event.currentTarget.children[i] != target; ++i);
 
             event.currentTarget.parentElement.querySelector(".stwTab[selected]").removeAttribute("selected");
-            event.currentTarget.parentElement.children[i+1].setAttribute("selected", "");
+            event.currentTarget.parentElement.children[i + 1].setAttribute("selected", "");
         }
+        event.preventDefault();
     },
     manageBrowse: (event) => {
         let target = event.target;
