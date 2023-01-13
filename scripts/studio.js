@@ -24,7 +24,6 @@ let stwStudio = {
             else
                 target.parentElement.nextElementSibling.style.display = "";
         }
-        // Closest stwTabLabel
     },
     loadFile: (path, destination, callback) => {
         fetch(path)
@@ -62,7 +61,7 @@ let stwStudio = {
             function fillPanel(panel) {
                 switch (panel) {
                     case "/panels/explorer.html":
-                        fetch('/api/dir')
+                        fetch('/api/explorer')
                             .then(res => {
                                 if (res.ok)
                                     return res.json();
@@ -74,14 +73,14 @@ let stwStudio = {
                                 console.log(err);
                             });
                         break;
-                    case "/panels/outline.html":
-                        fetch('/api/outline')
+                    case "/panels/webbase.html":
+                        fetch('/api/webbase')
                             .then(res => {
                                 if (res.ok)
                                     return res.json();
                             })
                             .then(json => {
-                                document.querySelector(".stwPanel .stwTree").insertAdjacentHTML("beforeend", `<ul onclick="stwStudio.manageOutline(event)">${renderTree(json)}</ul>`);
+                                document.querySelector(".stwPanel .stwTree").insertAdjacentHTML("beforeend", `<ul onclick="stwStudio.manageWebbase(event)">${renderTree(json)}</ul>`);
                             })
                             .catch((err) => {
                                 console.log(err);
@@ -108,13 +107,13 @@ let stwStudio = {
             return `${html}</li>`;
         }
     },
-    manageOutline: (event) => {
+    manageWebbase: (event) => {
         switch (event.currentTarget.tagName) {
             case "H1":
                 tree = event.currentTarget.nextElementSibling;
 
                 if (event.target.dataset.action === "refresh") {
-                    // Reload outline
+                    // Reload webbase
                 } else {
                     let parent = tree.querySelector("li[selected]") || tree.querySelector("li");
                     parent.removeAttribute("selected");

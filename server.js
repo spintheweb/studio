@@ -6,7 +6,7 @@ const url = require("url");
 let WBDL = JSON.parse(fs.readFileSync(`${__dirname}/wbdl.json`));
 // [TODO] Speed up webbase navigation
 (function indexGUID(obj) {
-})(WBDL.outline);
+})(WBDL.webbase);
 
 const hostname = "studio.spintheweb.org" || process.env.hostname || "127.0.0.1";
 const port = process.env.port || 443;
@@ -18,13 +18,20 @@ const options = {
 
 const server = https.createServer(options, (req, res) => {
     // [TODO] websocket and session management
-    if (req.method == "GET")
-        getRequest(req, res);
+    switch (req.method) {
+        case "GET": 
+            getRequest(req, res);
+            break;
+        case "POST":
+            postRequest(req, res);
+            break;
+        default:
+            res.end();
+    }
 });
 
 function getRequest(req, res) {
     let pathname = req.url === "/" ? "/index.html" : url.parse(req.url, true).pathname;
-
 
     if (pathname.startsWith("/api/"))
         getAPI(req, res);
@@ -41,16 +48,15 @@ function getRequest(req, res) {
         });
 }
 
-// There are two types of API GET calls: WBDL and File System
 function getAPI(req, res) {
     let pathname = url.parse(req.url, true).pathname.split("/");
 
     switch (pathname[2]) {
-        case "outline":
+        case "webbase":
             res.writeHead(200, "Content-Type", "text/json");
             res.end(JSON.stringify(pathname[3] ? WBDL.index[pathname[3]] : WBDL));
             break;
-        case "dir":
+        case "explorer":
             let dir = getDir();
             res.writeHead(200, "Content-Type", "text/json");
             res.end(JSON.stringify(dir));
@@ -61,8 +67,22 @@ function getAPI(req, res) {
             break;
     }
 }
-// There are two types of API POST calls: WBDL and File System
+
+function postRequest(req, res) {
+    let pathname = url.parse(req.url, true).pathname;
+
+    if (pathname.startsWith("/api/"))
+        postAPI(req, res);
+    else
+        res.end();
+}
+
 function postAPI(req, res) {
+    let pathname = url.parse(req.url, true).pathname.split("/");
+
+    switch (pathname[2]) {
+        
+    }
     res.end();
 }
 

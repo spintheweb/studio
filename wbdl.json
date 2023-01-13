@@ -1,5 +1,6 @@
 {
     "_id": "141a8b53-9aa0-4a6e-8f79-de97911df0f8",
+    "type": "site",
     "name": {
         "en": "studio.spintheweb.org"
     },
@@ -58,6 +59,35 @@
                             }
                         }
                     ]
+                }
+            ]
+        },
+        {
+            "_id": "78f3c4f2-74bd-4002-86e0-2b5174e6761b",
+            "type": "area",
+            "name": {
+                "en": "API"
+            },
+            "slug": {
+                "en": "api"
+            },
+            "authorizations": {
+                "users": true
+            },
+            "children": [
+                {
+                    "_id": "c711aa2d-c4a5-4074-a57e-57495d683c4c",
+                    "type": "content/serversidecode",
+                    "name": {
+                        "en": "dir"
+                    },
+                    "slug": "dir",
+                    "dsn": null,
+                    "query": null,
+                    "parameters": null,
+                    "layout": {
+                        "js": "function() { return \"Hello World!\"; }"
+                    }
                 }
             ]
         }

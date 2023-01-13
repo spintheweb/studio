@@ -9,7 +9,9 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "stwp", "studio", "wbdl"
+    "stwp",
+    "studio",
+    "wbdl"
   ],
   "author": "Giancarlo Trevisan",
   "license": "MIT",
