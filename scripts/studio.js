@@ -9,8 +9,12 @@ let stwStudio = {
             i.parentElement.nextElementSibling.style.display = "none";
         });
     },
-    click: (event, mode) => {
+    click: (event) => {
         let target = event.target;
+
+        if (!event.isTrusted && target.id == "properties" && target.classList.contains("fa-angle-down"))
+            return;
+
         if (target.classList.contains("fa-angle-down")) {
             target.classList.replace("fa-angle-down", "fa-angle-right");
             if (target.parentElement.tagName === "LI")
@@ -24,6 +28,25 @@ let stwStudio = {
             else
                 target.parentElement.nextElementSibling.style.display = "";
         }
+    },
+    submitForm: (event) => {
+        let data = {};
+        for (let input of event.target.form)
+            data[input.name] = input.value;
+
+        fetch(`/api/webbase/${data._id}`,
+            {
+                method: "POST",
+                body: JSON.stringify(data),
+                headers: { "Content-type": "application/json; charset=UTF-8" }
+            })
+            .then(response => response.json())
+            .then(json => console.log(json))
+            .catch(err => console.log(err));
+    },
+    loadForm: (form, data) => {
+        for (let input of form)
+            input.value = data[input.name];
     },
     loadFile: (path, destination, callback) => {
         fetch(path)
@@ -55,7 +78,7 @@ let stwStudio = {
         } else if (target.tagName === "I") {
             let selected = event.currentTarget.querySelector("[selected]");
             if (selected) selected.removeAttribute("selected");
-            target.setAttribute("selected", null);
+            target.setAttribute("selected", "");
             stwStudio.loadFile(target.dataset.panel, event.currentTarget.nextElementSibling, fillPanel);
 
             function fillPanel(panel) {
@@ -96,9 +119,9 @@ let stwStudio = {
 
             if (node.children && node.children.length) {
                 if (depth)
-                    html = `<li data-type="${node.type}"><i class="fa-solid fa-fw fa-angle-right"></i><div>${name}</div><ul style="display:none">`;
+                    html = `<li ${node._id ? `data-id="${node._id}" ` : ""}data-type="${node.type}"><i class="fa-solid fa-fw fa-angle-right"></i><div>${name}</div><ul style="display:none">`;
                 else
-                    html = `<li data-type="${node.type}" selected><div>${name}</div><ul>`;
+                    html = `<li ${node._id ? `data-id="${node._id}" ` : ""}data-type="${node.type}" selected><div>${name}</div><ul>`;
                 for (let child of node.children)
                     html += renderTree(child, depth + 1);
                 html += "</ul>";
@@ -122,7 +145,7 @@ let stwStudio = {
                         parent.lastElementChild.insertAdjacentHTML("beforeend", li);
                     else
                         parent.insertAdjacentHTML("beforeend", `<ul>${li}</ul>`);
-                    document.getElementById("properties").click(null, "open");
+                    document.getElementById("properties").click();
                 }
                 break;
 
@@ -130,10 +153,13 @@ let stwStudio = {
                 if (!event.target.parentElement.hasAttribute("selected")) {
                     event.currentTarget.querySelector("li[selected]").removeAttribute("selected");
                     event.target.parentElement.setAttribute("selected", "");
-                    document.getElementById("properties").click("close");
+                    document.getElementById("properties").click();
                 }
                 break;
         }
+    },
+    manageProperties: (event) => {
+
     },
     manageGroups: (event) => {
         let target = event.target;
@@ -143,9 +169,6 @@ let stwStudio = {
         }
     },
     manageDatasource: (event) => {
-
-    },
-    manageProperties: (event) => {
 
     },
     manageExplorer: (event) => {

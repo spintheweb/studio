@@ -10,7 +10,8 @@
 </div>
 <div class="stwForm">
     <h1><i id="properties" class="fa-thin fa-fw fa-angle-right"></i> properties</h1>
-    <form name="properties">
+    <form name="content_properties" onchange="stwStudio.submitForm(event)">
+        <input type="hidden" name="_id">
         <input type="text" name="name" placeholder="Name" title="Name">
         <div style="display: grid; grid-template-columns: 1fr 5em;">
             <input type="text" name="section" placeholder="Section" title="Section">
@@ -43,6 +44,18 @@
         <input type="text" name="parameters" placeholder="key=value" title="Parameters">
         <textarea name="layout" placeholder="Layout" title="Layout"></textarea>
     </form>
+    <!--form name="site_properties">
+        <input type="hidden" name="_id">
+        <input type="text" name="name" placeholder="Name" title="Name">
+        <input type="text" name="domain" placeholder="URL" title="Domain">
+        <input type="text" name="key" placeholder="" title="Key">
+        <input type="text" name="icon" placeholder="icon" title="Icon">
+        <input type="text" name="image" placeholder="image" title="Image">
+        <input type="text" name="homepage" placeholder="homepage" title="Home page">
+        <input type="text" name="lang" placeholder="language" title="Default language">
+        <input type="text" name="keywords" placeholder="keywords" title="SEO Keywords">
+        <input type="text" name="description" placeholder="description" title="SEO description">
+    </form-->
 </div>
 <div class="stwForm">
     <h1><i id="authorizations" class="fa-thin fa-fw fa-angle-right"></i> authorizations</h1>

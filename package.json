@@ -2,7 +2,7 @@
   "name": "stwpstudio",
   "version": "1.0.0",
   "description": "Spin the Web Studio is designed to ease development of Spin the Web sites",
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
     "start": "node .",
     "debug": "nodemon .",
@@ -25,5 +25,8 @@
   "homepage": "https://github.com/spintheweb/studio#readme",
   "devDependencies": {
     "nodemon": "^2.0.20"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
   }
 }
