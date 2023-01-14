@@ -44,6 +44,14 @@ let stwStudio = {
     },
     loadForm: (form, data) => {
         for (let input of form) {
+            if (data[input.name] === undefined) {
+                input.setAttribute("disabled", "");
+                input.style.display = "none";     
+            } else {
+                input.removeAttribute("disabled");
+                input.style.display = "";
+            }
+
             if (!data[input.name])
                 input.value = null;
             else if (typeof data[input.name] === "object")

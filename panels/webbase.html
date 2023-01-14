@@ -13,30 +13,40 @@
     <form name="content_properties" onchange="stwStudio.submitForm(event)">
         <input type="hidden" name="_id">
         <input type="text" name="name" placeholder="Name" title="Name">
+
+        <input type="text" name="domain" placeholder="URL" title="Domain">
+        <input type="text" name="key" placeholder="key" title="Key">
+        <input type="text" name="icon" placeholder="icon" title="Icon">
+        <input type="text" name="image" placeholder="image" title="Image">
+        <input type="text" name="homepage" placeholder="homepage" title="Home page">
+        <input type="text" name="lang" placeholder="language" title="Default language">
+        <input type="text" name="keywords" placeholder="keywords" title="SEO Keywords">
+        <input type="text" name="description" placeholder="description" title="SEO description">
+
         <div style="display: grid; grid-template-columns: 1fr 5em;">
             <input type="text" name="section" placeholder="Section" title="Section">
             <input type="number" name="sequence" placeholder="Seq." step="0.1" title="Sequence">
         </div>
         <input type="text" name="cssclass" placeholder="CSS class" title="CSS class">
-        <select name="type" title="Type">
-            <option value="content/text">Text</option>
-            <option value="content/form">Form</option>
-            <option value="content/table">Table</option>
-            <option value="content/list">List</option>
-            <option value="content/tree">Tree</option>
-            <option value="content/tabs">Tabs</option>
-            <option value="content/calendar">Calendar</option>
-            <option value="content/graph">Graph</option>
-            <option value="content/pagelinks">Page links</option>
-            <option value="content/arealinks">Area links</option>
-            <option value="content/indexedlinks">Indexed links</option>
-            <option value="content/breadcrumb">Breadcrumb</option>
-            <option value="content/cliccableimage">Cliccable image</option>
-            <option value="content/shortcut">Shortcut</option>
-            <option value="content/clientsidecode">Client side code</option>
-            <option value="content/serversidecode">Server side code</option>
+        <select name="subtype" title="Type">
+            <option value="text">Text</option>
+            <option value="form">Form</option>
+            <option value="table">Table</option>
+            <option value="list">List</option>
+            <option value="tree">Tree</option>
+            <option value="tabs">Tabs</option>
+            <option value="calendar">Calendar</option>
+            <option value="graph">Graph</option>
+            <option value="pagelinks">Page links</option>
+            <option value="arealinks">Area links</option>
+            <option value="indexedlinks">Indexed links</option>
+            <option value="breadcrumb">Breadcrumb</option>
+            <option value="cliccableimage">Cliccable image</option>
+            <option value="shortcut">Shortcut</option>
+            <option value="clientsidecode">Client side code</option>
+            <option value="serversidecode">Server side code</option>
         </select>
-        <select name="DSN" title="Type">
+        <select name="dsn" title="Datasource">
             <option></option>
             <option value="webbase">Webbase</option>
         </select>
@@ -44,18 +54,6 @@
         <input type="text" name="parameters" placeholder="key=value" title="Parameters">
         <textarea name="layout" placeholder="Layout" title="Layout"></textarea>
     </form>
-    <!--form name="site_properties">
-        <input type="hidden" name="_id">
-        <input type="text" name="name" placeholder="Name" title="Name">
-        <input type="text" name="domain" placeholder="URL" title="Domain">
-        <input type="text" name="key" placeholder="" title="Key">
-        <input type="text" name="icon" placeholder="icon" title="Icon">
-        <input type="text" name="image" placeholder="image" title="Image">
-        <input type="text" name="homepage" placeholder="homepage" title="Home page">
-        <input type="text" name="lang" placeholder="language" title="Default language">
-        <input type="text" name="keywords" placeholder="keywords" title="SEO Keywords">
-        <input type="text" name="description" placeholder="description" title="SEO description">
-    </form-->
 </div>
 <div class="stwForm" id="authorizations">
     <h1><i class="fa-thin fa-fw fa-angle-right"></i> authorizations</h1>

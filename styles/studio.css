@@ -223,46 +223,34 @@ iframe,
     padding: 0.5em;
 }
 
-li[data-type="site"] > div::before {
-    content: "\f719";
+li[data-type] > div::before {
     padding-right: 0.5em;
     font-family: "Font Awesome 6 Pro";
     font-weight: 300;
+}
+
+li[data-type="site"] > div::before {
+    content: "\f719";
 }
 
 li[data-type="area"] > div::before {
     content: "\f07b";
-    padding-right: 0.5em;
-    font-family: "Font Awesome 6 Pro";
-    font-weight: 300;
 }
 
 li[data-type="page"] > div::before {
     content: "\e428";
-    padding-right: 0.5em;
-    font-family: "Font Awesome 6 Pro";
-    font-weight: 300;
 }
 
-li[data-type^="content"] > div::before {
+li[data-type="content"] > div::before {
     content: "\f0c8";
-    padding-right: 0.5em;
-    font-family: "Font Awesome 6 Pro";
-    font-weight: 300;
 }
 
 li[data-type="dir"] > div::before {
     content: "\f07b";
-    padding-right: 0.5em;
-    font-family: "Font Awesome 6 Pro";
-    font-weight: 300;
 }
 
 li[data-type="file"] > div::before {
     content: "\f15b";
-    padding-right: 0.5em;
-    font-family: "Font Awesome 6 Pro";
-    font-weight: 300;
 }
 
 .menu {

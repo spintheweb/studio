@@ -19,7 +19,7 @@ WBDL.get = key => {
 
     function walk(path, node) {
         node = node || WBDL;
-        return WBDL.walk(path, null);
+        return null; // WBDL.walk(path, null);
     }
 }
 

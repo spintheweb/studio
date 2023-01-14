@@ -4,9 +4,10 @@
     "name": {
         "en": "studio.spintheweb.org"
     },
+    "key": null,
     "lang": "en",
     "url": "https://studio.spintheweb.org",
-    "homepage": "89a30afc-75ba-400e-965b-2e73ac4370eb",
+    "mainpage": "89a30afc-75ba-400e-965b-2e73ac4370eb",
     "authorizations": {
         "root": true,
         "administrators": true
@@ -24,6 +25,9 @@
             "slug": {
                 "en": "area"
             },
+            "icon": null,
+            "keywords": null,
+            "description": null,
             "authorizations": {
                 "users": true
             },
@@ -44,7 +48,8 @@
                     "children": [
                         {
                             "_id": "ca5c92fc-dcc0-456b-bb6e-6c88acf43d41",
-                            "type": "content/text",
+                            "type": "content",
+                            "subtype": "text",
                             "name": {
                                 "en": "Welcome"
                             },
@@ -71,13 +76,17 @@
             "slug": {
                 "en": "api"
             },
+            "icon": null,
+            "keywords": null,
+            "description": null,
             "authorizations": {
                 "users": true
             },
             "children": [
                 {
                     "_id": "c711aa2d-c4a5-4074-a57e-57495d683c4c",
-                    "type": "content/serversidecode",
+                    "type": "content",
+                    "subtype": "serversidecode",
                     "name": {
                         "en": "dir"
                     },
