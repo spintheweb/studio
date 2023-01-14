@@ -12,11 +12,16 @@ WBDL.index = new Map();
         for (let child of obj.children)
             index(child);
 })(WBDL);
-WBDL.node = _id => WBDL.index.get(_id);
-WBDL.walk = (path, node) => {
-    node = node || WBDL;
-    return WBDL.walk(path, null);
-};
+WBDL.get = key => {
+    if (/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i.test(key))
+        return WBDL.index.get(key);
+    return walk(key);
+
+    function walk(path, node) {
+        node = node || WBDL;
+        return WBDL.walk(path, null);
+    }
+}
 
 const hostname = "studio.spintheweb.org" || process.env.hostname || "127.0.0.1";
 const port = process.env.port || 443;
@@ -28,7 +33,7 @@ app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 app.get("/api/webbase(/:path)?", (req, res) => {
-    res.json(req.params.path ? WBDL.node(req.params.path) : WBDL);
+    res.json(req.params.path ? WBDL.get(req.params.path) : WBDL);
 });
 app.get("/api/explorer(/:path)?", (req, res) => {
     res.json(getDir(req.params.path));
