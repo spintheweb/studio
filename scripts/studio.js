@@ -50,7 +50,6 @@ let stwStudio = {
                 input.value = data[input.name][stwStudio.settings.lang] || data[input.name][0] || null;
             else
                 input.value = data[input.name];
-
         }
     },
     loadFile: (path, destination, callback) => {
