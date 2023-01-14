@@ -1,8 +1,8 @@
 let stwStudio = {
-    settings: {
-        lang: "en"
-    },
-    setup: () => {
+    setup: (settings = {}) => {
+        stwStudio.settings = settings;
+        stwStudio.settings.lang = document.firstElementChild.getAttribute("lang") || "en";
+
         if (!document.querySelector(".stwPanels i[selected]"))
             document.querySelector(".stwPanels>i").click();
         document.querySelectorAll(".fa-angle-right").forEach(i => {
@@ -12,7 +12,7 @@ let stwStudio = {
     click: (event) => {
         let target = event.target;
 
-        if (!event.isTrusted && target.id == "properties" && target.classList.contains("fa-angle-down"))
+        if (!event.isTrusted && target.classList.contains("fa-angle-down"))
             return;
 
         if (target.classList.contains("fa-angle-down")) {
@@ -40,13 +40,18 @@ let stwStudio = {
                 body: JSON.stringify(data),
                 headers: { "Content-type": "application/json; charset=UTF-8" }
             })
-            .then(response => response.json())
-            .then(json => console.log(json))
-            .catch(err => console.log(err));
+            .then(res => console.log(res.status));
     },
     loadForm: (form, data) => {
-        for (let input of form)
-            input.value = data[input.name];
+        for (let input of form) {
+            if (!data[input.name])
+                input.value = null;
+            else if (typeof data[input.name] === "object")
+                input.value = data[input.name][stwStudio.settings.lang] || data[input.name][0] || null;
+            else
+                input.value = data[input.name];
+
+        }
     },
     loadFile: (path, destination, callback) => {
         fetch(path)
@@ -126,7 +131,7 @@ let stwStudio = {
                     html += renderTree(child, depth + 1);
                 html += "</ul>";
             } else
-                html = `<li data-type="${node.type}"><div>${name}</div>`;
+                html = `<li ${node._id ? `data-id="${node._id}" ` : ""}data-type="${node.type}"><div>${name}</div>`;
             return `${html}</li>`;
         }
     },
@@ -145,15 +150,29 @@ let stwStudio = {
                         parent.lastElementChild.insertAdjacentHTML("beforeend", li);
                     else
                         parent.insertAdjacentHTML("beforeend", `<ul>${li}</ul>`);
-                    document.getElementById("properties").click();
+
+                    let properties = document.getElementById("properties");
+                    properties.dataset.id = null;
+                    properties.querySelector("h1>i").click();
                 }
                 break;
-
             case "UL":
                 if (!event.target.parentElement.hasAttribute("selected")) {
                     event.currentTarget.querySelector("li[selected]").removeAttribute("selected");
                     event.target.parentElement.setAttribute("selected", "");
-                    document.getElementById("properties").click();
+
+                    let properties = document.getElementById("properties");
+                    properties.dataset.id = event.target.parentElement.dataset.id;
+                    fetch(`/api/webbase/${properties.dataset.id}`)
+                        .then(res => {
+                            if (res.ok)
+                                return res.json();
+                        })
+                        .then(json => {
+                            stwStudio.loadForm(properties.querySelector("form"), json);
+                        })
+                        .catch((err) => console.log(err));
+                    properties.querySelector("h1>i").click();
                 }
                 break;
         }

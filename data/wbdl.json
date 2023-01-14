@@ -86,7 +86,7 @@
                     "query": null,
                     "parameters": null,
                     "layout": {
-                        "js": "function() { return \"Hello World!\"; }"
+                        "en": "function() { return \"Hello World!\"; }"
                     }
                 }
             ]

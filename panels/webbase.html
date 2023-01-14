@@ -8,8 +8,8 @@
         </span>
     </h1>
 </div>
-<div class="stwForm">
-    <h1><i id="properties" class="fa-thin fa-fw fa-angle-right"></i> properties</h1>
+<div class="stwForm" id="properties">
+    <h1><i class="fa-thin fa-fw fa-angle-right"></i> properties</h1>
     <form name="content_properties" onchange="stwStudio.submitForm(event)">
         <input type="hidden" name="_id">
         <input type="text" name="name" placeholder="Name" title="Name">
@@ -19,26 +19,26 @@
         </div>
         <input type="text" name="cssclass" placeholder="CSS class" title="CSS class">
         <select name="type" title="Type">
-            <option>Text</option>
-            <option>Form</option>
-            <option>Table</option>
-            <option>List</option>
-            <option>Tree</option>
-            <option>Tabs</option>
-            <option>Calendar</option>
-            <option>Graph</option>
-            <option>Page links</option>
-            <option>Area links</option>
-            <option>Indexed links</option>
-            <option>Breadcrumb</option>
-            <option>Cliccable image</option>
-            <option>Shortcut</option>
-            <option>Client side code</option>
-            <option>Server side code</option>
+            <option value="content/text">Text</option>
+            <option value="content/form">Form</option>
+            <option value="content/table">Table</option>
+            <option value="content/list">List</option>
+            <option value="content/tree">Tree</option>
+            <option value="content/tabs">Tabs</option>
+            <option value="content/calendar">Calendar</option>
+            <option value="content/graph">Graph</option>
+            <option value="content/pagelinks">Page links</option>
+            <option value="content/arealinks">Area links</option>
+            <option value="content/indexedlinks">Indexed links</option>
+            <option value="content/breadcrumb">Breadcrumb</option>
+            <option value="content/cliccableimage">Cliccable image</option>
+            <option value="content/shortcut">Shortcut</option>
+            <option value="content/clientsidecode">Client side code</option>
+            <option value="content/serversidecode">Server side code</option>
         </select>
         <select name="DSN" title="Type">
             <option></option>
-            <option>Webbase</option>
+            <option value="webbase">Webbase</option>
         </select>
         <textarea name="query" placeholder="Query" title="Query"></textarea>
         <input type="text" name="parameters" placeholder="key=value" title="Parameters">
@@ -57,8 +57,8 @@
         <input type="text" name="description" placeholder="description" title="SEO description">
     </form-->
 </div>
-<div class="stwForm">
-    <h1><i id="authorizations" class="fa-thin fa-fw fa-angle-right"></i> authorizations</h1>
+<div class="stwForm" id="authorizations">
+    <h1><i class="fa-thin fa-fw fa-angle-right"></i> authorizations</h1>
     <table>
         <tbody>
             <tr>
