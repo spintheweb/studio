@@ -32,6 +32,9 @@ app.use(express.static(__dirname)); // for handling static files
 app.use(express.json()); // for parsing application/json
 app.use(express.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
+app.get("/api/webbase/groups", (req, res) => {
+    res.json(WBDL.authorizations);
+});
 app.get("/api/webbase(/:path)?", (req, res) => {
     res.json(req.params.path ? WBDL.get(req.params.path) : WBDL);
 });

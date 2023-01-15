@@ -1,7 +1,7 @@
 <div class="stwTable">
-    <h1><i class="fa-thin fa-fw"></i> groups
+    <h1><i class="fa-light fa-fw"></i> groups
         <span onclick="stwStudio.manageGroups(event)">
-            <i class="fa-thin fa-fw fa-plus" title="Add group" data-action="addGroup"></i>
+            <i class="fa-light fa-fw fa-plus" title="Add group" data-action="addGroup"></i>
         </span>
     </h1>
     <table>
@@ -28,4 +28,10 @@
             </tr>
         </tbody>
     </table>
+</div>
+<div class="stwForm" id="properties">
+    <h1><i class="fa-light fa-fw fa-angle-right"></i> properties</h1>
+    <form name="content_properties" onchange="stwStudio.submitForm(event)">
+        <input type="text" name="name" placeholder="Name" title="Name" required>
+    </form>
 </div>

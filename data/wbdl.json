@@ -4,13 +4,16 @@
     "name": {
         "en": "studio.spintheweb.org"
     },
-    "key": null,
     "lang": "en",
     "url": "https://studio.spintheweb.org",
     "mainpage": "89a30afc-75ba-400e-965b-2e73ac4370eb",
     "authorizations": {
-        "root": true,
-        "administrators": true
+        "guests": null,
+        "users": null,
+        "translators": null,
+        "developers": null,
+        "administrators": true,
+        "root": true
     },
     "icon": null,
     "keywords": null,

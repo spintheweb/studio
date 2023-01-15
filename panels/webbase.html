@@ -1,32 +1,45 @@
 <div class="stwTree">
-    <h1 onclick="stwStudio.manageWebbase(event)"><i class="fa-thin fa-fw"></i> webbase
+    <h1 onclick="stwStudio.manageWebbase(event)"><i class="fa-light fa-fw"></i> webbase
         <span>
-            <i class="fa-thin fa-fw fa-arrow-rotate-right" title="Refresh" data-action="refresh"></i>
-            <i class="fa-thin fa-fw fa-folder-plus" title="New area" data-action="newArea"></i>
-            <i class="fa-thin fa-fw fa-file-plus" title="New page" data-action="newPage"></i>
-            <i class="fa-thin fa-fw fa-square-plus" title="New content" data-action="newContent"></i>
+            <i class="fa-light fa-fw fa-arrow-rotate-right" title="Refresh" data-action="refresh"></i>
+            <i class="fa-light fa-fw fa-folder-plus" title="New area" data-action="newArea"></i>
+            <i class="fa-light fa-fw fa-file-plus" title="New page" data-action="newPage"></i>
+            <i class="fa-light fa-fw fa-square-plus" title="New content" data-action="newContent"></i>
         </span>
     </h1>
 </div>
 <div class="stwForm" id="properties">
-    <h1><i class="fa-thin fa-fw fa-angle-right"></i> properties</h1>
+    <h1><i class="fa-light fa-fw fa-angle-right"></i> properties</h1>
     <form name="content_properties" onchange="stwStudio.submitForm(event)">
         <input type="hidden" name="_id">
-        <input type="text" name="name" placeholder="Name" title="Name">
+        
+        <input type="text" name="name" placeholder="Name" title="Name" required>
 
-        <input type="text" name="domain" placeholder="URL" title="Domain">
-        <input type="text" name="key" placeholder="key" title="Key">
+        <input type="text" name="domain" placeholder="URL" title="Domain" required>
         <input type="text" name="icon" placeholder="icon" title="Icon">
         <input type="text" name="image" placeholder="image" title="Image">
-        <input type="text" name="homepage" placeholder="homepage" title="Home page">
-        <input type="text" name="lang" placeholder="language" title="Default language">
+        
+        <input type="text" name="template" placeholder="Template" title="Template" required>
+        <input type="text" name="visible">
+        
+        <input type="text" name="homepage" placeholder="homepage" title="Home page" readonly>
+        <input type="text" name="mainpage" placeholder="mainpage" title="Main page" readonly>
+
+        <select name="lang" title="Default language">
+            <option value="en">English</option>
+            <option value="es">Spanish</option>
+            <option value="it">Italian</option>
+            <option value="fr">French</option>
+            <option value="de">German</option>
+        </select>
         <input type="text" name="keywords" placeholder="keywords" title="SEO Keywords">
-        <input type="text" name="description" placeholder="description" title="SEO description">
+        <textarea name="description" placeholder="description" title="SEO description"></textarea>
 
         <div style="display: grid; grid-template-columns: 1fr 5em;">
             <input type="text" name="section" placeholder="Section" title="Section">
             <input type="number" name="sequence" placeholder="Seq." step="0.1" title="Sequence">
         </div>
+        
         <input type="text" name="cssclass" placeholder="CSS class" title="CSS class">
         <select name="subtype" title="Type">
             <option value="text">Text</option>
@@ -56,23 +69,23 @@
     </form>
 </div>
 <div class="stwForm" id="authorizations">
-    <h1><i class="fa-thin fa-fw fa-angle-right"></i> authorizations</h1>
+    <h1><i class="fa-light fa-fw fa-angle-right"></i> authorizations</h1>
     <table>
         <tbody>
             <tr>
-                <td data-group="guests"><i class="fa-solid fa-fw fa-users"></i> Guests</td><td style="width: 1em;"><i class="fa-solid fa-fw fa-eye-slash"></i></td>
+                <td><i class="fa-light fa-fw fa-users"></i> guests</td><td style="width: 1em;"><i class="fa-solid fa-fw fa-eye-slash"></i></td>
             </tr>
             <tr>
-                <td data-group="users"><i class="fa-solid fa-fw fa-users"></i> Users</td><td><i class="fa-solid fa-fw fa-eye"></i></td>
+                <td><i class="fa-light fa-fw fa-users"></i> users</td><td><i class="fa-solid fa-fw fa-eye"></i></td>
             </tr>
             <tr>
-                <td data-group="translators"><i class="fa-solid fa-fw fa-users"></i> Translators</td><td><i class="fa-thin fa-fw fa-eye-slash"></i></td>
+                <td><i class="fa-light fa-fw fa-users"></i> translators</td><td><i class="fa-light fa-fw fa-eye-slash"></i></td>
             </tr>
             <tr>
-                <td data-group="developers"><i class="fa-solid fa-fw fa-users"></i> Developers</td><td><i class="fa-thin fa-fw fa-eye-slash"></i></td>
+                <td><i class="fa-light fa-fw fa-users"></i> developers</td><td><i class="fa-light fa-fw fa-eye-slash"></i></td>
             </tr>
             <tr>
-                <td data-group="administrators"><i class="fa-solid fa-fw fa-users"></i> Administrators</td><td><i class="fa-thin fa-fw fa-eye-slash"></i></td>
+                <td><i class="fa-light fa-fw fa-users"></i> administrators</td><td><i class="fa-light fa-fw fa-eye-slash"></i></td>
             </tr>
         </tbody>
     </table>

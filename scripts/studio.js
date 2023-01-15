@@ -1,5 +1,7 @@
 let stwStudio = {
     setup: (settings = {}) => {
+        ace.config.set("basePath", "https://cdnjs.cloudflare.com/ajax/libs/ace/1.14.0/");
+
         stwStudio.settings = settings;
         stwStudio.settings.lang = document.firstElementChild.getAttribute("lang") || "en";
 
@@ -116,6 +118,7 @@ let stwStudio = {
                             })
                             .then(json => {
                                 document.querySelector(".stwPanel .stwTree").insertAdjacentHTML("beforeend", `<ul onclick="stwStudio.manageWebbase(event)">${renderTree(json)}</ul>`);
+                                document.querySelector("li[data-type=site]>div").click();
                             })
                             .catch((err) => {
                                 console.log(err);
@@ -131,14 +134,14 @@ let stwStudio = {
 
             if (node.children && node.children.length) {
                 if (depth)
-                    html = `<li ${node._id ? `data-id="${node._id}" ` : ""}data-type="${node.type}"><i class="fa-solid fa-fw fa-angle-right"></i><div>${name}</div><ul style="display:none">`;
+                    html = `<li ${node._id ? `data-id="${node._id}" ` : ""}data-type="${node.type}"><i class="fa-solid fa-fw fa-angle-right"></i><div><div class="stwFill"></div>${name}</div><ul style="display:none">`;
                 else
-                    html = `<li ${node._id ? `data-id="${node._id}" ` : ""}data-type="${node.type}" selected><div>${name}</div><ul>`;
+                    html = `<li ${node._id ? `data-id="${node._id}" ` : ""}data-type="${node.type}" selected><div><div class="stwFill"></div>${name}</div><ul>`;
                 for (let child of node.children)
                     html += renderTree(child, depth + 1);
                 html += "</ul>";
             } else
-                html = `<li ${node._id ? `data-id="${node._id}" ` : ""}data-type="${node.type}"><div>${name}</div>`;
+                html = `<li ${node._id ? `data-id="${node._id}" ` : ""}data-type="${node.type}"><div><div class="stwFill"></div>${name}</div>`;
             return `${html}</li>`;
         }
     },
@@ -152,7 +155,7 @@ let stwStudio = {
                 } else {
                     let parent = tree.querySelector("li[selected]") || tree.querySelector("li");
                     parent.removeAttribute("selected");
-                    let li = `<li class="${event.target.dataset.action.replace("new", "stw")}" selected><div>${event.target.getAttribute("title")}</div></li>`
+                    let li = `<li data-type="${event.target.dataset.action.replace("new", "").toLowerCase()}" selected><div>${event.target.getAttribute("title")}</div></li>`
                     if (parent.querySelector("ul"))
                         parent.lastElementChild.insertAdjacentHTML("beforeend", li);
                     else
@@ -164,7 +167,7 @@ let stwStudio = {
                 }
                 break;
             case "UL":
-                if (!event.target.parentElement.hasAttribute("selected")) {
+                if (!event.target.parentElement.hasAttribute("selected") || !event.isTrusted) {
                     event.currentTarget.querySelector("li[selected]").removeAttribute("selected");
                     event.target.parentElement.setAttribute("selected", "");
 
@@ -190,7 +193,7 @@ let stwStudio = {
     manageGroups: (event) => {
         let target = event.target;
         if (target.classList.contains("fa-plus")) {
-            let tr = `<tr><td><i class="fa-solid fa-fw fa-users"></i></td><td><div contenteditable>New group</div></td></tr>`;
+            let tr = `<li><i class="fa-light fa-fw fa-users"></i> New group</li>`;
             target.closest("div").querySelector("tbody").insertAdjacentHTML("beforeend", tr);
         }
     },
@@ -206,12 +209,13 @@ let stwStudio = {
                 path = el.children[1].innerText + "/" + path;
 
             if (!document.getElementById(path)) {
-                document.querySelector(".stwTabs > div").insertAdjacentHTML("beforeend", `<span class="stwTabLabel" title="${path}">${filename}<i class="fa-thin fa-times"></i></span>`);
+                document.querySelector(".stwTabs > div").insertAdjacentHTML("beforeend", `<span class="stwTabLabel" title="${path}">${filename}<i class="fa-light fa-times"></i></span>`);
                 document.querySelector(".stwTabs").insertAdjacentHTML("beforeend", `<div class="stwTab"><div></div><div id="${path}"></div></div>`);
 
                 let editor = ace.edit(path);
-                // editor.setTheme("ace/theme/monokai");
-                // editor.session.setMode("ace/mode/javascript");
+                if (window.getComputedStyle(document.body).getPropertyValue('color-scheme') === "dark")
+                    editor.setTheme("ace/theme/tomorrow_night");
+                editor.session.setMode(ace.require("ace/ext/modelist").getModeForPath(path).mode);
                 stwStudio.loadFile(path, editor);
             } else
                 document.querySelector(`.stwTabs .stwTabLabel[title="${path}"]`).click();
