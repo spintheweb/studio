@@ -11,7 +11,7 @@ let stwStudio = {
             i.parentElement.nextElementSibling.style.display = "none";
         });
     },
-    click: (event) => {
+    click: event => {
         let target = event.target;
 
         if (!event.isTrusted && target.classList.contains("fa-angle-down"))
@@ -31,12 +31,16 @@ let stwStudio = {
                 target.parentElement.nextElementSibling.style.display = "";
         }
     },
-    submitForm: (event) => {
+    submitForm: event => {
         let data = {};
         for (let input of event.target.form)
-            data[input.name] = input.value;
+            if (!input.hasAttribute("disabled"))
+                data[input.name] = input.value;
 
-        fetch(`/api/webbase/${data._id}`,
+        if (data.hasOwnProperty("slug") && data.slug === "")
+            data.slug = data.name.toLowerCase().replace(/[!a-z]/g, "");
+
+        fetch(`/api/webbase/${stwStudio.settings.lang}/${data._id}`,
             {
                 method: "POST",
                 body: JSON.stringify(data),
@@ -48,7 +52,7 @@ let stwStudio = {
         for (let input of form) {
             if (data[input.name] === undefined) {
                 input.setAttribute("disabled", "");
-                input.style.display = "none";     
+                input.style.display = "none";
             } else {
                 input.removeAttribute("disabled");
                 input.style.display = "";
@@ -61,6 +65,8 @@ let stwStudio = {
             else
                 input.value = data[input.name];
         }
+        if (form.slug && form.slug.value === "")
+            form.slug.value = form.name.value.toLowerCase().replace(/[!a-z]/g, "");
     },
     loadFile: (path, destination, callback) => {
         fetch(path)
@@ -80,7 +86,54 @@ let stwStudio = {
                 }
             });
     },
-    managePanel: (event) => {
+    fillPanel: panel => {
+        switch (panel) {
+            case "/panels/webbase.html":
+                fetch('/api/webbase')
+                    .then(res => {
+                        if (res.ok)
+                            return res.json();
+                    })
+                    .then(json => {
+                        document.querySelector(".stwPanel .stwTree").insertAdjacentHTML("beforeend", `<ul onclick="stwStudio.manageWebbase(event)">${stwStudio.renderTree(json)}</ul>`);
+                        document.querySelector("li[data-type=site]>div").click();
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+                break;
+            case "/panels/explorer.html":
+                fetch('/api/explorer')
+                    .then(res => {
+                        if (res.ok)
+                            return res.json();
+                    })
+                    .then(json => {
+                        document.querySelector(".stwPanel .stwTree").insertAdjacentHTML("beforeend", `<ul onclick="stwStudio.manageExplorer(event)">${stwStudio.renderTree(json)}</ul>`);
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+                break;
+        }
+    },
+    renderTree: (node, depth = 0) => {
+        let html,
+            name = typeof (node.name) === "string" ? node.name : node.name[stwStudio.settings.lang];
+
+        if (node.children && node.children.length) {
+            if (depth)
+                html = `<li ${node._id ? `data-id="${node._id}" ` : ""}data-type="${node.type}"><i class="fa-solid fa-fw fa-angle-right"></i><div><div class="stwFill"></div>${name}</div><ul style="display:none">`;
+            else
+                html = `<li ${node._id ? `data-id="${node._id}" ` : ""}data-type="${node.type}" selected><div><div class="stwFill"></div>${name}</div><ul>`;
+            for (let child of node.children)
+                html += stwStudio.renderTree(child, depth + 1);
+            html += "</ul>";
+        } else
+            html = `<li ${node._id ? `data-id="${node._id}" ` : ""}data-type="${node.type}"><div><div class="stwFill"></div>${name}</div>`;
+        return `${html}</li>`;
+    },
+    managePanel: event => {
         let target = event.target;
         if (target.tagName === "I" && target.dataset.panel === "menu") {
             // [TODO]
@@ -93,77 +146,43 @@ let stwStudio = {
             let selected = event.currentTarget.querySelector("[selected]");
             if (selected) selected.removeAttribute("selected");
             target.setAttribute("selected", "");
-            stwStudio.loadFile(target.dataset.panel, event.currentTarget.nextElementSibling, fillPanel);
-
-            function fillPanel(panel) {
-                switch (panel) {
-                    case "/panels/explorer.html":
-                        fetch('/api/explorer')
-                            .then(res => {
-                                if (res.ok)
-                                    return res.json();
-                            })
-                            .then(json => {
-                                document.querySelector(".stwPanel .stwTree").insertAdjacentHTML("beforeend", `<ul onclick="stwStudio.manageExplorer(event)">${renderTree(json)}</ul>`);
-                            })
-                            .catch((err) => {
-                                console.log(err);
-                            });
-                        break;
-                    case "/panels/webbase.html":
-                        fetch('/api/webbase')
-                            .then(res => {
-                                if (res.ok)
-                                    return res.json();
-                            })
-                            .then(json => {
-                                document.querySelector(".stwPanel .stwTree").insertAdjacentHTML("beforeend", `<ul onclick="stwStudio.manageWebbase(event)">${renderTree(json)}</ul>`);
-                                document.querySelector("li[data-type=site]>div").click();
-                            })
-                            .catch((err) => {
-                                console.log(err);
-                            });
-                        break;
-                }
-            }
-        }
-
-        function renderTree(node, depth = 0) {
-            let html,
-                name = typeof (node.name) === "string" ? node.name : node.name[stwStudio.settings.lang];
-
-            if (node.children && node.children.length) {
-                if (depth)
-                    html = `<li ${node._id ? `data-id="${node._id}" ` : ""}data-type="${node.type}"><i class="fa-solid fa-fw fa-angle-right"></i><div><div class="stwFill"></div>${name}</div><ul style="display:none">`;
-                else
-                    html = `<li ${node._id ? `data-id="${node._id}" ` : ""}data-type="${node.type}" selected><div><div class="stwFill"></div>${name}</div><ul>`;
-                for (let child of node.children)
-                    html += renderTree(child, depth + 1);
-                html += "</ul>";
-            } else
-                html = `<li ${node._id ? `data-id="${node._id}" ` : ""}data-type="${node.type}"><div><div class="stwFill"></div>${name}</div>`;
-            return `${html}</li>`;
+            stwStudio.loadFile(target.dataset.panel, event.currentTarget.nextElementSibling, stwStudio.fillPanel);
         }
     },
-    manageWebbase: (event) => {
+    manageWebbase: event => {
+        if (event.target.tagName === "H1") {
+            event.preventDefault();
+            event.stopPropagation();
+            return;
+        }
+
         switch (event.currentTarget.tagName) {
             case "H1":
                 tree = event.currentTarget.nextElementSibling;
 
                 if (event.target.dataset.action === "refresh") {
-                    // Reload webbase
-                } else {
-                    let parent = tree.querySelector("li[selected]") || tree.querySelector("li");
-                    parent.removeAttribute("selected");
-                    let li = `<li data-type="${event.target.dataset.action.replace("new", "").toLowerCase()}" selected><div>${event.target.getAttribute("title")}</div></li>`
-                    if (parent.querySelector("ul"))
-                        parent.lastElementChild.insertAdjacentHTML("beforeend", li);
-                    else
-                        parent.insertAdjacentHTML("beforeend", `<ul>${li}</ul>`);
+                    stwStudio.loadFile("/panels/webbase.html", document.querySelector("section.stwPanel"), stwStudio.fillPanel);
 
-                    let properties = document.getElementById("properties");
-                    properties.dataset.id = null;
-                    properties.querySelector("h1>i").click();
+                } else {
+                    fetch(`/api/webbase/${stwStudio.settings.lang}/${event.target.dataset.action}`,
+                        {
+                            method: "POST"
+                        })
+                        .then(res => res.json())
+                        .then(node => {
+                            let parent = tree.querySelector("li[selected]") || tree.querySelector("li");
+                            parent.removeAttribute("selected");
+                            let li = `<li data-type="${node.type}" selected><div>${node.title}</div></li>`
+                            if (parent.querySelector("ul"))
+                                parent.lastElementChild.insertAdjacentHTML("beforeend", li);
+                            else
+                                parent.insertAdjacentHTML("beforeend", `<ul>${li}</ul>`);
+
+                            let properties = document.getElementById("properties");
+                            properties.dataset.id = node._id;
+                            properties.querySelector("h1>i").click();
+                        })
+                        .catch(err => { console.log(err) });
                 }
                 break;
             case "UL":
@@ -181,26 +200,23 @@ let stwStudio = {
                         .then(json => {
                             stwStudio.loadForm(properties.querySelector("form"), json);
                         })
-                        .catch((err) => console.log(err));
-                    properties.querySelector("h1>i").click();
+                        .catch(err => console.log(err));
+//                    properties.querySelector("h1>i").click();
                 }
                 break;
         }
     },
-    manageProperties: (event) => {
-
-    },
-    manageGroups: (event) => {
+    manageGroups: event => {
         let target = event.target;
         if (target.classList.contains("fa-plus")) {
             let tr = `<li><i class="fa-light fa-fw fa-users"></i> New group</li>`;
             target.closest("div").querySelector("tbody").insertAdjacentHTML("beforeend", tr);
         }
     },
-    manageDatasource: (event) => {
+    manageDatasource: event => {
 
     },
-    manageExplorer: (event) => {
+    manageExplorer: event => {
         let target = event.target.parentElement;
         if (target.dataset.type === "file") {
             let filename = target.innerText;
@@ -221,7 +237,7 @@ let stwStudio = {
                 document.querySelector(`.stwTabs .stwTabLabel[title="${path}"]`).click();
         }
     },
-    manageTab: (event) => {
+    manageTab: event => {
         let target = event.target;
         if (target.classList.contains("fa-times")) {
             let i;
@@ -245,7 +261,7 @@ let stwStudio = {
         }
         event.preventDefault();
     },
-    manageBrowse: (event) => {
+    manageBrowse: event => {
         let target = event.target;
         switch (target.dataset.action) {
             case "back":
@@ -257,7 +273,7 @@ let stwStudio = {
                 break;
         }
     },
-    setURL: (event) => {
+    setURL: event => {
         let target = event.target;
         if (target.tagName === "INPUT")
             target.parentElement.nextElementSibling.contentWindow.location.href = target.value;

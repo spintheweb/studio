@@ -2,9 +2,9 @@
     <h1 onclick="stwStudio.manageWebbase(event)"><i class="fa-light fa-fw"></i> webbase
         <span>
             <i class="fa-light fa-fw fa-arrow-rotate-right" title="Refresh" data-action="refresh"></i>
-            <i class="fa-light fa-fw fa-folder-plus" title="New area" data-action="newArea"></i>
-            <i class="fa-light fa-fw fa-file-plus" title="New page" data-action="newPage"></i>
-            <i class="fa-light fa-fw fa-square-plus" title="New content" data-action="newContent"></i>
+            <i class="fa-light fa-fw fa-folder-plus" title="New area" data-action="area"></i>
+            <i class="fa-light fa-fw fa-file-plus" title="New page" data-action="page"></i>
+            <i class="fa-light fa-fw fa-square-plus" title="New content" data-action="content"></i>
         </span>
     </h1>
 </div>
@@ -14,6 +14,7 @@
         <input type="hidden" name="_id">
         
         <input type="text" name="name" placeholder="Name" title="Name" required>
+        <input type="text" name="slug" placeholder="Slug" title="Slug" required>
 
         <input type="text" name="domain" placeholder="URL" title="Domain" required>
         <input type="text" name="icon" placeholder="icon" title="Icon">
@@ -32,7 +33,7 @@
             <option value="fr">French</option>
             <option value="de">German</option>
         </select>
-        <input type="text" name="keywords" placeholder="keywords" title="SEO Keywords">
+        <input type="text" name="keywords" placeholder="keywords" title="SEO keywords">
         <textarea name="description" placeholder="description" title="SEO description"></textarea>
 
         <div style="display: grid; grid-template-columns: 1fr 5em;">
@@ -68,8 +69,8 @@
         <textarea name="layout" placeholder="Layout" title="Layout"></textarea>
     </form>
 </div>
-<div class="stwForm" id="authorizations">
-    <h1><i class="fa-light fa-fw fa-angle-right"></i> authorizations</h1>
+<div class="stwForm" id="visibility">
+    <h1><i class="fa-light fa-fw fa-angle-right"></i> visibility</h1>
     <table>
         <tbody>
             <tr>
