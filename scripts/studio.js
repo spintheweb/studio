@@ -44,7 +44,7 @@ let stwStudio = {
             {
                 method: "POST",
                 body: JSON.stringify(data),
-                headers: { "Content-type": "application/json; charset=UTF-8" }
+                headers: { "Content-type": "application/json" }
             })
             .then(res => console.log(res.status));
     },
@@ -201,7 +201,7 @@ let stwStudio = {
                             stwStudio.loadForm(properties.querySelector("form"), json);
                         })
                         .catch(err => console.log(err));
-//                    properties.querySelector("h1>i").click();
+                    properties.querySelector("h1>i").click();
                 }
                 break;
         }

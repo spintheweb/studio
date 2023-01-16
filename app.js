@@ -1,8 +1,14 @@
-const express = require("express");
 const https = require("https");
 const path = require('path');
 const fs = require("fs");
+const express = require("express");
 const uuid = require("uuid");
+const git = require('simple-git')({
+    baseDir: process.cwd(),
+    binary: 'git',
+    maxConcurrentProcesses: 6,
+    trimmed: false,
+ });
 
 // Load WBDL from file and index for faster access
 let WBDL = JSON.parse(fs.readFileSync(path.join(__dirname, "data/wbdl.json")));
@@ -32,6 +38,13 @@ const hostname = "studio.spintheweb.org" || process.env.hostname || "127.0.0.1";
 const port = process.env.port || 443;
 
 const app = express();
+app.disable("x-powered-by");
+app.use(function (req, res, next) {
+    res.setHeader("charset", "utf-8");
+    res.setHeader("x-content-type-options", "nosniff");
+    res.setHeader("cache-control", "no-cache");
+    next();
+});
 
 app.use(express.static(__dirname)); // for handling static files
 app.use(express.json()); // for parsing application/json
@@ -73,8 +86,8 @@ app.post("/api/webbase/:lang/:_id", (req, res) => {
         switch (req.params.component) {
             case "area":
                 res.json({
-                    _id: uuid.v5("studio.spintheweb.org", uuid.v5.DNS), 
-                    name: {}, 
+                    _id: uuid.v5("studio.spintheweb.org", uuid.v5.DNS),
+                    name: {},
                     type: "area",
                     slug: {},
                     icon: null,
@@ -98,11 +111,14 @@ app.post("/api/webbase/:lang/:_id", (req, res) => {
         }
     }
 });
+app.get("/api/git/status", async (req, res) => {
+    res.json(await git.status());
+});
 
 https.createServer(
     {
-        key: fs.readFileSync(`${__dirname}/pki/private_key.pem`),
-        cert: fs.readFileSync(`${__dirname}/pki/certificate.pem`)
+        key: fs.readFileSync(path.join(__dirname, "/pki/private_key.pem")),
+        cert: fs.readFileSync(path.join(__dirname, "/pki/certificate.pem"))
     },
     app)
     .listen(port, hostname, () => {
@@ -124,17 +140,3 @@ function getDir(directory = ".") {
     }
     return response;
 }
-
-/*
-Use git
-
-const util = require('node:util');
-const exec = util.promisify(require('node:child_process').exec);
-
-async function lsExample() {
-  const { stdout, stderr } = await exec('ls');
-  console.log('stdout:', stdout);
-  console.error('stderr:', stderr);
-}
-lsExample();
-*/
