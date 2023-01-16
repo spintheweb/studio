@@ -1,33 +1,16 @@
-<div class="stwTable">
-    <h1><i class="fa-light fa-fw"></i> groups
-        <span onclick="stwStudio.manageGroups(event)">
+<div class="stwList">
+    <h1 onclick="stwStudio.manageGroups(event)"><i class="fa-light fa-fw"></i> groups
+        <span>
             <i class="fa-light fa-fw fa-plus" title="Add group" data-action="addGroup"></i>
         </span>
     </h1>
-    <table>
-        <tbody>
-            <tr data-group="guests">
-                <td><i class="fa-solid fa-fw fa-users"></i></td>
-                <td>Guests</td>
-            </tr>
-            <tr data-group="users">
-                <td><i class="fa-solid fa-fw fa-users"></i></td>
-                <td>Users</td>
-            </tr>
-            <tr data-group="translators">
-                <td><i class="fa-solid fa-fw fa-users"></i></td>
-                <td>Translators</td>
-            </tr>
-            <tr data-group="developers">
-                <td><i class="fa-solid fa-fw fa-users"></i></td>
-                <td>Developers</td>
-            </tr>
-            <tr data-group="administrators">
-                <td><i class="fa-solid fa-fw fa-users"></i></td>
-                <td>Administrators</td>
-            </tr>
-        </tbody>
-    </table>
+    <ul>
+        <li data-key="guests"><i class="fa-light fa-fw fa-users"></i> Guests</li>
+        <li data-key="users"><i class="fa-light fa-fw fa-users"></i> Users</li>
+        <li data-key="translators"><i class="fa-light fa-fw fa-users"></i> Translators</li>
+        <li data-key="developers"><i class="fa-light fa-fw fa-users"></i> Developers</li>
+        <li data-key="administrators"><i class="fa-light fa-fw fa-users"></i> Administrators</li>
+    </ul>
 </div>
 <div class="stwForm" id="properties">
     <h1><i class="fa-light fa-fw fa-angle-right"></i> properties</h1>

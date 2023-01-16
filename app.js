@@ -1,4 +1,4 @@
-const https = require("https");
+const http = require("http");
 const path = require('path');
 const fs = require("fs");
 const express = require("express");
@@ -34,8 +34,8 @@ WBDL.get = (lang, key) => {
     })(key.split("/"), WBDL);
 };
 
-const hostname = "studio.spintheweb.org" || process.env.hostname || "127.0.0.1";
-const port = process.env.port || 443;
+const hostname = process.env.hostname || "127.0.0.1";
+const port = process.env.port || 8080;
 
 const app = express();
 app.disable("x-powered-by");
@@ -115,7 +115,7 @@ app.get("/api/git/status", async (req, res) => {
     res.json(await git.status());
 });
 
-https.createServer(
+http.createServer(
     {
         key: fs.readFileSync(path.join(__dirname, "/pki/private_key.pem")),
         cert: fs.readFileSync(path.join(__dirname, "/pki/certificate.pem"))

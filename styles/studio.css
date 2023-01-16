@@ -196,6 +196,7 @@ body {
     cursor: pointer;
 }
 
+.stwList ul,
 .stwTree ul {
     list-style: none;
     margin: 0;
@@ -203,11 +204,16 @@ body {
     cursor: pointer;
 }
 
+.stwList li:hover {
+    background-color: var(--highlight);
+}
+
 .stwTree ul>li>ul>li {
     white-space: nowrap;
     padding-left: 0.75em;
 }
 
+.stwList li,
 .stwTree li>div {
     position: relative;
     padding: 0.5em 0.25em;

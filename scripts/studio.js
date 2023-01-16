@@ -208,10 +208,12 @@ let stwStudio = {
     },
     manageGroups: event => {
         let target = event.target;
+        /*
         if (target.classList.contains("fa-plus")) {
             let tr = `<li><i class="fa-light fa-fw fa-users"></i> New group</li>`;
             target.closest("div").querySelector("tbody").insertAdjacentHTML("beforeend", tr);
         }
+        */
     },
     manageDatasource: event => {
 

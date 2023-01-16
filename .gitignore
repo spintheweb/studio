@@ -1,4 +1,5 @@
 /node_modules
-/.vscode
 /pki
-
+/styles/fontawesome-pro-6.2.1-web
+.npmrc
+.readme
