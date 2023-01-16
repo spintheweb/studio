@@ -38,7 +38,7 @@ let stwStudio = {
                 data[input.name] = input.value;
 
         if (data.hasOwnProperty("slug") && data.slug === "")
-            data.slug = data.name.toLowerCase().replace(/[!a-z]/g, "");
+            data.slug = data.name.toLowerCase().replace(/[^a-z]/g, "");
 
         fetch(`/api/webbase/${stwStudio.settings.lang}/${data._id}`,
             {
@@ -66,7 +66,7 @@ let stwStudio = {
                 input.value = data[input.name];
         }
         if (form.slug && form.slug.value === "")
-            form.slug.value = form.name.value.toLowerCase().replace(/[!a-z]/g, "");
+            form.slug.value = form.name.value.toLowerCase().replace(/[^a-z]/g, "");
     },
     loadFile: (path, destination, callback) => {
         fetch(path)

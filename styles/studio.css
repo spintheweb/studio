@@ -102,8 +102,8 @@ body {
 
 .stwPanel {
     display: grid;
-    resize: horizontal;
-    overflow: hidden;
+    /* resize: horizontal; */
+    /* overflow: hidden; */
     grid-template-rows: 1fr auto auto;
     background-color: var(--medium);
 }
@@ -176,10 +176,6 @@ body {
 
 .stwTab:not([selected]) {
     display: none;
-}
-
-.stwVSplitter {
-    background-color: var(--medium);
 }
 
 .stwForm form {
