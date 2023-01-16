@@ -46,7 +46,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use(express.static(__dirname)); // for handling static files
+app.use([/^\/(pki|data|node_modules)/, "/"], express.static(__dirname, { dotfiles: "deny" })); // for handling static files
 app.use(express.json()); // for parsing application/json
 
 app.get("/api/webbase/users", (req, res) => {
