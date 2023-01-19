@@ -114,7 +114,7 @@ let stwStudio = {
                             return res.json();
                     })
                     .then(json => {
-                        document.querySelector(".stwPanel .stwTree").insertAdjacentHTML("beforeend", `<ul onclick="stwStudio.manageWebbase(event)">${stwStudio.renderTree(json)}</ul>`);
+                        document.querySelector(".stwPanel .stwTree").insertAdjacentHTML("beforeend", `<ul>${stwStudio.renderTree(json)}</ul>`);
                         document.querySelector("li[data-type=site]>div").click();
                     })
                     .catch(err => {
@@ -128,7 +128,7 @@ let stwStudio = {
                             return res.json();
                     })
                     .then(json => {
-                        document.querySelector(".stwPanel .stwTree").insertAdjacentHTML("beforeend", `<ul onclick="stwStudio.manageExplorer(event)">${stwStudio.renderTree(json)}</ul>`);
+                        document.querySelector(".stwPanel .stwTree").insertAdjacentHTML("beforeend", `<ul>${stwStudio.renderTree(json)}</ul>`);
                     })
                     .catch(err => {
                         console.log(err);
@@ -169,15 +169,17 @@ let stwStudio = {
         }
     },
     manageWebbase: event => {
+        let target = event.target.closest("h1") || (event.target.closest("ul") ? event.currentTarget.querySelector("ul") : event.target);
+
         if (event.target.tagName === "H1") {
             event.preventDefault();
             event.stopPropagation();
             return;
         }
 
-        switch (event.currentTarget.tagName) {
+        switch (target.tagName) {
             case "H1":
-                tree = event.currentTarget.nextElementSibling;
+                tree = target.nextElementSibling;
 
                 if (event.target.dataset.action === "refresh") {
                     stwStudio.loadFile("/panels/webbase.html", document.querySelector("section.stwPanel"), stwStudio.fillPanel);
@@ -210,7 +212,7 @@ let stwStudio = {
                 break;
             case "UL":
                 if (!event.target.parentElement.hasAttribute("selected") || !event.isTrusted) {
-                    event.currentTarget.querySelector("li[selected]").removeAttribute("selected");
+                    target.querySelector("li[selected]").removeAttribute("selected");
                     event.target.parentElement.setAttribute("selected", "");
 
                     let properties = document.getElementById("properties");
@@ -243,8 +245,9 @@ let stwStudio = {
 
     },
     manageExplorer: event => {
-        let target = event.target.parentElement;
-        if (target.dataset.type === "file") {
+        let target = event.target.closest("h1") || event.target.closest("ul") || event.target;
+
+        if (target.tagName === "UL" && target.dataset.type === "file") {
             let filename = target.innerText;
             let path = filename;
             for (let el = target.closest("li[data-type=dir]"); el.firstChild.tagName === "I"; el = el.parentElement.closest("li[data-type=dir]"))
@@ -262,6 +265,25 @@ let stwStudio = {
             } else
                 document.querySelector(`.stwTabs .stwTabLabel[title="${path}"]`).click();
         }
+    },
+    manageProperties: (event, what) => {
+        let target = event.target.closest("h1") || event.target;
+
+        if (target.tagName === "H1" && event.target.dataset.action) {
+            switch (event.target.dataset.action) {
+                case "delete":
+                    if (what === "webbase") {
+                        document.getElementById(what).querySelector("li[selected]").remove();
+                        // [TODO] Move node to trash
+                    }
+                    break;
+                case "clone":
+                    break;
+            }
+        }
+    },
+    manageVisibility: event => {
+
     },
     manageTab: event => {
         let target = event.target;

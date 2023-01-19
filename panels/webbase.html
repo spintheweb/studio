@@ -1,5 +1,5 @@
-<div class="stwTree" id="webbase">
-    <h1 onclick="stwStudio.manageWebbase(event)"><i class="fa-light fa-fw"></i> webbase
+<div class="stwTree" id="webbase" onclick="stwStudio.manageWebbase(event)">
+    <h1><i class="fa-light fa-fw"></i> webbase
         <span>
             <i class="fa-light fa-fw fa-arrow-rotate-right" title="Refresh" data-action="refresh"></i>
             <i class="fa-light fa-fw fa-folder-plus" title="New area" data-action="area"></i>
@@ -8,8 +8,13 @@
         </span>
     </h1>
 </div>
-<div class="stwForm" id="properties">
-    <h1><i class="fa-light fa-fw fa-angle-right"></i> properties</h1>
+<div class="stwForm" id="properties" onclick="stwStudio.manageProperties(event, 'webbase')">
+    <h1><i class="fa-light fa-fw fa-angle-right"></i> properties
+        <span>
+            <i class="fa-light fa-fw fa-trash" title="Delete" data-action="delete"></i>
+            <i class="fa-light fa-fw fa-clone" title="Clone" data-action="clone"></i>
+        </span>
+    </h1>
     <form name="content_properties" onchange="stwStudio.submitForm(event)">
         <input type="hidden" name="_id">
         <input type="hidden" name="_idparent">
@@ -71,7 +76,7 @@
         <textarea name="layout" placeholder="Layout" title="Layout"></textarea>
     </form>
 </div>
-<div class="stwForm" id="visibility">
+<div class="stwForm" id="visibility" onclick="stwStudio.manageVisibility(event)">
     <h1><i class="fa-light fa-fw fa-angle-right"></i> visibility</h1>
     <table>
         <tbody>
