@@ -10,6 +10,21 @@ let stwStudio = {
         document.querySelectorAll(".fa-angle-right").forEach(i => {
             i.parentElement.nextElementSibling.style.display = "none";
         });
+
+        document.querySelectorAll("input[list]").forEach(dataListInput => {
+            dataListInput.addEventListener("focus", event => {
+                event.target.setAttribute("placeholder", dataListInput.value);
+                dataListInput.value = "";
+            });
+            dataListInput.addEventListener("change", event => {
+                event.target.setAttribute("placeholder", dataListInput.value);
+                dataListInput.value = "";
+            });
+            dataListInput.addEventListener("blur", event => {
+                if (dataListInput.value === "")
+                    dataListInput.value = event.target.getAttribute("placeholder");
+            });
+        });
     },
     click: event => {
         let target = event.target;
@@ -46,7 +61,11 @@ let stwStudio = {
                 body: JSON.stringify(data),
                 headers: { "Content-type": "application/json" }
             })
-            .then(res => console.log(res.status));
+            .then(res => res.json())
+            .then(data => {
+                document.querySelector("#webbase [selected] div").childNodes[1].textContent = data.name[stwStudio.settings.lang];
+                stwStudio.loadForm(document.querySelector("#properties form"), data);
+            });
     },
     loadForm: (form, data) => {
         for (let input of form) {
@@ -130,7 +149,7 @@ let stwStudio = {
                 html += stwStudio.renderTree(child, depth + 1);
             html += "</ul>";
         } else
-            html = `<li ${node._id ? `data-id="${node._id}" ` : ""}data-type="${node.type}"><div><div class="stwFill"></div>${name}</div>`;
+            html = `<li ${node._id ? `data-id="${node._id}" ` : ""}data-type="${node.type}"><div style="border-left:thin solid gray;"><div class="stwFill"></div>${name}</div>`;
         return `${html}</li>`;
     },
     managePanel: event => {
@@ -172,14 +191,18 @@ let stwStudio = {
                         .then(node => {
                             let parent = tree.querySelector("li[selected]") || tree.querySelector("li");
                             parent.removeAttribute("selected");
-                            let li = `<li data-type="${node.type}" selected><div>${node.title}</div></li>`
+                            let li = `<li data-id="${node._id}" data-type="${node.type}" selected><div><div class="stwFill"></div>${node.name[stwStudio.settings.lang]}</div></li>`
                             if (parent.querySelector("ul"))
                                 parent.lastElementChild.insertAdjacentHTML("beforeend", li);
                             else
                                 parent.insertAdjacentHTML("beforeend", `<ul>${li}</ul>`);
 
+                            node._idparent = parent.dataset.id;
+
                             let properties = document.getElementById("properties");
                             properties.dataset.id = node._id;
+                            properties.dataset.idparent = node._idparent;
+                            stwStudio.loadForm(properties.querySelector("form"), node);
                             properties.querySelector("h1>i").click();
                         })
                         .catch(err => { console.log(err) });
@@ -192,13 +215,14 @@ let stwStudio = {
 
                     let properties = document.getElementById("properties");
                     properties.dataset.id = event.target.parentElement.dataset.id;
+                    delete properties.dataset.idparent;
                     fetch(`/api/webbase/${properties.dataset.id}`)
                         .then(res => {
                             if (res.ok)
                                 return res.json();
                         })
-                        .then(json => {
-                            stwStudio.loadForm(properties.querySelector("form"), json);
+                        .then(node => {
+                            stwStudio.loadForm(properties.querySelector("form"), node);
                         })
                         .catch(err => console.log(err));
                     properties.querySelector("h1>i").click();
@@ -267,9 +291,10 @@ let stwStudio = {
         let target = event.target;
         switch (target.dataset.action) {
             case "back":
+                // document.querySelector("iframe").window.history.back(-1); Does not work
                 break;
             case "refresh":
-                document.querySelector("").documentWindow.location;
+                document.querySelector("iframe").src = document.querySelector(".stwBrowsebar [name=url]").value;
                 break;
             case "home":
                 break;
@@ -278,9 +303,9 @@ let stwStudio = {
     setURL: event => {
         let target = event.target;
         if (target.tagName === "INPUT")
-            target.parentElement.nextElementSibling.contentWindow.location.href = target.value;
+            target.parentElement.nextElementSibling.src = target.value;
         else if (target.tagName === "IFRAME")
-            target.previousElementSibling.querySelector("[name=url]").value = target.contentWindow.location.href;
+            target.previousElementSibling.querySelector("[name=url]").value = target.src;
     }
 }
 

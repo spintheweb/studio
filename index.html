@@ -33,12 +33,13 @@
                 <i class="fa-light fa-fw fa-arrow-left" title="Back" data-action="back"></i>
                 <i class="fa-light fa-fw fa-arrow-rotate-right" title="Refresh" data-action="refresh"></i>
                 <i class="fa-light fa-fw fa-house" title="Home" data-action="home"></i>
-                <input type="url" name="url" placeholder="URL" onchange="setURL(event)" list="sites">
+                <input type="url" name="url" placeholder="URL" onchange="stwStudio.setURL(event)" list="sites" pattern="(http|https)://*" require>
                 <datalist id="sites">
                     <option>https://studio.spintheweb.org</option>
+                    <option>https://www.keyvisions.it</option>
                 </datalist>
             </div>
-            <iframe title="Site" src="" onload="stwStudio.setURL(event)"></iframe>
+            <iframe title="Site" src="https://studio.spintheweb.org" onload="stwStudio.setURL(event)"></iframe>
         </div>
     </section>
     <section class="stwStatusbar"><i class="fa-light fa-fw fa-triangle-exclamation"></i> This site is under development</section>

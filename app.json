@@ -1,0 +1,9 @@
+{
+    "protocol": "http",
+    "dns": "studio.spintheweb.org",
+    "port": 443,
+    "pki": {
+        "key": "/pki/private_key.pem",
+        "certificate": "/pki/certificate.pem"
+    }
+}

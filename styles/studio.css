@@ -141,6 +141,15 @@ body {
     grid-template-columns: repeat(3, min-content) 1fr;
 }
 
+.stwBrowsebar i {
+    cursor: pointer;
+}
+
+.stwBrowsebar input {
+    padding: 0.25em;
+    margin-top: -0.2em;
+}
+
 .stwTabs {
     display: grid;
     grid-template-rows: auto 1fr;
@@ -210,13 +219,17 @@ body {
 
 .stwTree ul>li>ul>li {
     white-space: nowrap;
-    padding-left: 0.75em;
+    padding-left: 0.5em;
 }
 
 .stwList li,
 .stwTree li>div {
     position: relative;
     padding: 0.5em 0.25em;
+}
+
+.stwTree:first-of-type(ul) {
+    overflow: auto;
 }
 
 .stwTree li>div .stwFill {
@@ -230,6 +243,10 @@ body {
     z-index: -1;
 }
 
+.stwTree li li>div {
+    border-left: thin solid gray;
+}
+
 .stwTree li div:hover .stwFill,
 .stwTree li[selected]>div .stwFill {
     display: block;
@@ -240,7 +257,7 @@ body {
 .stwTree .fa-angle-right {
     position: relative;
     float: left;
-    padding: 0.5em 0.25em 0.5em 0;
+    padding: 0.5em 0;
     z-index: 1;
 }
 
@@ -259,19 +276,19 @@ li[data-type="area"]>div::before {
 }
 
 li[data-type="page"]>div::before {
-    content: "\e428";
+    content: "\0020\e428";
 }
 
 li[data-type="content"]>div::before {
-    content: "\f0c8";
+    content: "\0020\f0c8";
 }
 
 li[data-type="dir"]>div::before {
-    content: "\f07b";
+    content: "\0020\f07b";
 }
 
 li[data-type="file"]>div::before {
-    content: "\f15b";
+    content: "\0020\f15b";
 }
 
 .menu {
