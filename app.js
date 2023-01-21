@@ -153,7 +153,7 @@ function createNode(lang, type) {
     let basenode = {
         _id: UUID,
         type: type,
-        flags: 0,
+        status: null,
         name: { [lang]: 'New ' + type },
         slug: {},
         visibility: [],
@@ -182,6 +182,7 @@ function createNode(lang, type) {
                 ...basenode,
                 section: null,
                 sequence: 1,
+                subtype: 'text',
                 dsn: null,
                 query: null,
                 parameters: null,
