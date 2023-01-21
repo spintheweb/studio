@@ -1,8 +1,8 @@
 {
-    "protocol": "http",
-    "dns": "studio.spintheweb.org",
+    "protocol": "https",
+    "hostname": "studio.spintheweb.org",
     "port": 443,
-    "pki": {
+    "options": {
         "key": "/pki/private_key.pem",
         "certificate": "/pki/certificate.pem"
     }

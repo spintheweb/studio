@@ -1,9 +1,9 @@
-const http = require("http");
-const https = require("https");
+const http = require('http');
+const https = require('https');
 const path = require('path');
-const fs = require("fs");
-const express = require("express");
-const uuid = require("uuid");
+const fs = require('fs');
+const express = require('express');
+const uuid = require('uuid');
 const git = require('simple-git')({
     baseDir: process.cwd(),
     binary: 'git',
@@ -11,18 +11,8 @@ const git = require('simple-git')({
     trimmed: false,
 });
 
-// [TODO] Only in dev mode
-const inspector = require('inspector');
-function applog(...args) {
-    if (inspector.url() !== undefined)
-        console.log(args);
-}
-
-let settings = JSON.parse(fs.readFileSync(path.join(__dirname, "app.json")));
-const protocol = settings.protocol === "http" ? http : https;
-
 // Load WBDL from file and index for faster access
-let WBDL = JSON.parse(fs.readFileSync(path.join(__dirname, "data/wbdl.json")));
+let WBDL = JSON.parse(fs.readFileSync(path.join(__dirname, 'data/wbdl.json')));
 WBDL.index = new Map();
 (function index(obj) {
     WBDL.index.set(obj._id, obj);
@@ -42,40 +32,52 @@ WBDL.get = (lang, key) => {
             return clone;
         }
         return walk(slugs, node);
-    })(key.split("/"), WBDL);
+    })(key.split('/'), WBDL);
 };
 
-const hostname = process.env.hostname || "127.0.0.1";
-const port = process.env.port || 8080;
+let settings = JSON.parse(fs.readFileSync(path.join(__dirname, '.settings')));
+
+if (process.env.npm_lifecycle_event === 'debug')
+    settings = {
+        protocol: 'http',
+        hostname: process.env.hostname || '127.0.0.1',
+        port: 8080,
+        options: {}
+    }
+else
+    settings.options = {
+        key: fs.readFileSync(path.join(__dirname, settings.pki.key)),
+        cert: fs.readFileSync(path.join(__dirname, settings.pki.certificate))
+    }
 
 const app = express();
-app.disable("x-powered-by");
+app.disable('x-powered-by');
 app.use(function (req, res, next) {
-    res.setHeader("charset", "utf-8");
-    res.setHeader("x-content-type-options", "nosniff");
-    res.setHeader("cache-control", "no-cache");
+    res.setHeader('charset', 'utf-8');
+    res.setHeader('x-content-type-options', 'nosniff');
+    res.setHeader('cache-control', 'no-cache');
     next();
 });
 
-app.use([/^\/(pki|data|node_modules)/, "/"], express.static(__dirname, { dotfiles: "deny" })); // Needed for handling static files
+app.use([/^\/(pki|data|node_modules)/, '/'], express.static(__dirname, { dotfiles: 'deny' })); // Needed for handling static files
 app.use(express.json()); // Needed for parsing application/json
 
-app.get("/api/webbase/users", (req, res) => {
+app.get('/api/webbase/users', (req, res) => {
     res.json({}); // [TODO]
 });
-app.get("/api/webbase/datasources", (req, res) => {
+app.get('/api/webbase/datasources', (req, res) => {
     res.json({}); // [TODO]
 });
-app.get("/api/webbase/groups", (req, res) => {
+app.get('/api/webbase/groups', (req, res) => {
     res.json(WBDL.visibility);
 });
-app.get("/api/webbase(/*)?", (req, res) => {
-    res.json(req.params[1] ? WBDL.get("en", req.params[1]) : WBDL);
+app.get('/api/webbase(/*)?', (req, res) => {
+    res.json(req.params[1] ? WBDL.get('en', req.params[1]) : WBDL);
 });
-app.get("/api/explorer(/:path)?", (req, res) => {
-    res.json(getDir(req.params.path));
+app.get('/api/explorer(/:path)?', async (req, res) => {
+    res.json(await getDir(req.params.path, (await git.status()).files));
 });
-app.post("/api/webbase/:lang/:_id", (req, res) => {
+app.post('/api/webbase/:lang/:_id', (req, res) => {
     try {
         if (!/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i.test(req.params._id))
             res.json(createNode(req.params.lang, req.params._id));
@@ -96,17 +98,17 @@ app.post("/api/webbase/:lang/:_id", (req, res) => {
             }
 
             for (let obj in newNode) {
-                if (typeof node[obj] != "undefined")
-                    if (node[obj] != null && typeof node[obj] === "object")
+                if (typeof node[obj] != 'undefined')
+                    if (node[obj] != null && typeof node[obj] === 'object')
                         node[obj] = { [req.params.lang]: newNode[obj] };
                     else
                         node[obj] = newNode[obj];
             }
 
-            fs.writeFile(__dirname + "/data/wbdl.json", JSON.stringify(WBDL), err => {
+            fs.writeFile(__dirname + '/data/wbdl.json', JSON.stringify(WBDL), err => {
                 if (err)
                     throw 503; // 503 Service Unavailable
-                applog("Persisted /data/wbdl.json");
+                console.log('Persisted /data/wbdl.json');
             });
             res.json(node);
         }
@@ -115,84 +117,79 @@ app.post("/api/webbase/:lang/:_id", (req, res) => {
         res.end(error);
     }
 });
-app.get("/api/git/status", async (req, res) => {
+app.get('/api/git/status', async (req, res) => {
     res.json(await git.status());
 });
 
-protocol.createServer(
-    //    {
-    //        key: fs.readFileSync(path.join(__dirname, "/pki/private_key.pem")),
-    //        cert: fs.readFileSync(path.join(__dirname, "/pki/certificate.pem"))
-    //    },
-    app)
-    .listen(port, hostname, () => {
-        console.log(`Spin the Web Studio running at ${settings.protocol}://${hostname}:${port}/`);
+(settings.protocol === 'http' ? http : https).createServer(settings.options, app)
+    .listen(settings.port, settings.hostname, () => {
+        console.log(`Spin the Web Studio running at ${settings.protocol}://${settings.hostname}:${settings.port}/`);
     });
 
-function getDir(directory = ".") {
-    let response = { name: "root", type: "dir", children: [] };
+async function getDir(dirpath = '.', gitStatus) {
+    let dir = { name: dirpath, type: 'dir', children: [] };
 
-    const files = fs.readdirSync(directory);
+    const files = fs.readdirSync(dirpath);
     for (let file of files) {
-        if (file.startsWith(".") || ["node_modules", "pki", "package.json", "package-lock.json"].includes(file))
-            continue;
+        let ignore = await git.checkIgnore(path.join(dirpath, file));
 
-        if (fs.lstatSync(path.join(directory, file)).isDirectory())
-            response.children.push({ name: file, type: "dir", children: getDir(path.join(directory, file)).children });
-        else if (fs.lstatSync(path.join(directory, file)).isFile())
-            response.children.push({ name: file, type: "file" });
+        if (ignore.length === 0 && file[0] !== '.') {
+            if (fs.lstatSync(path.join(dirpath, file)).isDirectory()) {
+                let status = gitStatus.find(element => element.path.startsWith(file + '/'));
+                dir.children.push({ name: file, type: 'dir', status: status ? '●' : '', children: (await getDir(path.join(dirpath, file), gitStatus)).children });
+            } else if (fs.lstatSync(path.join(dirpath, file)).isFile()) {
+                let status = gitStatus.find(element => element.path === path.join(dirpath, file).replace(/\\/g, '/'));
+                dir.children.push({ name: file, type: 'file', status: status ? status.working_dir : '' });
+            }
+        }
     }
-    return response;
+    return dir;
 }
 
 // [TODO] Base creation on JSON schema
 function createNode(lang, type) {
     let UUID = uuid.v1();
+
+    let basenode = {
+        _id: UUID,
+        type: type,
+        flags: 0,
+        name: { [lang]: 'New ' + type },
+        slug: {},
+        visibility: [],
+        children: []
+    };
+
     switch (type) {
-        case "area":
+        case 'area':
             return {
-                _id: UUID,
-                type: type,
-                name: { [lang]: "New area" },
-                slug: {},
+                ...basenode,
                 icon: null,
                 mainpage: null,
                 keywords: {},
-                description: {},
-                visibility: {},
-                children: []
+                description: {}
             };
-        case "page":
+        case 'page':
             return {
-                _id: UUID,
-                type: type,
-                name: { [lang]: "New page" },
-                slug: {},
+                ...basenode,
+                template: 'index.html',
                 icon: null,
                 keywords: {},
-                description: {},
-                visibility: {},
-                children: []
+                description: {}
             };
-        case "content":
+        case 'content':
             return {
-                _id: UUID,
-                type: type,
-                subtype: "text",
-                name: { [lang]: "New content" },
-                slug: {},
+                ...basenode,
                 section: null,
                 sequence: 1,
                 dsn: null,
                 query: null,
                 parameters: null,
-                layout: {},
-                visibility: {},
-                children: []
+                layout: {}
             };
-        case "shortcut":
+        case 'shortcut':
             return {};
-        case "group":
+        case 'group':
             return {};
         default:
             throw 406; // 406 Not Accepatable

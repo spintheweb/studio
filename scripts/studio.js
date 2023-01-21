@@ -116,6 +116,7 @@ let stwStudio = {
                     .then(json => {
                         document.querySelector(".stwPanel .stwTree").insertAdjacentHTML("beforeend", `<ul>${stwStudio.renderTree(json)}</ul>`);
                         document.querySelector("li[data-type=site]>div").click();
+                        document.querySelector(".stwPanel .stwLoading").remove();
                     })
                     .catch(err => {
                         console.log(err);
@@ -129,6 +130,24 @@ let stwStudio = {
                     })
                     .then(json => {
                         document.querySelector(".stwPanel .stwTree").insertAdjacentHTML("beforeend", `<ul>${stwStudio.renderTree(json)}</ul>`);
+                        document.querySelector(".stwPanel .stwLoading").remove();
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+                break;
+            case "/panels/sourcecontrol.html":
+                fetch('/api/git/status')
+                    .then(res => {
+                        if (res.ok)
+                            return res.json();
+                    })
+                    .then(json => {
+                        let tree = { name: '.', type: 'dir', children: [] };
+                        json.files.forEach(file => tree.children.push({ name: file.path, type: 'file', status: file.working_dir }));
+
+                        document.querySelector(".stwPanel .stwTree").insertAdjacentHTML("beforeend", `<ul>${stwStudio.renderTree(tree)}</ul>`);
+                        document.querySelector(".stwPanel .stwLoading").remove();
                     })
                     .catch(err => {
                         console.log(err);
@@ -136,20 +155,20 @@ let stwStudio = {
                 break;
         }
     },
-    renderTree: (node, depth = 0) => {
+    renderTree: (node, root = true) => {
         let html,
             name = typeof (node.name) === "string" ? node.name : node.name[stwStudio.settings.lang];
 
         if (node.children && node.children.length) {
-            if (depth)
-                html = `<li ${node._id ? `data-id="${node._id}" ` : ""}data-type="${node.type}"><i class="fa-solid fa-fw fa-angle-right"></i><div><div class="stwFill"></div>${name}</div><ul style="display:none">`;
-            else
+            if (root)
                 html = `<li ${node._id ? `data-id="${node._id}" ` : ""}data-type="${node.type}" selected><div><div class="stwFill"></div>${name}</div><ul>`;
+            else
+                html = `<li ${node._id ? `data-id="${node._id}" ` : ""}data-type="${node.type}"><i class="fa-solid fa-fw fa-angle-right"></i><div><div class="stwFill"></div>${name}<span>${node.status}</span></div><ul style="display:none">`;
             for (let child of node.children)
-                html += stwStudio.renderTree(child, depth + 1);
+                html += stwStudio.renderTree(child, false);
             html += "</ul>";
         } else
-            html = `<li ${node._id ? `data-id="${node._id}" ` : ""}data-type="${node.type}"><div style="border-left:thin solid gray;"><div class="stwFill"></div>${name}</div>`;
+            html = `<li ${node._id ? `data-id="${node._id}" ` : ""}data-type="${node.type}"><div style="border-left:thin solid gray;"><div class="stwFill"></div>${name}<span>${node.status}</span></div>`;
         return `${html}</li>`;
     },
     managePanel: event => {
@@ -201,6 +220,8 @@ let stwStudio = {
 
                             node._idparent = parent.dataset.id;
 
+                            //parent.innerHTML = stwStudio.renderTree(node._idparent);
+
                             let properties = document.getElementById("properties");
                             properties.dataset.id = node._id;
                             properties.dataset.idparent = node._idparent;
@@ -212,7 +233,8 @@ let stwStudio = {
                 break;
             case "UL":
                 if (!event.target.parentElement.hasAttribute("selected") || !event.isTrusted) {
-                    target.querySelector("li[selected]").removeAttribute("selected");
+                    if (target.querySelector("li[selected]"))
+                        target.querySelector("li[selected]").removeAttribute("selected");
                     event.target.parentElement.setAttribute("selected", "");
 
                     let properties = document.getElementById("properties");
@@ -245,13 +267,13 @@ let stwStudio = {
 
     },
     manageExplorer: event => {
-        let target = event.target.closest("h1") || event.target.closest("ul") || event.target;
+        let target = event.target.closest("h1") || event.target.closest("li") || event.target;
 
-        if (target.tagName === "UL" && target.dataset.type === "file") {
-            let filename = target.innerText;
+        if (target.tagName === "LI" && target.dataset.type === "file") {
+            let filename = target.firstChild.childNodes[1].textContent;
             let path = filename;
             for (let el = target.closest("li[data-type=dir]"); el.firstChild.tagName === "I"; el = el.parentElement.closest("li[data-type=dir]"))
-                path = el.children[1].innerText + "/" + path;
+                path = el.children[1].childNodes[1].textContent + "/" + path;
 
             if (!document.getElementById(path)) {
                 document.querySelector(".stwTabs > div").insertAdjacentHTML("beforeend", `<span class="stwTabLabel" title="${path}">${filename}<i class="fa-light fa-times"></i></span>`);
@@ -271,7 +293,7 @@ let stwStudio = {
 
         if (target.tagName === "H1" && event.target.dataset.action) {
             switch (event.target.dataset.action) {
-                case "delete":
+                case "trash":
                     if (what === "webbase") {
                         document.getElementById(what).querySelector("li[selected]").remove();
                         // [TODO] Move node to trash

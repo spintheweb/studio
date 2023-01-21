@@ -1,1 +1,47 @@
-{"_id":"141a8b53-9aa0-4a6e-8f79-de97911df0f8","type":"site","name":{"en":"studio.spintheweb.org"},"lang":"en","url":"https://studio.spintheweb.org","mainpage":"89a30afc-75ba-400e-965b-2e73ac4370eb","visibility":{"guests":null,"users":null,"translators":null,"developers":null,"administrators":true,"root":true},"icon":{"en":""},"keywords":{"en":"wbdl studio"},"description":{"en":"Enables management of Spin the Web Sites"},"children":[{"_id":"9afffedf-d49e-417e-bbad-4cceba62339f","type":"area","name":{"en":"Administration"},"slug":{"en":"administration"},"icon":{"en":""},"keywords":{"en":""},"description":{"en":"We take care of you!"},"visibility":{"users":true},"mainpage":"","children":[{"_id":"89a30afc-75ba-400e-965b-2e73ac4370eb","type":"page","name":{"en":"Home page"},"slug":{"en":"homepage"},"template":"index.html","visibility":null,"keywords":{"en":"Prova"},"description":{"en":""},"children":[{"_id":"ca5c92fc-dcc0-456b-bb6e-6c88acf43d41","type":"content","subtype":"text","name":{"en":"Hello World"},"slug":{"en":"helloworld"},"section":"main","sequence":1,"dsn":"webbase","query":"select * from table","parameters":"key=value","layout":{"en":"Welcome to Spin the Web Studio"}}]}]},{"_id":"78f3c4f2-74bd-4002-86e0-2b5174e6761b","type":"area","name":{"en":"API"},"slug":{"en":"api"},"icon":{"en":""},"keywords":{"en":""},"description":{"en":""},"visibility":{"users":true},"children":[{"_id":"c711aa2d-c4a5-4074-a57e-57495d683c4c","type":"content","subtype":"serversidecode","name":{"en":"dir"},"slug":{"en":"dir"},"dsn":"","query":"","parameters":"","layout":{"en":"function() { return \"Hello World!\"; }"}}]},{"_id":"a1a8ff90-97b7-11ed-9007-c7627a93f7b8","type":"area","name":{"en":"Production"},"slug":{"en":"production"},"icon":"","mainpage":"","keywords":{"en":""},"description":{"en":"This is a test!"},"visibility":{},"children":[{"_id":"fc9cfeb0-97b7-11ed-9007-c7627a93f7b8","type":"page","name":{"en":"New page"},"slug":{"en":"newpage"},"icon":"","keywords":{"en":""},"description":{"en":"This is a new page"},"visibility":{},"children":[{"_id":"0711ff30-97b8-11ed-9007-c7627a93f7b8","type":"content","subtype":"form","name":{"en":"Partenza"},"slug":{"en":"newcontent"},"section":"","sequence":"1","dsn":"webbase","query":"select *from table","parameters":"","layout":{"en":"\\s('caption=\"ok\" ')"},"visibility":{},"children":[]}]}]}],"index":{}}
+{
+    "_id": "141a8b53-9aa0-4a6e-8f79-de97911df0f8",
+    "type": "site",
+    "flags": 0,
+    "name": {
+        "en": "studio.spintheweb.org"
+    },
+    "lang": "en",
+    "url": "https://studio.spintheweb.org",
+    "mainpage": "89a30afc-75ba-400e-965b-2e73ac4370eb",
+    "visibility": {
+        "administrators": true
+    },
+    "icon": {
+        "en": ""
+    },
+    "keywords": {
+        "en": "wbdl studio"
+    },
+    "description": {
+        "en": "Enables management of Spin the Web Sites"
+    },
+    "children": [
+        {
+            "_id": "d34b41e0-9800-11ed-a32b-55ccefa949f3",
+            "type": "area",
+            "flags": 0,
+            "name": {
+                "en": "Administration"
+            },
+            "slug": {
+                "en": "administration"
+            },
+            "visibility": [],
+            "children": [],
+            "icon": "",
+            "mainpage": "",
+            "keywords": {
+                "en": ""
+            },
+            "description": {
+                "en": ""
+            }
+        }
+    ],
+    "index": {}
+}
