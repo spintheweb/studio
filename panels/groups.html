@@ -1,16 +1,13 @@
-<div class="stwList">
-    <h1 onclick="stwStudio.manageGroups(event)"><i class="fa fa-fw"></i> groups
+<div class="stwTree" id="groups" onclick="stwStudio.manageGroups(event)">
+    <h1 onclick="stwStudio.manageGroups(event)"><i class="fa fa-fw fa-nothing"></i> groups
         <span>
+            <i class="fa fa-fw fa-arrow-rotate-right" title="Refresh" data-action="refresh"></i>
             <i class="fa fa-fw fa-plus" title="Add group" data-action="addGroup"></i>
         </span>
     </h1>
-    <ul>
-        <li data-key="guests"><i class="fa fa-fw fa-users"></i> Guests</li>
-        <li data-key="users"><i class="fa fa-fw fa-users"></i> Users</li>
-        <li data-key="translators"><i class="fa fa-fw fa-users"></i> Translators</li>
-        <li data-key="developers"><i class="fa fa-fw fa-users"></i> Developers</li>
-        <li data-key="administrators"><i class="fa fa-fw fa-users"></i> Administrators</li>
-    </ul>
+    <div class="stwLoading">
+        <i class="fa fa-sync fa-spin fa-2x"></i>
+    </div>
 </div>
 <div class="stwForm" id="properties">
     <h1><i class="fa fa-fw fa-angle-right"></i> properties</h1>

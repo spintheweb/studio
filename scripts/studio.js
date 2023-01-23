@@ -156,8 +156,26 @@ let stwStudio = {
                             return res.json();
                     })
                     .then(json => {
-                        let tree = { name: '.', type: 'dir', status: null, children: [] };
+                        let tree = { children: [] };
                         json.files.forEach(file => tree.children.push({ name: file.path, type: 'file', status: file.working_dir }));
+
+                        document.querySelector('.stwPanel .stwTree').insertAdjacentHTML('beforeend', `<ul>${stwStudio.renderTree(tree)}</ul>`);
+                        document.querySelector('.stwPanel .stwLoading').remove();
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+                break;
+            case '/panels/groups.html':
+                fetch('/api/webbase/groups')
+                    .then(res => {
+                        if (res.ok)
+                            return res.json();
+                    })
+                    .then(groups => {
+                        let tree = { children: [] };
+                        for (let group in groups)
+                            tree.children.push({ name: group, type: 'group' });
 
                         document.querySelector('.stwPanel .stwTree').insertAdjacentHTML('beforeend', `<ul>${stwStudio.renderTree(tree)}</ul>`);
                         document.querySelector('.stwPanel .stwLoading').remove();
@@ -169,19 +187,27 @@ let stwStudio = {
         }
     },
     renderTree: (node, depth = 0) => {
-        let html,
-            name = typeof (node.name) === 'string' ? node.name : node.name[stwStudio.settings.lang];
+        let html = '';
 
-        if (node.children && node.children.length) {
-            if (depth == 0)
-                html = `<li ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div><span></span><span>${name}</span><span></span></div><ul>`;
-            else
-                html = `<li ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div><span>${'&emsp;'.repeat(depth - 1)}<i class="fa fa-fw fa-angle-right"></i></span><span>${name}</span><span>${node.status}</span></div><ul style="display:none">`;
+        if (!depth && !node.type) {
             for (let child of node.children)
-                html += stwStudio.renderTree(child, depth + 1);
-            html += '</ul>';
-        } else
-            html = `<li ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div><span>${'&emsp;'.repeat(depth)}&nbsp;</span><span>${name}</span><span>${node.status || ''}</span></div>`;
+                html += stwStudio.renderTree(child, depth);
+
+        } else {
+            let name = typeof (node.name) === 'string' ? node.name : node.name[stwStudio.settings.lang];
+
+            if (node.children && node.children.length) {
+                if (!depth)
+                    html = `<li ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div tabindex="0" role="link"><span></span><span>${name}</span><span></span></div><ul>`;
+                else
+                    html = `<li ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div tabindex="0" role="link"><span>${'&emsp;'.repeat(depth - 1)}<i class="fa fa-fw fa-angle-right"></i></span><span>${name}</span><span>${node.status}</span></div><ul style="display:none">`;
+                for (let child of node.children)
+                    html += stwStudio.renderTree(child, depth + 1);
+                html += '</ul>';
+            } else
+                html = `<li ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div tabindex="0" role="link"><span>${'&emsp;'.repeat(depth)}&nbsp;</span><span>${name}</span><span>${node.status || ''}</span></div>`;
+        }
+
         return `${html}</li>`;
     },
     managePanel: event => {
@@ -273,6 +299,7 @@ let stwStudio = {
     },
     manageGroups: event => {
         let target = event.target;
+
         /*
         if (target.classList.contains('fa-plus')) {
             let tr = `<li><i class="fa fa-fw fa-users"></i> New group</li>`;
@@ -293,7 +320,7 @@ let stwStudio = {
                 path = el.firstChild.children[1].innerText + '/' + path;
 
             if (!document.getElementById(path)) {
-                document.querySelector('.stwTabs > div').insertAdjacentHTML('beforeend', `<span class="stwTabLabel" title="${path}">${path}<i class="fa fa-times"></i></span>`);
+                document.querySelector('.stwTabs > div').insertAdjacentHTML('beforeend', `<span tabindex="0" role="link" class="stwTabLabel" title="${path}">${path}<i class="fa fa-times"></i></span>`);
                 document.querySelector('.stwTabs').insertAdjacentHTML('beforeend', `<div class="stwTab"><div></div><div id="${path}"></div></div>`);
 
                 let editor = ace.edit(path);
@@ -325,26 +352,27 @@ let stwStudio = {
 
     },
     manageTab: event => {
-        let target = event.target;
+        let target = event.target, currentTarget = event.currentTarget;
         if (target.classList.contains('fa-times')) {
             let i;
-            for (i = 0; i < event.currentTarget.children.length && event.currentTarget.children[i] != target.parentElement; ++i);
+            for (i = 0; i < currentTarget.children.length && currentTarget.children[i] != target.parentElement; ++i);
 
             if (target.parentElement.hasAttribute('selected'))
-                event.currentTarget.firstChild.click();
+                currentTarget.firstChild.click();
 
-            event.currentTarget.children[i].remove();
-            event.currentTarget.parentElement.children[i + 1].remove();
+            currentTarget.children[i].remove();
+            currentTarget.parentElement.children[i + 1].remove();
 
         } else if (target.className === 'stwTabLabel' && !target.hasAttribute('selected')) {
-            event.currentTarget.querySelector('.stwTabLabel[selected]').removeAttribute('selected');
+            currentTarget.querySelector('.stwTabLabel[selected]').removeAttribute('selected');
             target.setAttribute('selected', '');
 
             let i;
-            for (i = 0; i < event.currentTarget.children.length && event.currentTarget.children[i] != target; ++i);
+            for (i = 0; i < currentTarget.children.length && currentTarget.children[i] != target; ++i);
 
-            event.currentTarget.parentElement.querySelector('.stwTab[selected]').removeAttribute('selected');
-            event.currentTarget.parentElement.children[i + 1].setAttribute('selected', '');
+            currentTarget.parentElement.querySelector('.stwTab[selected]').removeAttribute('selected');
+            currentTarget.parentElement.children[i + 1].setAttribute('selected', '');
+            currentTarget.parentElement.querySelector(`div[id="${target.innerText}"]>textarea`).focus();
         }
         event.preventDefault();
     },

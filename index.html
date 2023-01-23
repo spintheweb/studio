@@ -7,9 +7,10 @@
     <title>STW Studio</title>
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="stylesheet" href="styles/studio.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer">
-    <!--link rel="stylesheet" href="/styles/fontawesome-pro-6.2.1-web/css/fontawesome.min.css">
-    <link rel="stylesheet" href="/styles/fontawesome-pro-6.2.1-web/css/thin.css"-->
+    <!--link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"-->
+    <link rel="stylesheet" href="/styles/fontawesome-pro-6.2.1-web/css/fontawesome.min.css">
+    <link rel="stylesheet" href="/styles/fontawesome-pro-6.2.1-web/css/thin.css">
+    <!--script src="https://kit.fontawesome.com/b7b91fea3f.js" crossorigin="anonymous"></script-->
     <script src="scripts/studio.js"></script>
     <script>
         function toggleTheme(event) {
@@ -26,25 +27,31 @@
 
 <body class="stwDark">
     <section class="stwPanels" onclick="stwStudio.managePanel(event)">
-        <i class="fa fa-fw fa-bars" title="Menu" data-panel="menu"></i>
-        <i class="fa fa-fw fa-sitemap" title="Webbase" data-panel="/panels/webbase.html"></i>
-        <i class="fa fa-fw fa-search" title="Search" data-panel="/panels/search.html"></i>
-        <i class="fa fa-fw fa-folder" title="Explorer" data-panel="/panels/explorer.html"></i>
-        <i class="fa fa-fw fa-code-branch" title="Source control" data-panel="/panels/sourcecontrol.html"></i>
-        <i class="fa fa-fw fa-database" title="Datasources" data-panel="/panels/datasources.html"></i>
-        <i class="fa fa-fw fa-users" title="Groups" data-panel="/panels/groups.html"></i>
+        <i tabindex="0" role="link" class="fa fa-fw fa-bars" title="Menu" data-panel="menu"></i>
+        <i tabindex="0" role="link" class="fa fa-fw fa-sitemap" title="Webbase" data-panel="/panels/webbase.html"></i>
+        <i tabindex="0" role="link" class="fa fa-fw fa-search" title="Search" data-panel="/panels/search.html"></i>
+        <i tabindex="0" role="link" class="fa fa-fw fa-folder" title="Explorer" data-panel="/panels/explorer.html"></i>
+        <i tabindex="0" role="link" class="fa fa-fw fa-code-branch" title="Source control"
+            data-panel="/panels/sourcecontrol.html"></i>
+        <i tabindex="0" role="link" class="fa fa-fw fa-database" title="Datasources"
+            data-panel="/panels/datasources.html"></i>
+        <i tabindex="0" role="link" class="fa fa-fw fa-users" title="Groups" data-panel="/panels/groups.html"></i>
         <span></span>
-        <i class="fa fa-fw fa-circle-user" title="Account" data-panel="/panels/account.html"></i>
-        <i class="fa fa-fw fa-cog" title="Settings" data-panel="/panels/settings.html"></i>
+        <i tabindex="0" role="link" class="fa fa-fw fa-circle-user" title="Account"
+            data-panel="/panels/account.html"></i>
+        <i tabindex="0" role="link" class="fa fa-fw fa-cog" title="Settings" data-panel="/panels/settings.html"></i>
     </section>
     <section class="stwPanel"></section>
     <section class="stwTabs">
-        <div onclick="stwStudio.manageTab(event)"><span class="stwTabLabel" title="Browse" selected>Browse</span></div>
+        <div onclick="stwStudio.manageTab(event)">
+            <span tabindex="0" role="link" class="stwTabLabel" title="Browse" selected>Browse</span>
+        </div>
         <div class="stwTab" selected>
             <div class="stwBrowsebar" onclick="stwStudio.manageBrowse(event)">
-                <i class="fa fa-fw fa-arrow-left" title="Back" data-action="back"></i>
-                <i class="fa fa-fw fa-arrow-rotate-right" title="Refresh" data-action="refresh"></i>
-                <i class="fa fa-fw fa-house" title="Home" data-action="home"></i>
+                <i tabindex="0" role="link" class="fa fa-fw fa-arrow-left" title="Back" data-action="back"></i>
+                <i tabindex="0" role="link" class="fa fa-fw fa-arrow-rotate-right" title="Refresh"
+                    data-action="refresh"></i>
+                <i tabindex="0" role="link" class="fa fa-fw fa-house" title="Home" data-action="home"></i>
                 <input type="url" name="url" placeholder="URL" onchange="stwStudio.setURL(event)" list="sites"
                     pattern="(http|https)://*" require>
                 <datalist id="sites">
@@ -52,11 +59,11 @@
                     <option>https://www.keyvisions.it</option>
                 </datalist>
             </div>
-            <iframe title="Site" src="https://studio.spintheweb.org" onload="stwStudio.setURL(event)"></iframe>
+            <iframe id="Browse" title="Site" src="https://studio.spintheweb.org" onload="stwStudio.setURL(event)"></iframe>
         </div>
     </section>
     <section class="stwStatusbar"><span></span><span><i class="fa fa-fw fa-triangle-exclamation"></i> This site is under
-        development</span><span><i class="fa-solid fa-moon" onclick="toggleTheme(event)"></i></span></section>
+            development</span><span><i class="fa-solid fa-moon" onclick="toggleTheme(event)"></i></span></section>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.14.0/ace.min.js"
         integrity="sha512-s57ywpCtz+4PU992Bg1rDtr6+1z38gO2mS92agz2nqQcuMQ6IvgLWoQ2SFpImvg1rbgqBKeSEq0d9bo9NtBY0w=="
