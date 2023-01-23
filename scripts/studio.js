@@ -1,5 +1,10 @@
 let stwStudio = {
     setup: (settings = {}) => {
+        if (window.getComputedStyle(document.body).getPropertyValue('color-scheme') === 'dark')
+            document.body.className = 'stwDark';
+        else
+            document.body.className = 'stwLight';
+
         ace.config.set('basePath', 'https://cdnjs.cloudflare.com/ajax/libs/ace/1.14.0/');
 
         stwStudio.settings = settings;
@@ -32,18 +37,20 @@ let stwStudio = {
         if (!event.isTrusted && target.classList.contains('fa-angle-down'))
             return;
 
+        let parent = target.closest('h1') || target.closest('div');
+
         if (target.classList.contains('fa-angle-down')) {
             target.classList.replace('fa-angle-down', 'fa-angle-right');
-            if (target.parentElement.tagName === 'LI')
-                target.parentElement.querySelector('ul').style.display = 'none';
+            if (parent.parentElement.tagName === 'LI')
+                parent.parentElement.querySelector('ul').style.display = 'none';
             else
-                target.parentElement.nextElementSibling.style.display = 'none';
+                parent.nextElementSibling.style.display = 'none';
         } else if (target.classList.contains('fa-angle-right')) {
             target.classList.replace('fa-angle-right', 'fa-angle-down');
-            if (target.parentElement.tagName === 'LI')
-                target.parentElement.querySelector('ul').style.display = '';
+            if (parent.parentElement.tagName === 'LI')
+                parent.parentElement.querySelector('ul').style.display = '';
             else
-                target.parentElement.nextElementSibling.style.display = '';
+                parent.nextElementSibling.style.display = '';
         }
     },
     submitForm: event => {
@@ -107,7 +114,7 @@ let stwStudio = {
                     document.querySelector(`.stwTabs .stwTabLabel[title="${path}"]`).click();
                 }
             })
-            .catch(err => { 
+            .catch(err => {
                 console.log(err);
             });
     },
@@ -149,7 +156,7 @@ let stwStudio = {
                             return res.json();
                     })
                     .then(json => {
-                        let tree = { name: 'Changes', type: 'dir', status: null, children: [] };
+                        let tree = { name: '.', type: 'dir', status: null, children: [] };
                         json.files.forEach(file => tree.children.push({ name: file.path, type: 'file', status: file.working_dir }));
 
                         document.querySelector('.stwPanel .stwTree').insertAdjacentHTML('beforeend', `<ul>${stwStudio.renderTree(tree)}</ul>`);
@@ -161,20 +168,20 @@ let stwStudio = {
                 break;
         }
     },
-    renderTree: (node, root = true) => {
+    renderTree: (node, depth = 0) => {
         let html,
             name = typeof (node.name) === 'string' ? node.name : node.name[stwStudio.settings.lang];
 
         if (node.children && node.children.length) {
-            if (root)
-                html = `<li ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div><div class="stwFill"></div>${name}</div><ul>`;
+            if (depth == 0)
+                html = `<li ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div><span></span><span>${name}</span><span></span></div><ul>`;
             else
-                html = `<li ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><i class="fa-solid fa-fw fa-angle-right"></i><div><div class="stwFill"></div>${name}<span>${node.status}</span></div><ul style="display:none">`;
+                html = `<li ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div><span>${'&emsp;'.repeat(depth - 1)}<i class="fa fa-fw fa-angle-right"></i></span><span>${name}</span><span>${node.status}</span></div><ul style="display:none">`;
             for (let child of node.children)
-                html += stwStudio.renderTree(child, false);
+                html += stwStudio.renderTree(child, depth + 1);
             html += '</ul>';
         } else
-            html = `<li ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div style="border-left:thin solid gray;"><div class="stwFill"></div>${name}<span>${node.status || ''}</span></div>`;
+            html = `<li ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div><span>${'&emsp;'.repeat(depth)}&nbsp;</span><span>${name}</span><span>${node.status || ''}</span></div>`;
         return `${html}</li>`;
     },
     managePanel: event => {
@@ -238,13 +245,14 @@ let stwStudio = {
                 }
                 break;
             case 'UL':
-                if (!event.target.parentElement.hasAttribute('selected') || !event.isTrusted) {
+                let div = event.target.closest('div');
+                if (!div.parentElement.hasAttribute('selected') || !event.isTrusted) {
                     if (target.querySelector('li[selected]'))
                         target.querySelector('li[selected]').removeAttribute('selected');
-                    event.target.parentElement.setAttribute('selected', '');
+                    div.parentElement.setAttribute('selected', '');
 
                     let properties = document.getElementById('properties');
-                    properties.dataset.id = event.target.parentElement.dataset.id;
+                    properties.dataset.id = div.parentElement.dataset.id;
                     delete properties.dataset.idparent;
                     fetch(`/api/webbase/${properties.dataset.id}`)
                         .then(res => {
@@ -260,11 +268,14 @@ let stwStudio = {
                 break;
         }
     },
+    manageSearch: event => {
+
+    },
     manageGroups: event => {
         let target = event.target;
         /*
         if (target.classList.contains('fa-plus')) {
-            let tr = `<li><i class="fa-light fa-fw fa-users"></i> New group</li>`;
+            let tr = `<li><i class="fa fa-fw fa-users"></i> New group</li>`;
             target.closest('div').querySelector('tbody').insertAdjacentHTML('beforeend', tr);
         }
         */
@@ -278,15 +289,15 @@ let stwStudio = {
         if (target.tagName === 'LI' && target.dataset.type === 'file') {
             let filename = target.firstChild.childNodes[1].textContent;
             let path = filename;
-            for (let el = target.closest('li[data-type=dir]'); el.firstChild.tagName === 'I'; el = el.parentElement.closest('li[data-type=dir]'))
-                path = el.children[1].childNodes[1].textContent + '/' + path;
+            for (let el = target.closest('li[data-type=dir]'); el; el = el.parentElement.closest('li[data-type=dir]'))
+                path = el.firstChild.children[1].innerText + '/' + path;
 
             if (!document.getElementById(path)) {
-                document.querySelector('.stwTabs > div').insertAdjacentHTML('beforeend', `<span class="stwTabLabel" title="${path}">${path}<i class="fa-light fa-times"></i></span>`);
+                document.querySelector('.stwTabs > div').insertAdjacentHTML('beforeend', `<span class="stwTabLabel" title="${path}">${path}<i class="fa fa-times"></i></span>`);
                 document.querySelector('.stwTabs').insertAdjacentHTML('beforeend', `<div class="stwTab"><div></div><div id="${path}"></div></div>`);
 
                 let editor = ace.edit(path);
-                if (window.getComputedStyle(document.body).getPropertyValue('color-scheme') === 'dark')
+                if (document.body.className == 'stwDark')
                     editor.setTheme('ace/theme/tomorrow_night');
                 editor.session.setMode(ace.require('ace/ext/modelist').getModeForPath(path).mode);
                 stwStudio.loadFile(path, editor);

@@ -4,14 +4,15 @@
   "description": "Spin the Web Studio is designed to ease development of Spin the Web sites",
   "main": "app.js",
   "scripts": {
-    "start": "node .",
-    "debug": "nodemon --watch app.js .",
+    "start": "node . helloworld.wbdl",
+    "debug": "nodemon --watch app.js . helloworld.wbdl",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
     "stwp",
     "studio",
-    "wbdl"
+    "wbdl",
+    "wbll"
   ],
   "author": "Giancarlo Trevisan",
   "license": "MIT",

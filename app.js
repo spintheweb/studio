@@ -4,15 +4,10 @@ const path = require('path');
 const fs = require('fs');
 const express = require('express');
 const uuid = require('uuid');
-const git = require('simple-git')({
-    baseDir: process.cwd(),
-    binary: 'git',
-    maxConcurrentProcesses: 6,
-    trimmed: false,
-});
+const git = require('simple-git')();
 
 // Load WBDL from file and index for faster access
-let WBDL = JSON.parse(fs.readFileSync(path.join(__dirname, 'data/wbdl.json')));
+let WBDL = JSON.parse(fs.readFileSync(path.join(__dirname, `data/${process.argv[2]}`)) || "{}");
 WBDL.index = new Map();
 (function index(obj) {
     WBDL.index.set(obj._id, obj);
