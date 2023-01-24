@@ -7,22 +7,8 @@
     <title>STW Studio</title>
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="stylesheet" href="styles/studio.css">
-    <!--link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer"-->
-    <link rel="stylesheet" href="/styles/fontawesome-pro-6.2.1-web/css/fontawesome.min.css">
-    <link rel="stylesheet" href="/styles/fontawesome-pro-6.2.1-web/css/thin.css">
-    <!--script src="https://kit.fontawesome.com/b7b91fea3f.js" crossorigin="anonymous"></script-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <script src="scripts/studio.js"></script>
-    <script>
-        function toggleTheme(event) {
-            if (event.target.className == 'fa-solid fa-moon') {
-                event.target.className = 'fa-solid fa-sun';
-                document.body.className = 'stwLight';
-            } else {
-                event.target.className = 'fa-solid fa-moon';
-                document.body.className = 'stwDark';
-            }
-        }
-    </script>
 </head>
 
 <body class="stwDark">
@@ -63,7 +49,7 @@
         </div>
     </section>
     <section class="stwStatusbar"><span></span><span><i class="fa fa-fw fa-triangle-exclamation"></i> This site is under
-            development</span><span><i class="fa-solid fa-moon" onclick="toggleTheme(event)"></i></span></section>
+            development</span><span><i class="fa-solid fa-toggle-on" style="cursor:pointer" onclick="stwStudio.toggleTheme(event)"></i> <i class="fa-solid fa-moon"></i></span></section>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.14.0/ace.min.js"
         integrity="sha512-s57ywpCtz+4PU992Bg1rDtr6+1z38gO2mS92agz2nqQcuMQ6IvgLWoQ2SFpImvg1rbgqBKeSEq0d9bo9NtBY0w=="

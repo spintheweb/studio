@@ -13,7 +13,7 @@
 .stwDark,
 .stwDark .stwPanel,
 .stwDark .stwTabs {
-    color: rgb(255, 255, 255);
+    color: white;
     background-color: rgb(62, 62, 62);
     color-scheme: dark;
 }
@@ -21,7 +21,7 @@
 .stwLight,
 .stwLight .stwPanel,
 .stwLight .stwTabs {
-    color: rgb(0, 0, 0);
+    color: black;
     background-color: rgb(243, 243, 243);
     color-scheme: light;
 }
@@ -134,8 +134,8 @@ body {
     display: grid;
     grid-column: 1 / 5;
     grid-row: 2;
-    grid-template-columns: 2em 1fr 2em;
-    color: rgb(255, 255, 255);
+    grid-template-columns: 2em 1fr 3em;
+    color: white;
     background-color: var(--specialColor);
     padding: 0.5em;
 }

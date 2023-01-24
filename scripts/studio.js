@@ -31,6 +31,21 @@ let stwStudio = {
             });
         });
     },
+    toggleTheme: event => {
+        let theme;
+
+        if (event.target.className == 'fa-solid fa-toggle-on') {
+            event.target.className = 'fa-solid fa-toggle-off';
+            theme = 'stwLight';
+        } else {
+            event.target.className = 'fa-solid fa-toggle-on';
+            theme = 'stwDark';
+        }
+        document.body.className = theme;
+        document.querySelectorAll('.ace_editor').forEach(ace => {
+            ace.editor.setTheme(theme == 'stwDark' ? 'ace/theme/tomorrow_night' : '');
+        });
+    },
     keydown: event => {
         if (document.activeElement.className === 'ace_text-input' && event.key == 's' && event.ctrlKey) {
             event.stopPropagation();
