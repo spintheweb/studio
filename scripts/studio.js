@@ -31,6 +31,23 @@ let stwStudio = {
             });
         });
     },
+    keydown: event => {
+        if (document.activeElement.className === 'ace_text-input' && event.key == 's' && event.ctrlKey) {
+            event.stopPropagation();
+            event.preventDefault();
+
+            let tab = document.activeElement.parentElement;
+            fetch(`/api/explorer/${tab.id}`,
+                { 
+                    method: 'POST', 
+                    body: tab.editor.getValue(),
+                    headers: { 'Content-type': 'text/plain' }
+                })
+                .catch(err => {
+                    console.log(err);
+                });
+        }
+    },
     click: event => {
         let target = event.target;
 
@@ -110,6 +127,7 @@ let stwStudio = {
                     stwStudio.setup();
                     callback(path);
                 } else if (destination) {
+                    document.getElementById(path).editor = destination;
                     destination.setValue(data, -1);
                     document.querySelector(`.stwTabs .stwTabLabel[title="${path}"]`).click();
                 }
@@ -357,8 +375,8 @@ let stwStudio = {
             let i;
             for (i = 0; i < currentTarget.children.length && currentTarget.children[i] != target.parentElement; ++i);
 
-            if (target.parentElement.hasAttribute('selected'))
-                currentTarget.firstChild.click();
+            if (target.closest('.stwTabLabel').hasAttribute('selected'))
+                currentTarget.firstElementChild.click();
 
             currentTarget.children[i].remove();
             currentTarget.parentElement.children[i + 1].remove();
@@ -372,7 +390,10 @@ let stwStudio = {
 
             currentTarget.parentElement.querySelector('.stwTab[selected]').removeAttribute('selected');
             currentTarget.parentElement.children[i + 1].setAttribute('selected', '');
-            currentTarget.parentElement.querySelector(`div[id="${target.innerText}"]>textarea`).focus();
+
+            let editor = currentTarget.parentElement.querySelector(`div[id="${target.innerText}"]>textarea`);
+            if (editor)
+                editor.focus();
         }
         event.preventDefault();
     },
@@ -400,3 +421,4 @@ let stwStudio = {
 
 window.addEventListener('load', stwStudio.setup, { once: true });
 window.addEventListener('click', stwStudio.click);
+window.addEventListener('keydown', stwStudio.keydown);

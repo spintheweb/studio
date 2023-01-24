@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const express = require('express');
 const uuid = require('uuid');
+const { allowedNodeEnvironmentFlags } = require('process');
 const git = require('simple-git')();
 
 // Load WBDL from file and index for faster access
@@ -56,6 +57,7 @@ app.use(function (req, res, next) {
 
 app.use([/^\/(pki|data|node_modules)/, '/'], express.static(__dirname, { dotfiles: 'deny' })); // Needed for handling static files
 app.use(express.json()); // Needed for parsing application/json
+app.use(express.text()); // Needed for parsing text/plain
 
 app.get('/api/webbase/users', (req, res) => {
     res.json({}); // [TODO]
@@ -68,9 +70,6 @@ app.get('/api/webbase/groups', (req, res) => {
 });
 app.get('/api/webbase(/*)?', (req, res) => {
     res.json(req.params[1] ? WBDL.get('en', req.params[1]) : WBDL);
-});
-app.get('/api/explorer(/:path)?', async (req, res) => {
-    res.json(await getDir(req.params.path, (await git.status()).files));
 });
 app.post('/api/webbase/:lang/:_id', (req, res) => {
     try {
@@ -103,7 +102,7 @@ app.post('/api/webbase/:lang/:_id', (req, res) => {
             fs.writeFile(__dirname + '/data/wbdl.json', JSON.stringify(WBDL), err => {
                 if (err)
                     throw 503; // 503 Service Unavailable
-                console.log('Persisted /data/wbdl.json');
+                console.log('Saved /data/wbdl.json');
             });
             res.json(node);
         }
@@ -112,6 +111,19 @@ app.post('/api/webbase/:lang/:_id', (req, res) => {
         res.end(error);
     }
 });
+
+app.get('/api/explorer(/:path)?', async (req, res) => {
+    res.json(await getDir(req.params.path, (await git.status()).files));
+});
+app.post('/api/explorer(/*)', (req, res) => {
+    fs.writeFile(path.join(__dirname, req.params[1]), req.body, err => {
+        if (err)
+            throw 503; // 503 Service Unavailable
+        console.log(`Saved ${req.params[1]}`);
+    });
+    res.end();
+});
+
 app.get('/api/git/status', async (req, res) => {
     res.json(await git.status());
 });

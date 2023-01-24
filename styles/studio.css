@@ -84,7 +84,7 @@ body {
 .stwPanels i {
     padding: 0.5em 0.35em;
     cursor: pointer;
-    font-size: 1.75em;
+    font-size: 1.6em;
 }
 
 .stwPanel h1:not(:has(i.fa-nothing)) {
@@ -101,11 +101,6 @@ body {
 
 .stwPanel h1>span {
     float: right;
-}
-
-.stwPanel h1>span>i:hover {
-    background-color: var(--light);
-    cursor: pointer;
 }
 
 .stwPanel {
@@ -146,15 +141,22 @@ body {
 }
 
 .stwBrowsebar {
-    font-size: 1.5em;
     padding: 0.25em;
     display: grid;
     gap: 0.5em;
     grid-template-columns: repeat(3, min-content) 1fr;
 }
 
+.stwBrowsebar i:hover,
+h1>span>i:hover {
+    background-color: var(--light);
+    cursor: pointer;
+}
+
 .stwBrowsebar i {
     cursor: pointer;
+    font-size: 1.25em;
+    padding: 0.2em;
 }
 
 .stwBrowsebar input {
