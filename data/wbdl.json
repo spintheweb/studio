@@ -36,7 +36,7 @@
             "slug": {
                 "en": "administration"
             },
-            "visibility": [],
+            "visibility": {},
             "children": [],
             "icon": "",
             "mainpage": "",
@@ -57,7 +57,7 @@
             "slug": {
                 "en": "production"
             },
-            "visibility": [],
+            "visibility": {},
             "children": [],
             "icon": "",
             "mainpage": "",
@@ -78,7 +78,7 @@
             "slug": {
                 "en": "logistics"
             },
-            "visibility": [],
+            "visibility": {},
             "children": [],
             "icon": "",
             "mainpage": "",
@@ -99,7 +99,7 @@
             "slug": {
                 "en": "marketing"
             },
-            "visibility": [],
+            "visibility": {},
             "children": [],
             "icon": "",
             "mainpage": "",
@@ -120,7 +120,7 @@
             "slug": {
                 "en": "sales"
             },
-            "visibility": [],
+            "visibility": {},
             "children": [],
             "icon": "",
             "mainpage": "",
@@ -141,7 +141,7 @@
             "slug": {
                 "en": "reception"
             },
-            "visibility": [],
+            "visibility": {},
             "children": [
                 {
                     "_id": "f8e19d70-99b1-11ed-be3f-d599c1c48261",
@@ -153,7 +153,7 @@
                     "slug": {
                         "en": "homepage"
                     },
-                    "visibility": [],
+                    "visibility": {},
                     "children": [
                         {
                             "_id": "2b1fdbd0-99b2-11ed-be3f-d599c1c48261",
@@ -165,7 +165,7 @@
                             "slug": {
                                 "en": "welcome"
                             },
-                            "visibility": [],
+                            "visibility": {},
                             "children": [],
                             "subtype": "text",
                             "section": "main",

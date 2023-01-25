@@ -4,7 +4,6 @@ const path = require('path');
 const fs = require('fs');
 const express = require('express');
 const uuid = require('uuid');
-const { allowedNodeEnvironmentFlags } = require('process');
 const git = require('simple-git')();
 
 // Load WBDL from file and index for faster access
@@ -60,14 +59,27 @@ app.use([/^\/(pki|data|node_modules)/, '/'], express.static(__dirname, { dotfile
 app.use(express.json()); // Needed for parsing application/json
 app.use(express.text()); // Needed for parsing text/plain
 
+// [TODO] These API should be in the Spin the Web Spinner (They are here temporarily)
 app.get('/api/webbase/users', (req, res) => {
     res.json({}); // [TODO]
 });
 app.get('/api/webbase/datasources', (req, res) => {
     res.json({}); // [TODO]
 });
-app.get('/api/webbase/groups', (req, res) => {
-    res.json(WBDL.visibility);
+app.get('/api/webbase/groups(/*)?', (req, res) => {
+    let visibility = structuredClone(WBDL.visibility), localVisibility;
+    if (!req.params || !/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i.test(req.params[1]))
+        localVisibility = WBDL.visibility;
+    else
+        localVisibility = WBDL.get(null, req.params[1]).visibility;
+        
+    for (let group in localVisibility)
+        if (localVisibility[group] == true)
+            visibility[group] = 'LV';
+        else if (localVisibility[group] == false)
+            visibility[group] = 'LI';
+
+    res.json(visibility);
 });
 app.get('/api/webbase(/*)?', (req, res) => {
     res.json(req.params[1] ? WBDL.get(null, req.params[1]) : WBDL);

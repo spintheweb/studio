@@ -1,4 +1,10 @@
-let stwStudio = {
+const stwStudio = {
+    visibilityEnum: {
+        'LV': '<i class="fa-solid fa-fw fa-eye"></i>', // Local visibility
+        'LI': '<i class="fa-solid fa-fw fa-eye-slash"></i>', // Local invisibility
+        'IV': '<i class="fa-regular fa-fw fa-eye"></i>', // Inherited visibility
+        'II': '<i class="fa-regular fa-fw fa-eye-slash"></i>' // Inherited invisibility
+    },
     setup: (settings = {}) => {
         if (window.getComputedStyle(document.body).getPropertyValue('color-scheme') === 'dark')
             document.body.className = 'stwDark';
@@ -173,9 +179,9 @@ let stwStudio = {
                             document.querySelector(`[data-id="${subpath}"]`).remove();
                             document.querySelector(`[data-id="${subpath}"]>div`).click();
                         } else {
-                            document.querySelector('.stwPanel .stwTree').insertAdjacentHTML('beforeend', `<ul>${stwStudio.renderTree(json)}</ul>`);
+                            document.querySelector('#webbase').insertAdjacentHTML('beforeend', `<ul>${stwStudio.renderTree(json)}</ul>`);
                             document.querySelector('li[data-type=site]>div').click();
-                            document.querySelector('.stwPanel .stwLoading').remove();
+                            document.querySelector('#webbase .stwLoading').remove();
                         }
                     })
                     .catch(err => {
@@ -189,8 +195,8 @@ let stwStudio = {
                             return res.json();
                     })
                     .then(json => {
-                        document.querySelector('.stwPanel .stwTree').insertAdjacentHTML('beforeend', `<ul>${stwStudio.renderTree(json)}</ul>`);
-                        document.querySelector('.stwPanel .stwLoading').remove();
+                        document.querySelector('#explorer').insertAdjacentHTML('beforeend', `<ul>${stwStudio.renderTree(json)}</ul>`);
+                        document.querySelector('#explorer .stwLoading').remove();
                     })
                     .catch(err => {
                         console.log(err);
@@ -206,8 +212,8 @@ let stwStudio = {
                         let tree = { children: [] };
                         json.files.forEach(file => tree.children.push({ name: file.path, type: 'file', status: file.working_dir }));
 
-                        document.querySelector('.stwPanel .stwTree').insertAdjacentHTML('beforeend', `<ul>${stwStudio.renderTree(tree)}</ul>`);
-                        document.querySelector('.stwPanel .stwLoading').remove();
+                        document.querySelector('#sourcecontrol').insertAdjacentHTML('beforeend', `<ul>${stwStudio.renderTree(tree)}</ul>`);
+                        document.querySelector('#sourcecontrol .stwLoading').remove();
                     })
                     .catch(err => {
                         console.log(err);
@@ -224,8 +230,8 @@ let stwStudio = {
                         for (let group in groups)
                             tree.children.push({ name: group, type: 'group' });
 
-                        document.querySelector('.stwPanel .stwTree').insertAdjacentHTML('beforeend', `<ul>${stwStudio.renderTree(tree)}</ul>`);
-                        document.querySelector('.stwPanel .stwLoading').remove();
+                        document.querySelector('#groups').insertAdjacentHTML('beforeend', `<ul>${stwStudio.renderTree(tree)}</ul>`);
+                        document.querySelector('#groups .stwLoading').remove();
                     })
                     .catch(err => {
                         console.log(err);
@@ -241,18 +247,19 @@ let stwStudio = {
                 html += stwStudio.renderTree(child, depth);
 
         } else {
-            let name = typeof (node.name) === 'string' ? node.name : node.name[stwStudio.settings.lang];
+            let name = typeof (node.name) === 'string' ? node.name : node.name[stwStudio.settings.lang],
+                cssClass = node.status === 'T' ? `class="stw${node.status}"` : '';
 
             if (node.children && node.children.length) {
                 if (!depth)
                     html = `<li ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div tabindex="0" role="link"><span></span><span>${name}</span><span></span></div><ul>`;
                 else
-                    html = `<li class="stw${node.status}" ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div tabindex="0" role="link"><span>${'&emsp;'.repeat(depth - 1)}<i class="fa fa-fw fa-angle-right"></i></span><span>${name}</span><span>${node.status}</span></div><ul style="display:none">`;
+                    html = `<li ${cssClass} ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div tabindex="0" role="link"><span>${'&emsp;'.repeat(depth - 1)}<i class="fa fa-fw fa-angle-right"></i></span><span>${name}</span><span>${node.status}</span></div><ul style="display:none">`;
                 for (let child of node.children)
                     html += stwStudio.renderTree(child, depth + 1);
                 html += '</ul>';
             } else
-                html = `<li class="stw${node.status}" ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div tabindex="0" role="link"><span>${'&emsp;'.repeat(depth)}&nbsp;</span><span>${name}</span><span>${node.status || ''}</span></div>`;
+                html = `<li ${cssClass} ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div tabindex="0" role="link"><span>${'&emsp;'.repeat(depth)}&nbsp;</span><span>${name}</span><span>${node.status || ''}</span></div>`;
         }
 
         return `${html}</li>`;
@@ -313,8 +320,6 @@ let stwStudio = {
 
                             node._idparent = parent.dataset.id;
 
-                            //parent.innerHTML = stwStudio.renderTree(node._idparent);
-
                             let properties = document.getElementById('properties');
                             properties.dataset.id = node._id;
                             properties.dataset.idparent = node._idparent;
@@ -334,6 +339,8 @@ let stwStudio = {
                     let properties = document.getElementById('properties');
                     properties.dataset.id = div.parentElement.dataset.id;
                     delete properties.dataset.idparent;
+
+                    // Fetch node
                     fetch(`/api/webbase/${properties.dataset.id}`)
                         .then(res => {
                             if (res.ok)
@@ -341,6 +348,24 @@ let stwStudio = {
                         })
                         .then(node => {
                             stwStudio.loadForm(properties.querySelector('form'), node);
+
+                            // Fetch node visibility
+                            fetch(`/api/webbase/groups/${node._id}`)
+                                .then(res => {
+                                    if (res.ok)
+                                        return res.json();
+                                })
+                                .then(groups => {
+                                    let tree = { children: [] };
+                                    for (let group in groups)
+                                        tree.children.push({ name: group, type: 'group', status: stwStudio.visibilityEnum[groups[group]] });
+
+                                    document.querySelector('#visibility').lastElementChild.remove();
+                                    document.querySelector('#visibility').insertAdjacentHTML('beforeend', `<ul>${stwStudio.renderTree(tree)}</ul>`);
+                                })
+                                .catch(err => {
+                                    console.log(err);
+                                });
                         })
                         .catch(err => console.log(err));
                     properties.querySelector('h1>i').click();

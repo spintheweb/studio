@@ -36,8 +36,8 @@
         <input type="text" name="template" placeholder="Template" title="Template" required>
         <input type="text" name="visible">
         
-        <input type="text" name="homepage" placeholder="homepage" title="Home page" readonly>
-        <input type="text" name="mainpage" placeholder="mainpage" title="Main page" readonly>
+        <input type="node" name="homepage" placeholder="homepage" title="Home page" readonly>
+        <input type="node" name="mainpage" placeholder="mainpage" title="Main page" readonly>
 
         <select name="lang" title="Default language">
             <option value="en">English</option>
@@ -64,11 +64,14 @@
             <option value="tabs">Tabs</option>
             <option value="calendar">Calendar</option>
             <option value="graph">Graph</option>
+            <option value="map">Map</option>
+            <option value="menu">Menu</option>
             <option value="pagelinks">Page links</option>
             <option value="arealinks">Area links</option>
             <option value="indexedlinks">Indexed links</option>
             <option value="breadcrumb">Breadcrumb</option>
             <option value="cliccableimage">Cliccable image</option>
+            <option value="group">Group</option>
             <option value="shortcut">Shortcut</option>
             <option value="clientsidecode">Client side code</option>
             <option value="serversidecode">Server side code</option>
@@ -82,25 +85,9 @@
         <textarea name="layout" placeholder="Layout" title="Layout"></textarea>
     </form>
 </div>
-<div class="stwForm" id="visibility" onclick="stwStudio.manageVisibility(event)">
+<div class="stwTree" id="visibility" onclick="stwStudio.manageVisibility(event)">
     <h1><i class="fa fa-fw fa-angle-right"></i> visibility</h1>
-    <table>
-        <tbody>
-            <tr>
-                <td><i class="fa fa-fw fa-users"></i> guests</td><td style="width: 1em;"><i class="fa  fa-fw fa-eye-slash"></i></td>
-            </tr>
-            <tr>
-                <td><i class="fa fa-fw fa-users"></i> users</td><td><i class="fa  fa-fw fa-eye"></i></td>
-            </tr>
-            <tr>
-                <td><i class="fa fa-fw fa-users"></i> translators</td><td><i class="fa fa-fw fa-eye-slash"></i></td>
-            </tr>
-            <tr>
-                <td><i class="fa fa-fw fa-users"></i> developers</td><td><i class="fa fa-fw fa-eye-slash"></i></td>
-            </tr>
-            <tr>
-                <td><i class="fa fa-fw fa-users"></i> administrators</td><td><i class="fa fa-fw fa-eye-slash"></i></td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="stwLoading">
+        <i class="fa fa-sync fa-spin fa-2x"></i>
+    </div>
 </div>
