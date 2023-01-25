@@ -53,8 +53,8 @@ let stwStudio = {
 
             let tab = document.activeElement.parentElement;
             fetch(`/api/explorer/${tab.id}`,
-                { 
-                    method: 'POST', 
+                {
+                    method: 'POST',
                     body: tab.editor.getValue(),
                     headers: { 'Content-type': 'text/plain' }
                 })
@@ -103,8 +103,13 @@ let stwStudio = {
             })
             .then(res => res.json())
             .then(data => {
-                document.querySelector('#webbase [selected] div').innerHTML = `<div class="stwFill"></div>${data.name[stwStudio.settings.lang]}<span>${data.status || ''}</span>`;
+                stwStudio.fillPanel('/panels/webbase.html', data._id);
+
+//                document.querySelector('#webbase [selected] div').innerHTML = `<span></span><span>${data.name[stwStudio.settings.lang]}</span><span>${data.status || ''}</span>`;
                 stwStudio.loadForm(document.querySelector('#properties form'), data);
+            })
+            .catch(err => {
+                console.log(err);
             });
     },
     loadForm: (form, data) => {
@@ -151,18 +156,26 @@ let stwStudio = {
                 console.log(err);
             });
     },
-    fillPanel: panel => {
+    fillPanel: (panel, subpath) => {
         switch (panel) {
             case '/panels/webbase.html':
-                fetch('/api/webbase')
+                fetch(`/api/webbase${subpath ? '/' + subpath : ''}`)
                     .then(res => {
                         if (res.ok)
                             return res.json();
                     })
                     .then(json => {
-                        document.querySelector('.stwPanel .stwTree').insertAdjacentHTML('beforeend', `<ul>${stwStudio.renderTree(json)}</ul>`);
-                        document.querySelector('li[data-type=site]>div').click();
-                        document.querySelector('.stwPanel .stwLoading').remove();
+                        if (subpath) {
+                            let ul = document.querySelector(`[data-id="${subpath}"]`).parentElement.closest('ul');
+                            for (var depth = -1; ul; ul = ul.parentElement.closest('ul'), ++depth);
+                            document.querySelector(`[data-id="${subpath}"]`).insertAdjacentHTML('afterend', stwStudio.renderTree(json, depth));
+                            document.querySelector(`[data-id="${subpath}"]`).remove();
+                            document.querySelector(`[data-id="${subpath}"]>div`).click();
+                        } else {
+                            document.querySelector('.stwPanel .stwTree').insertAdjacentHTML('beforeend', `<ul>${stwStudio.renderTree(json)}</ul>`);
+                            document.querySelector('li[data-type=site]>div').click();
+                            document.querySelector('.stwPanel .stwLoading').remove();
+                        }
                     })
                     .catch(err => {
                         console.log(err);
@@ -245,7 +258,7 @@ let stwStudio = {
     },
     managePanel: event => {
         let target = event.target;
-        if (target.tagName === 'I' && target.dataset.panel === 'menu') {
+        if (target.tagName === 'I' && target.dataset.panel === 'stwMenu') {
             // [TODO]
 
         } else if (target.tagName === 'I' && target.hasAttribute('selected')) {
@@ -284,7 +297,7 @@ let stwStudio = {
                         .then(node => {
                             let parent = tree.querySelector('li[selected]') || tree.querySelector('li');
                             parent.removeAttribute('selected');
-                            let li = `<li data-id="${node._id}" data-type="${node.type}" selected><div><div class="stwFill"></div>${node.name[stwStudio.settings.lang]}</div></li>`
+                            let li = `<li data-id="${node._id}" data-type="${node.type}" selected><div tabindex="0" role="link"><span></span><span>${node.name[stwStudio.settings.lang]}</span><span>?</span></div></li>`
                             if (parent.querySelector('ul'))
                                 parent.lastElementChild.insertAdjacentHTML('beforeend', li);
                             else

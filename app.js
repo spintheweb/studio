@@ -8,7 +8,8 @@ const { allowedNodeEnvironmentFlags } = require('process');
 const git = require('simple-git')();
 
 // Load WBDL from file and index for faster access
-let WBDL = JSON.parse(fs.readFileSync(path.join(__dirname, `data/${process.argv[2]}`)) || "{}");
+let WBDL = JSON.parse(fs.readFileSync(path.join(__dirname, `data/${process.argv[2] || 'wbdl.json'}`)) || "{}");
+WBDL.path = `data/${process.argv[2] || 'wbdl.json'}`;
 WBDL.index = new Map();
 (function index(obj) {
     WBDL.index.set(obj._id, obj);
@@ -69,7 +70,7 @@ app.get('/api/webbase/groups', (req, res) => {
     res.json(WBDL.visibility);
 });
 app.get('/api/webbase(/*)?', (req, res) => {
-    res.json(req.params[1] ? WBDL.get('en', req.params[1]) : WBDL);
+    res.json(req.params[1] ? WBDL.get(null, req.params[1]) : WBDL);
 });
 app.post('/api/webbase/:lang/:_id', (req, res) => {
     try {
@@ -99,16 +100,16 @@ app.post('/api/webbase/:lang/:_id', (req, res) => {
                         node[obj] = newNode[obj];
             }
 
-            fs.writeFile(__dirname + '/data/wbdl.json', JSON.stringify(WBDL), err => {
+            fs.writeFile(path.join(__dirname, WBDL.path), JSON.stringify(WBDL), err => {
                 if (err)
                     throw 503; // 503 Service Unavailable
-                console.log('Saved /data/wbdl.json');
+                console.log('Saved ' + WBDL.path);
             });
             res.json(node);
         }
 
-    } catch (error) {
-        res.end(error);
+    } catch (err) {
+        res.end(500); // 500 Internal server error
     }
 });
 

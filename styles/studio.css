@@ -268,11 +268,11 @@ li[data-type=group]>div>span:nth-child(2)::before {
     content: "\f0c0";
 }
 
-.menu {
+.stwMenu {
     display: inline-block;
 }
 
-.menu ul {
+.stwMenu ul {
     display: flex;
     position: relative;
     z-index: 1;
@@ -280,63 +280,63 @@ li[data-type=group]>div>span:nth-child(2)::before {
     padding: 0;
 }
 
-.menu div>span {
+.stwMenu div>span {
     display: inline-block;
     padding: 0 0 0 2em;
 }
 
-.menu ul>li>ul {
+.stwMenu ul>li>ul {
     display: none;
     border: thin solid;
     position: absolute;
     left: 0;
 }
 
-.menu ul>li>ul>li>ul {
+.stwMenu ul>li>ul>li>ul {
     left: 100%;
     top: 0;
 }
 
-.menu ul>li:hover>ul {
+.stwMenu ul>li:hover>ul {
     display: block;
 }
 
-.menu li {
+.stwMenu li {
     list-style: none;
     position: relative;
 }
 
-.menu li>ul>li {
+.stwMenu li>ul>li {
     min-width: 12em;
 }
 
-.menu li>div {
+.stwMenu li>div {
     padding: 0.75em 1em;
     cursor: pointer;
     white-space: nowrap;
 }
 
-.menu div.checked:after {
+.stwMenu div.checked:after {
     font-family: FontAwesome, "Font Awesome 6 Pro";
     font-weight: 900;
     content: "\f00c";
     float: right;
 }
 
-.menu li>ul>li>div:not(:last-child):after {
+.stwMenu li>ul>li>div:not(:last-child):after {
     font-family: FontAwesome, "Font Awesome 6 Pro";
     font-weight: 900;
     content: "\f0da";
     float: right;
 }
 
-.menu li:hover>div {
+.stwMenu li:hover>div {
     background-color: var(--menu-background-color);
     color: var(--menu-hover-color);
     opacity: 1;
 }
 
-.menu ul {
+.stwMenu ul {
     background-color: var(--menu-background-color);
     color: var(--menu-color);
     opacity: 1;

@@ -1,0 +1,202 @@
+{
+    "_id": "141a8b53-9aa0-4a6e-8f79-de97911df0f8",
+    "type": "site",
+    "status": null,
+    "name": {
+        "en": "studio.spintheweb.org"
+    },
+    "lang": "en",
+    "url": "https://studio.spintheweb.org",
+    "mainpage": "89a30afc-75ba-400e-965b-2e73ac4370eb",
+    "visibility": {
+        "guests": null,
+        "users": null,
+        "translators": null,
+        "developers": null,
+        "administrators": null
+    },
+    "datasources": [],
+    "icon": {
+        "en": ""
+    },
+    "keywords": {
+        "en": "wbdl studio"
+    },
+    "description": {
+        "en": "Enables management of Spin the Web Sites"
+    },
+    "children": [
+        {
+            "_id": "d34b41e0-9800-11ed-a32b-55ccefa949f3",
+            "type": "area",
+            "status": "M",
+            "name": {
+                "en": "Administration"
+            },
+            "slug": {
+                "en": "administration"
+            },
+            "visibility": [],
+            "children": [],
+            "icon": "",
+            "mainpage": "",
+            "keywords": {
+                "en": ""
+            },
+            "description": {
+                "en": ""
+            }
+        },
+        {
+            "_id": "fc846ce0-9994-11ed-a24e-6d62bf657c74",
+            "type": "area",
+            "status": null,
+            "name": {
+                "en": "Production"
+            },
+            "slug": {
+                "en": "production"
+            },
+            "visibility": [],
+            "children": [],
+            "icon": "",
+            "mainpage": "",
+            "keywords": {
+                "en": ""
+            },
+            "description": {
+                "en": ""
+            }
+        },
+        {
+            "_id": "066591d0-9995-11ed-a24e-6d62bf657c74",
+            "type": "area",
+            "status": null,
+            "name": {
+                "en": "Logistics"
+            },
+            "slug": {
+                "en": "logistics"
+            },
+            "visibility": [],
+            "children": [],
+            "icon": "",
+            "mainpage": "",
+            "keywords": {
+                "en": ""
+            },
+            "description": {
+                "en": ""
+            }
+        },
+        {
+            "_id": "0cd2ecc0-9995-11ed-a24e-6d62bf657c74",
+            "type": "area",
+            "status": null,
+            "name": {
+                "en": "Marketing"
+            },
+            "slug": {
+                "en": "marketing"
+            },
+            "visibility": [],
+            "children": [],
+            "icon": "",
+            "mainpage": "",
+            "keywords": {
+                "en": ""
+            },
+            "description": {
+                "en": ""
+            }
+        },
+        {
+            "_id": "17e1bc40-9995-11ed-a24e-6d62bf657c74",
+            "type": "area",
+            "status": "M",
+            "name": {
+                "en": "Sales"
+            },
+            "slug": {
+                "en": "sales"
+            },
+            "visibility": [],
+            "children": [],
+            "icon": "",
+            "mainpage": "",
+            "keywords": {
+                "en": ""
+            },
+            "description": {
+                "en": ""
+            }
+        },
+        {
+            "_id": "efaf0800-99b1-11ed-be3f-d599c1c48261",
+            "type": "area",
+            "status": "M",
+            "name": {
+                "en": "Reception"
+            },
+            "slug": {
+                "en": "reception"
+            },
+            "visibility": [],
+            "children": [
+                {
+                    "_id": "f8e19d70-99b1-11ed-be3f-d599c1c48261",
+                    "type": "page",
+                    "status": "M",
+                    "name": {
+                        "en": "Home page!"
+                    },
+                    "slug": {
+                        "en": "homepage"
+                    },
+                    "visibility": [],
+                    "children": [
+                        {
+                            "_id": "2b1fdbd0-99b2-11ed-be3f-d599c1c48261",
+                            "type": "content",
+                            "status": "M",
+                            "name": {
+                                "en": "Welcome"
+                            },
+                            "slug": {
+                                "en": "welcome"
+                            },
+                            "visibility": [],
+                            "children": [],
+                            "subtype": "text",
+                            "section": "main",
+                            "sequence": "1",
+                            "dsn": "",
+                            "query": "",
+                            "parameters": "",
+                            "layout": {
+                                "en": ""
+                            }
+                        }
+                    ],
+                    "template": "index.html",
+                    "icon": "",
+                    "keywords": {
+                        "en": ""
+                    },
+                    "description": {
+                        "en": ""
+                    }
+                }
+            ],
+            "icon": "",
+            "mainpage": "",
+            "keywords": {
+                "en": ""
+            },
+            "description": {
+                "en": ""
+            }
+        }
+    ],
+    "index": {}
+}

@@ -6,14 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>STW Studio</title>
     <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
     <link rel="stylesheet" href="styles/studio.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer">
     <script src="scripts/studio.js"></script>
 </head>
 
 <body class="stwDark">
     <section class="stwPanels" onclick="stwStudio.managePanel(event)">
-        <i tabindex="0" role="link" class="fa fa-fw fa-bars" title="Menu" data-panel="menu"></i>
+        <i tabindex="0" role="link" class="fa fa-fw fa-bars" title="Menu" data-panel="stwMenu"></i>
         <i tabindex="0" role="link" class="fa fa-fw fa-sitemap" title="Webbase" data-panel="/panels/webbase.html"></i>
         <i tabindex="0" role="link" class="fa fa-fw fa-search" title="Search" data-panel="/panels/search.html"></i>
         <i tabindex="0" role="link" class="fa fa-fw fa-folder" title="Explorer" data-panel="/panels/explorer.html"></i>
@@ -45,11 +47,13 @@
                     <option>https://www.keyvisions.it</option>
                 </datalist>
             </div>
-            <iframe id="Browse" title="Site" src="https://studio.spintheweb.org" onload="stwStudio.setURL(event)"></iframe>
+            <iframe id="Browse" title="Site" src="https://studio.spintheweb.org"
+                onload="stwStudio.setURL(event)"></iframe>
         </div>
     </section>
     <section class="stwStatusbar"><span></span><span><i class="fa fa-fw fa-triangle-exclamation"></i> This site is under
-            development</span><span><i class="fa-solid fa-toggle-on" style="cursor:pointer" onclick="stwStudio.toggleTheme(event)"></i> <i class="fa-solid fa-moon"></i></span></section>
+            development</span><span><i class="fa-solid fa-toggle-on" style="cursor:pointer"
+                onclick="stwStudio.toggleTheme(event)"></i> <i class="fa-solid fa-moon"></i></span></section>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.14.0/ace.min.js"
         integrity="sha512-s57ywpCtz+4PU992Bg1rDtr6+1z38gO2mS92agz2nqQcuMQ6IvgLWoQ2SFpImvg1rbgqBKeSEq0d9bo9NtBY0w=="
