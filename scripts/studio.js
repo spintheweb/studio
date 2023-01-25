@@ -62,6 +62,8 @@ let stwStudio = {
                     console.log(err);
                 });
         }
+        if (event.key == 'e' && event.ctrlKey)
+            alert('[TODO] Expand properties');
     },
     click: event => {
         let target = event.target;
@@ -91,7 +93,8 @@ let stwStudio = {
             if (!input.hasAttribute('disabled'))
                 data[input.name] = input.value;
 
-        data.status = 'M';
+        if (event.currentTarget)
+            data.status = 'M';
         if (data.hasOwnProperty('slug') && data.slug === '')
             data.slug = data.name.toLowerCase().replace(/[^a-z]/g, '');
 
@@ -104,8 +107,6 @@ let stwStudio = {
             .then(res => res.json())
             .then(data => {
                 stwStudio.fillPanel('/panels/webbase.html', data._id);
-
-//                document.querySelector('#webbase [selected] div').innerHTML = `<span></span><span>${data.name[stwStudio.settings.lang]}</span><span>${data.status || ''}</span>`;
                 stwStudio.loadForm(document.querySelector('#properties form'), data);
             })
             .catch(err => {
@@ -246,12 +247,12 @@ let stwStudio = {
                 if (!depth)
                     html = `<li ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div tabindex="0" role="link"><span></span><span>${name}</span><span></span></div><ul>`;
                 else
-                    html = `<li ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div tabindex="0" role="link"><span>${'&emsp;'.repeat(depth - 1)}<i class="fa fa-fw fa-angle-right"></i></span><span>${name}</span><span>${node.status}</span></div><ul style="display:none">`;
+                    html = `<li class="stw${node.status}" ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div tabindex="0" role="link"><span>${'&emsp;'.repeat(depth - 1)}<i class="fa fa-fw fa-angle-right"></i></span><span>${name}</span><span>${node.status}</span></div><ul style="display:none">`;
                 for (let child of node.children)
                     html += stwStudio.renderTree(child, depth + 1);
                 html += '</ul>';
             } else
-                html = `<li ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div tabindex="0" role="link"><span>${'&emsp;'.repeat(depth)}&nbsp;</span><span>${name}</span><span>${node.status || ''}</span></div>`;
+                html = `<li class="stw${node.status}" ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div tabindex="0" role="link"><span>${'&emsp;'.repeat(depth)}&nbsp;</span><span>${name}</span><span>${node.status || ''}</span></div>`;
         }
 
         return `${html}</li>`;
@@ -287,6 +288,13 @@ let stwStudio = {
 
                 if (event.target.dataset.action === 'refresh') {
                     stwStudio.loadFile('/panels/webbase.html', document.querySelector('section.stwPanel'), stwStudio.fillPanel);
+
+                } else if (event.target.dataset.action === 'trashed') {
+                    if (event.target.className === 'fa-solid fa-fw fa-trash-can')
+                        event.target.className = 'fa-regular fa-fw fa-trash-can';
+                    else
+                        event.target.className = 'fa-solid fa-fw fa-trash-can';
+                    event.currentTarget.querySelector('ul').classList.toggle('stwT');
 
                 } else {
                     fetch(`/api/webbase/${stwStudio.settings.lang}/${event.target.dataset.action}`,
@@ -384,12 +392,13 @@ let stwStudio = {
         if (target.tagName === 'H1' && event.target.dataset.action) {
             switch (event.target.dataset.action) {
                 case 'trash':
-                    if (what === 'webbase') {
-                        document.getElementById(what).querySelector('li[selected]').remove();
-                        // [TODO] Move node to trash
+                    if (what === 'webbase' && event.currentTarget.querySelector('form').status.value != 'T') {
+                        event.currentTarget.querySelector('form').status.value = 'T';
+                        stwStudio.submitForm({ target: { form: event.currentTarget.querySelector('form') } });
                     }
                     break;
                 case 'clone':
+                    // [TODO] Deep clone node
                     break;
             }
         }

@@ -239,6 +239,10 @@ h1>span>i:hover {
     overflow: auto;
 }
 
+ul.stwT li.stwT {
+    display: none;
+}
+
 li[data-type]>div>span:nth-child(2)::before {
     display: inline-block;
     padding-right: 0.5em;

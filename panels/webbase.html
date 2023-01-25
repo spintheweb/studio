@@ -5,7 +5,7 @@
             <i class="fa-regular fa-fw fa-folder" title="New area" data-action="area"></i>
             <i class="fa-regular fa-fw fa-file" title="New page" data-action="page"></i>
             <i class="fa-regular fa-fw fa-square" title="New content" data-action="content"></i>
-            <i class="fa-regular fa-fw fa-trash-can" title="Trashed nodes" data-action="trashed"></i>
+            <i class="fa-regular fa-fw fa-trash-can" title="Show/Hide trashed nodes" data-action="trashed"></i>
         </span>
     </h1>
     <div class="stwLoading">
@@ -16,13 +16,15 @@
     <h1><i class="fa fa-fw fa-angle-right"></i> properties
         <span>
             <i class="fa-regular fa-fw fa-clone" title="Clone" data-action="clone"></i>
-            <i class="fa-regular fa-fw fa-trash-can" title="Trash" data-action="trash"></i>
+            <i class="fa-solid fa-fw fa-trash-can" title="Trash" data-action="trash"></i>
+            <i class="fa-solid fa-fw fa-expand" title="Expand CTRL+E" data-action="Expand"></i>
         </span>
     </h1>
     <form name="content_properties" onchange="stwStudio.submitForm(event)">
         <input type="hidden" name="_id">
         <input type="hidden" name="_idparent">
         <input type="hidden" name="type">
+        <input type="hidden" name="status">
 
         <input type="text" name="name" placeholder="Name" title="Name" required>
         <input type="text" name="slug" placeholder="Slug" title="Slug" required>
@@ -39,10 +41,10 @@
 
         <select name="lang" title="Default language">
             <option value="en">English</option>
-            <option value="es">Spanish</option>
-            <option value="it">Italian</option>
             <option value="fr">French</option>
             <option value="de">German</option>
+            <option value="it">Italian</option>
+            <option value="es">Spanish</option>
         </select>
         <input type="text" name="keywords" placeholder="keywords" title="Keywords">
         <textarea name="description" placeholder="description" title="Description"></textarea>
