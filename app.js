@@ -15,9 +15,12 @@ WBDL.index = new Map();
     WBDL.index.set(obj._id, obj);
     if (obj.children)
         for (let child of obj.children)
-            index(child, obj._idParent);
+            index(child, obj._id);
 })(WBDL);
 WBDL.get = (lang, key) => {
+    if (!key)
+        return null;
+
     if (/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i.test(key))
         return WBDL.index.get(key);
 
@@ -74,14 +77,20 @@ app.get('/api/webbase/groups(/*)?', (req, res) => {
     else
         localVisibility = WBDL.get(null, req.params[1]).visibility;
 
-    for (let group in localVisibility)
-        if (localVisibility[group] == true)
-            visibility[group] = 'LV';
-        else if (localVisibility[group] == false)
-            visibility[group] = 'LI';
-        else {
-
-        }
+    if (req.params[1])
+        for (let group in visibility)
+            if (localVisibility[group] == true)
+                visibility[group] = 'LV';
+            else if (localVisibility[group] == false)
+                visibility[group] = 'LI';
+            else {
+                visibility[group] = 'II';
+                for (let parent = WBDL.get(null, WBDL.get(null, req.params[1])._idParent); parent; parent = WBDL.get(null, parent._idParent))
+                    if (parent.visibility[group]) {
+                        visibility[group] = parent.visibility[group] ? 'IV' : 'II';
+                        break;
+                    }
+            }
 
     res.json(visibility);
 });
