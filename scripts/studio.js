@@ -248,7 +248,7 @@ const stwStudio = {
 
         } else {
             let name = typeof (node.name) === 'string' ? node.name : node.name[stwStudio.settings.lang],
-                cssClass = node.status === 'T' ? `class="stw${node.status}"` : '';
+                cssClass = node.status === 'T' ? 'class="stwT"' : '';
 
             if (node.children && node.children.length) {
                 if (!depth)
@@ -261,7 +261,6 @@ const stwStudio = {
             } else
                 html = `<li ${cssClass} ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div tabindex="0" role="link"><span>${'&emsp;'.repeat(depth)}&nbsp;</span><span>${name}</span><span>${node.status || ''}</span></div>`;
         }
-
         return `${html}</li>`;
     },
     managePanel: event => {
@@ -291,7 +290,8 @@ const stwStudio = {
 
         switch (target.tagName) {
             case 'H1':
-                tree = target.nextElementSibling;
+                var tree = target.nextElementSibling;
+                var parent = tree.querySelector('li[selected]');
 
                 if (event.target.dataset.action === 'refresh') {
                     stwStudio.loadFile('/panels/webbase.html', document.querySelector('section.stwPanel'), stwStudio.fillPanel);
@@ -303,30 +303,25 @@ const stwStudio = {
                         event.target.className = 'fa-solid fa-fw fa-trash-can';
                     event.currentTarget.querySelector('ul').classList.toggle('stwT');
 
-                } else {
-                    fetch(`/api/webbase/${stwStudio.settings.lang}/${event.target.dataset.action}`,
+                } else if (parent) {
+                    fetch(`/api/webbase/${stwStudio.settings.lang}/${parent.dataset.id}/${event.target.dataset.action}`,
                         {
                             method: 'POST'
                         })
                         .then(res => res.json())
                         .then(node => {
-                            let parent = tree.querySelector('li[selected]') || tree.querySelector('li');
-                            parent.removeAttribute('selected');
-                            let li = `<li data-id="${node._id}" data-type="${node.type}" selected><div tabindex="0" role="link"><span></span><span>${node.name[stwStudio.settings.lang]}</span><span>?</span></div></li>`
-                            if (parent.querySelector('ul'))
-                                parent.lastElementChild.insertAdjacentHTML('beforeend', li);
-                            else
-                                parent.insertAdjacentHTML('beforeend', `<ul>${li}</ul>`);
-
-                            node._idparent = parent.dataset.id;
-
-                            let properties = document.getElementById('properties');
-                            properties.dataset.id = node._id;
-                            properties.dataset.idparent = node._idparent;
-                            stwStudio.loadForm(properties.querySelector('form'), node);
-                            properties.querySelector('h1>i').click();
+                            fetch(`/api/webbase/${node._idParent}`)
+                                .then(res => res.json())
+                                .then(parentNode => {
+                                    let ul = parent.closest('ul');
+                                    for (var depth = -1; ul; ul = ul.parentElement.closest('ul'), ++depth);
+                                    parent.innerHTML = stwStudio.renderTree(parentNode, depth);
+                                    if (parent.querySelector('div .fa-angle-right'))
+                                        parent.querySelector('div .fa-angle-right').click();
+                                    document.querySelector(`[data-id="${node._id}"]>div`).click();
+                                });
                         })
-                        .catch(err => { console.log(err) });
+                        .catch(err => console.log(err));
                 }
                 break;
             case 'UL':
@@ -360,11 +355,7 @@ const stwStudio = {
                                     for (let group in groups)
                                         tree.children.push({ name: group, type: 'group', status: stwStudio.visibilityEnum[groups[group]] });
 
-                                    document.querySelector('#visibility').lastElementChild.remove();
-                                    document.querySelector('#visibility').insertAdjacentHTML('beforeend', `<ul>${stwStudio.renderTree(tree)}</ul>`);
-                                })
-                                .catch(err => {
-                                    console.log(err);
+                                    document.querySelector('#visibility ul').innerHTML = stwStudio.renderTree(tree);
                                 });
                         })
                         .catch(err => console.log(err));

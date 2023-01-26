@@ -17,12 +17,12 @@
         <span>
             <i class="fa-regular fa-fw fa-clone" title="Clone" data-action="clone"></i>
             <i class="fa-solid fa-fw fa-trash-can" title="Trash" data-action="trash"></i>
-            <i class="fa-solid fa-fw fa-expand" title="Expand CTRL+E" data-action="Expand"></i>
+            <i class="fa-solid fa-fw fa-expand" title="Expand (Ctrl+E)" data-action="Expand"></i>
         </span>
     </h1>
     <form name="content_properties" onchange="stwStudio.submitForm(event)">
         <input type="hidden" name="_id">
-        <input type="hidden" name="_idparent">
+        <input type="hidden" name="_idParent">
         <input type="hidden" name="type">
         <input type="hidden" name="status">
 
@@ -32,10 +32,10 @@
         <input type="text" name="url" placeholder="URL" title="url" required>
         <input type="text" name="icon" placeholder="icon" title="Icon">
         <input type="text" name="image" placeholder="image" title="Image">
-        
+
         <input type="text" name="template" placeholder="Template" title="Template" required>
         <input type="text" name="visible">
-        
+
         <input type="node" name="homepage" placeholder="homepage" title="Home page" readonly>
         <input type="node" name="mainpage" placeholder="mainpage" title="Main page" readonly>
 
@@ -53,7 +53,7 @@
             <input type="text" name="section" placeholder="Section" title="Section">
             <input type="number" name="sequence" placeholder="Seq." step="0.1" title="Sequence">
         </div>
-        
+
         <input type="text" name="cssclass" placeholder="CSS class" title="CSS class">
         <select name="subtype" title="Type">
             <option value="text">Text</option>
@@ -87,7 +87,5 @@
 </div>
 <div class="stwTree" id="visibility" onclick="stwStudio.manageVisibility(event)">
     <h1><i class="fa fa-fw fa-angle-right"></i> visibility</h1>
-    <div class="stwLoading">
-        <i class="fa fa-sync fa-spin fa-2x"></i>
-    </div>
+    <ul style="display: none"></ul>
 </div>

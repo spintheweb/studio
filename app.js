@@ -6,15 +6,16 @@ const express = require('express');
 const uuid = require('uuid');
 const git = require('simple-git')();
 
-// Load WBDL from file and index for faster access
-let WBDL = JSON.parse(fs.readFileSync(path.join(__dirname, `data/${process.argv[2] || 'wbdl.json'}`)) || "{}");
+// Load WBDL from file, index for faster access and set parent hierarchy
+let WBDL = JSON.parse(fs.readFileSync(path.join(__dirname, `data/${process.argv[2] || 'wbdl.json'}`)) || '{}');
 WBDL.path = `data/${process.argv[2] || 'wbdl.json'}`;
 WBDL.index = new Map();
-(function index(obj) {
+(function index(obj, _idParent = null) {
+    obj._idParent = _idParent;
     WBDL.index.set(obj._id, obj);
     if (obj.children)
         for (let child of obj.children)
-            index(child);
+            index(child, obj._idParent);
 })(WBDL);
 WBDL.get = (lang, key) => {
     if (/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i.test(key))
@@ -59,7 +60,7 @@ app.use([/^\/(pki|data|node_modules)/, '/'], express.static(__dirname, { dotfile
 app.use(express.json()); // Needed for parsing application/json
 app.use(express.text()); // Needed for parsing text/plain
 
-// [TODO] These API should be in the Spin the Web Spinner (They are here temporarily)
+// [TODO] These API should be in a Web Spinner, they're here temporarily for testing purposes
 app.get('/api/webbase/users', (req, res) => {
     res.json({}); // [TODO]
 });
@@ -72,56 +73,54 @@ app.get('/api/webbase/groups(/*)?', (req, res) => {
         localVisibility = WBDL.visibility;
     else
         localVisibility = WBDL.get(null, req.params[1]).visibility;
-        
+
     for (let group in localVisibility)
         if (localVisibility[group] == true)
             visibility[group] = 'LV';
         else if (localVisibility[group] == false)
             visibility[group] = 'LI';
+        else {
+
+        }
 
     res.json(visibility);
 });
 app.get('/api/webbase(/*)?', (req, res) => {
     res.json(req.params[1] ? WBDL.get(null, req.params[1]) : WBDL);
 });
-app.post('/api/webbase/:lang/:_id', (req, res) => {
+app.post('/api/webbase/:lang/:_id/:type?', (req, res) => {
     try {
-        if (!/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i.test(req.params._id))
-            res.json(createNode(req.params.lang, req.params._id));
+        if (!/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i.test(req.params._id) || !WBDL.index.get(req.params._id))
+            throw 406; // 406 Not Acceptable
 
-        else {
-            // [TODO] Check data against JSON schema
-            let node = WBDL.index.get(req.body._id), newNode = req.body;
+        let node,
+            newNode = req.body;
 
-            let _idparent = newNode._idparent
-            delete newNode._idparent;
+        if (req.params.type) {
+            node = createNode(req.params.lang, req.params.type);
+            node._idParent = req.params._id
+            WBDL.index.get(node._idParent).children.push(node);
+            WBDL.index.set(node._id, node);
+        } else
+            node = WBDL.index.get(req.body._id);
 
-            if (!node) {
-                node = createNode(null, newNode.type);
-                node._id = newNode._id;
-
-                WBDL.index.get(_idparent).children.push(node);
-                WBDL.index.set(node._id, node);
-            }
-
-            for (let obj in newNode) {
-                if (typeof node[obj] != 'undefined')
-                    if (node[obj] != null && typeof node[obj] === 'object')
-                        node[obj] = { [req.params.lang]: newNode[obj] };
-                    else
-                        node[obj] = newNode[obj];
-            }
-
-            fs.writeFile(path.join(__dirname, WBDL.path), JSON.stringify(WBDL), err => {
-                if (err)
-                    throw 503; // 503 Service Unavailable
-                console.log('Saved ' + WBDL.path);
-            });
-            res.json(node);
+        for (let obj in newNode) {
+            if (typeof node[obj] != 'undefined')
+                if (node[obj] != null && typeof node[obj] === 'object')
+                    node[obj] = { [req.params.lang]: newNode[obj] };
+                else
+                    node[obj] = newNode[obj];
         }
 
+        fs.writeFile(path.join(__dirname, WBDL.path), JSON.stringify(WBDL), err => {
+            if (err)
+                throw 503; // 503 Service Unavailable
+            console.log('Saved ' + WBDL.path);
+        });
+        res.json(node);
+
     } catch (err) {
-        res.end(500); // 500 Internal server error
+        res.end(err);
     }
 });
 
@@ -167,16 +166,17 @@ async function getDir(dirpath = '.', gitStatus) {
 }
 
 // [TODO] Base creation on JSON schema
-function createNode(lang, type) {
+function createNode(lang = 'en', type) {
     let UUID = uuid.v1();
 
     let basenode = {
         _id: UUID,
+        _idParent: null,
         type: type,
-        status: null,
+        status: 'M',
         name: { [lang]: 'New ' + type },
         slug: {},
-        visibility: [],
+        visibility: {},
         children: []
     };
 
