@@ -8,15 +8,16 @@ const git = require('simple-git')();
 
 // Load WBDL from file, index for faster access and set parent hierarchy
 let WBDL = JSON.parse(fs.readFileSync(path.join(__dirname, `data/${process.argv[2] || 'wbdl.json'}`)) || '{}');
+
 WBDL.path = `data/${process.argv[2] || 'wbdl.json'}`;
 WBDL.index = new Map();
-(function index(obj, _idParent = null) {
+WBDL.createIndex = (obj, _idParent = null) => {
     obj._idParent = _idParent;
     WBDL.index.set(obj._id, obj);
     if (obj.children)
         for (let child of obj.children)
-            index(child, obj._id);
-})(WBDL);
+            WBDL.createIndex(child, obj._id);
+}
 WBDL.get = (lang, key) => {
     if (!key)
         return null;
@@ -34,6 +35,8 @@ WBDL.get = (lang, key) => {
         return walk(slugs, node);
     })(key.split('/'), WBDL);
 };
+
+WBDL.createIndex(WBDL);
 
 let settings = JSON.parse(fs.readFileSync(path.join(__dirname, '.settings')));
 
@@ -64,20 +67,17 @@ app.use(express.json()); // Needed for parsing application/json
 app.use(express.text()); // Needed for parsing text/plain
 
 // [TODO] These API should be in a Web Spinner, they're here temporarily for testing purposes
-app.get('/api/wbdl/users', (req, res) => {
+app.get('/api/wbdl/datasources/:name?', (req, res) => {
     res.json({}); // [TODO]
 });
-app.get('/api/wbdl/datasources', (req, res) => {
-    res.json({}); // [TODO]
-});
-app.get('/api/wbdl/groups(/*)?', (req, res) => {
+app.get('/api/wbdl/visibility/:_id?', (req, res) => {
     let visibility = structuredClone(WBDL.visibility), localVisibility;
-    if (!req.params || !/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i.test(req.params[1]))
+    if (!req.params || !/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i.test(req.params._id))
         localVisibility = WBDL.visibility;
     else
-        localVisibility = WBDL.get(null, req.params[1]).visibility;
+        localVisibility = WBDL.index.get(req.params._id).visibility;
 
-    if (req.params[1])
+    if (req.params._id)
         for (let group in visibility)
             if (localVisibility[group] == true)
                 visibility[group] = 'LV';
@@ -85,7 +85,7 @@ app.get('/api/wbdl/groups(/*)?', (req, res) => {
                 visibility[group] = 'LI';
             else {
                 visibility[group] = 'II';
-                for (let parent = WBDL.get(null, WBDL.get(null, req.params[1])._idParent); parent; parent = WBDL.get(null, parent._idParent))
+                for (let parent = WBDL.index.get(WBDL.index.get(req.params._id)._idParent); parent; parent = WBDL.index.get(parent._idParent))
                     if (parent.visibility[group]) {
                         visibility[group] = parent.visibility[group] ? 'IV' : 'II';
                         break;
@@ -95,7 +95,7 @@ app.get('/api/wbdl/groups(/*)?', (req, res) => {
     res.json(visibility);
 });
 app.get('/api/wbdl(/*)?', (req, res) => {
-    res.json(req.params[1] ? WBDL.get(null, req.params[1]) : WBDL);
+    res.json(req.params[1] ? WBDL.index.get(req.params[1]) : WBDL);
 });
 app.post('/api/wbdl/visibility/:_id', (req, res) => {
     try {
@@ -124,6 +124,7 @@ app.post('/api/wbdl/:lang/:_id/:type?', (req, res) => {
             newNode = req.body;
 
         if (req.params.type) {
+            // [TODO] Check for duplicate slugs
             node = createNode(req.params.lang, req.params.type);
             node._idParent = req.params._id;
             WBDL.index.get(node._idParent).children.push(node);
@@ -131,13 +132,20 @@ app.post('/api/wbdl/:lang/:_id/:type?', (req, res) => {
         } else
             node = WBDL.index.get(req.body._id);
 
-        for (let obj in newNode) {
-            if (typeof node[obj] != 'undefined')
-                if (node[obj] != null && typeof node[obj] === 'object')
-                    node[obj] = { [req.params.lang]: newNode[obj] };
-                else
-                    node[obj] = newNode[obj];
-        }
+        if (newNode.status === 'T' && node.status === 'T') {
+            let i = WBDL.index.get(node._idParent).children.findIndex(child => child._id === node._id);
+            WBDL.index.get(node._idParent).children.splice(i, 1);
+            WBDL.index.clear();
+            WBDL.createIndex(WBDL);
+            node = WBDL.index.get(newNode._idParent);
+
+        } else
+            for (let obj in newNode)
+                if (typeof node[obj] != 'undefined')
+                    if (node[obj] != null && typeof node[obj] === 'object')
+                        node[obj] = { [req.params.lang]: newNode[obj] };
+                    else
+                        node[obj] = newNode[obj];
 
         fs.writeFile(path.join(__dirname, WBDL.path), JSON.stringify(WBDL), err => {
             if (err)

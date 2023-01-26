@@ -1,10 +1,10 @@
 <div class="stwForm" id="settings" onclick="">
-    <h1><i class="fa fa-fw fa-nothing"></i> Settings</h1>
-    <form>
-        <fieldset>
-            <legend>Apparence</legend>
-            <p><label><input type="checkbox" name="theme"><span>Dark theme</span></label></p>
-            <p><label><span>Hightlight color</span> <input type="color" name="specialColor" value="#ff004c"></label></p>
-        </fieldset>
+    <h1><i class="fa fa-fw fa-nothing"></i> settings</h1>
+</div>
+<div class="stwForm">
+    <h1><i class="fa fa-fw fa-angle-down"></i> apparence</h1>
+    <form style="display: grid;">
+        Dark theme<input type="checkbox" name="theme" checked onclick="stwStudio.toggleTheme(event)">
+        Hightlight color <input type="color" name="specialColor" value="#ff004c">
     </form>
 </div>

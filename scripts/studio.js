@@ -38,15 +38,7 @@ const stwStudio = {
         });
     },
     toggleTheme: event => {
-        let theme;
-
-        if (event.target.className == 'fa-solid fa-toggle-on') {
-            event.target.className = 'fa-solid fa-toggle-off';
-            theme = 'stwLight';
-        } else {
-            event.target.className = 'fa-solid fa-toggle-on';
-            theme = 'stwDark';
-        }
+        let theme = event.target.checked ? 'stwDark' : 'stwLight';
         document.body.className = theme;
         document.querySelectorAll('.ace_editor').forEach(ace => {
             ace.editor.setTheme(theme == 'stwDark' ? 'ace/theme/tomorrow_night' : '');
@@ -112,7 +104,7 @@ const stwStudio = {
             })
             .then(res => res.json())
             .then(data => {
-                stwStudio.fillPanel('/panels/webbase.html', data._id);
+                stwStudio.renderPanel('/panels/webbase.html', data._id);
                 stwStudio.loadForm(document.querySelector('#properties form'), data);
             })
             .catch(err => {
@@ -163,7 +155,7 @@ const stwStudio = {
                 console.log(err);
             });
     },
-    fillPanel: (panel, subpath) => {
+    renderPanel: (panel, subpath) => {
         switch (panel) {
             case '/panels/webbase.html':
                 fetch(`/api/wbdl${subpath ? '/' + subpath : ''}`)
@@ -179,9 +171,9 @@ const stwStudio = {
                             document.querySelector(`[data-id="${subpath}"]`).remove();
                             document.querySelector(`[data-id="${subpath}"]>div`).click();
                         } else {
-                            document.querySelector('#webbase').insertAdjacentHTML('beforeend', `<ul>${stwStudio.renderTree(json)}</ul>`);
+                            document.getElementById('webbase').lastElementChild.remove();
+                            document.getElementById('webbase').insertAdjacentHTML('beforeend', `<ul>${stwStudio.renderTree(json)}</ul>`);
                             document.querySelector('li[data-type=site]>div').click();
-                            document.querySelector('#webbase .stwLoading').remove();
                         }
                     })
                     .catch(err => {
@@ -195,8 +187,8 @@ const stwStudio = {
                             return res.json();
                     })
                     .then(json => {
-                        document.querySelector('#explorer').insertAdjacentHTML('beforeend', `<ul>${stwStudio.renderTree(json)}</ul>`);
-                        document.querySelector('#explorer .stwLoading').remove();
+                        document.getElementById('explorer').lastElementChild.remove();
+                        document.getElementById('explorer').insertAdjacentHTML('beforeend', `<ul>${stwStudio.renderTree(json)}</ul>`);
                     })
                     .catch(err => {
                         console.log(err);
@@ -212,15 +204,15 @@ const stwStudio = {
                         let tree = { children: [] };
                         json.files.forEach(file => tree.children.push({ name: file.path, type: 'file', status: file.working_dir }));
 
-                        document.querySelector('#sourcecontrol').insertAdjacentHTML('beforeend', `<ul>${stwStudio.renderTree(tree)}</ul>`);
-                        document.querySelector('#sourcecontrol .stwLoading').remove();
+                        document.getElementById('sourcecontrol').lastElementChild.remove();
+                        document.getElementById('sourcecontrol').insertAdjacentHTML('beforeend', `<ul>${stwStudio.renderTree(tree)}</ul>`);
                     })
                     .catch(err => {
                         console.log(err);
                     });
                 break;
             case '/panels/groups.html':
-                fetch('/api/wbdl/groups')
+                fetch('/api/wbdl/visibility')
                     .then(res => {
                         if (res.ok)
                             return res.json();
@@ -230,8 +222,8 @@ const stwStudio = {
                         for (let group in groups)
                             tree.children.push({ name: group, type: 'group' });
 
-                        document.querySelector('#groups').insertAdjacentHTML('beforeend', `<ul>${stwStudio.renderTree(tree)}</ul>`);
-                        document.querySelector('#groups .stwLoading').remove();
+                        document.getElementById('groups').lastElementChild.remove();
+                        document.getElementById('groups').insertAdjacentHTML('beforeend', `<ul>${stwStudio.renderTree(tree)}</ul>`);
                     })
                     .catch(err => {
                         console.log(err);
@@ -263,7 +255,7 @@ const stwStudio = {
         }
         return `${html}</li>`;
     },
-    managePanel: event => {
+    managePanels: event => {
         let target = event.target;
         if (target.tagName === 'I' && target.dataset.panel === 'stwMenu') {
             // [TODO]
@@ -276,7 +268,7 @@ const stwStudio = {
             let selected = event.currentTarget.querySelector('[selected]');
             if (selected) selected.removeAttribute('selected');
             target.setAttribute('selected', '');
-            stwStudio.loadFile(target.dataset.panel, event.currentTarget.nextElementSibling, stwStudio.fillPanel);
+            stwStudio.loadFile(target.dataset.panel, event.currentTarget.nextElementSibling, stwStudio.renderPanel);
         }
     },
     manageWebbase: event => {
@@ -294,7 +286,7 @@ const stwStudio = {
                 var parent = tree.querySelector('li[selected]');
 
                 if (event.target.dataset.action === 'refresh') {
-                    stwStudio.loadFile('/panels/webbase.html', document.querySelector('section.stwPanel'), stwStudio.fillPanel);
+                    stwStudio.loadFile('/panels/webbase.html', document.querySelector('section.stwPanel'), stwStudio.renderPanel);
 
                 } else if (event.target.dataset.action === 'trashed') {
                     if (event.target.className === 'fa-solid fa-fw fa-trash-can')
@@ -345,7 +337,7 @@ const stwStudio = {
                             stwStudio.loadForm(properties.querySelector('form'), node);
 
                             // Fetch node visibility
-                            fetch(`/api/wbdl/groups/${node._id}`)
+                            fetch(`/api/wbdl/visibility/${node._id}`)
                                 .then(res => {
                                     if (res.ok)
                                         return res.json();
@@ -408,8 +400,12 @@ const stwStudio = {
         if (target.tagName === 'H1' && event.target.dataset.action) {
             switch (event.target.dataset.action) {
                 case 'trash':
-                    if (what === 'webbase' && event.currentTarget.querySelector('form').status.value != 'T') {
-                        event.currentTarget.querySelector('form').status.value = 'T';
+                    if (what === 'webbase' && event.currentTarget.querySelector('form')._idParent.value != '') {
+                        if (event.currentTarget.querySelector('form').status.value != 'T')
+                            event.currentTarget.querySelector('form').status.value = 'T';
+                        else
+                            if (!confirm(`Are you sure you want do delete permanently the selected object with all it's underling hierarchy and references?`))
+                                return;
                         stwStudio.submitForm({ target: { form: event.currentTarget.querySelector('form') } });
                     }
                     break;
@@ -426,7 +422,7 @@ const stwStudio = {
         let status = event.target.closest('div').querySelector('i').outerHTML;
         for (let key in stwStudio.visibilityEnum)
             if (status === stwStudio.visibilityEnum[key]) {
-                fetch(`/api/wbdl/visibility/${document.querySelector('#properties').dataset.id}`, {
+                fetch(`/api/wbdl/visibility/${document.getElementById('properties').dataset.id}`, {
                     method: 'POST',
                     body: JSON.stringify({
                         group: event.target.closest('div').innerText,
