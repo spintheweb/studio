@@ -37,15 +37,15 @@ let settings = JSON.parse(fs.readFileSync(path.join(__dirname, '.settings')));
 if (process.env.npm_lifecycle_event === 'debug')
     settings = {
         protocol: 'http',
-        hostname: process.env.hostname || '127.0.0.1',
+        hostname: '127.0.0.1',
         port: 8080,
         options: {}
-    }
+    };
 else
     settings.options = {
         key: fs.readFileSync(path.join(__dirname, settings.pki.key)),
         cert: fs.readFileSync(path.join(__dirname, settings.pki.certificate))
-    }
+    };
 
 const app = express();
 app.disable('x-powered-by');
@@ -98,7 +98,7 @@ app.post('/api/webbase/:lang/:_id/:type?', (req, res) => {
 
         if (req.params.type) {
             node = createNode(req.params.lang, req.params.type);
-            node._idParent = req.params._id
+            node._idParent = req.params._id;
             WBDL.index.get(node._idParent).children.push(node);
             WBDL.index.set(node._id, node);
         } else
