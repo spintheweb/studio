@@ -64,13 +64,13 @@ app.use(express.json()); // Needed for parsing application/json
 app.use(express.text()); // Needed for parsing text/plain
 
 // [TODO] These API should be in a Web Spinner, they're here temporarily for testing purposes
-app.get('/api/webbase/users', (req, res) => {
+app.get('/api/wbdl/users', (req, res) => {
     res.json({}); // [TODO]
 });
-app.get('/api/webbase/datasources', (req, res) => {
+app.get('/api/wbdl/datasources', (req, res) => {
     res.json({}); // [TODO]
 });
-app.get('/api/webbase/groups(/*)?', (req, res) => {
+app.get('/api/wbdl/groups(/*)?', (req, res) => {
     let visibility = structuredClone(WBDL.visibility), localVisibility;
     if (!req.params || !/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i.test(req.params[1]))
         localVisibility = WBDL.visibility;
@@ -94,10 +94,28 @@ app.get('/api/webbase/groups(/*)?', (req, res) => {
 
     res.json(visibility);
 });
-app.get('/api/webbase(/*)?', (req, res) => {
+app.get('/api/wbdl(/*)?', (req, res) => {
     res.json(req.params[1] ? WBDL.get(null, req.params[1]) : WBDL);
 });
-app.post('/api/webbase/:lang/:_id/:type?', (req, res) => {
+app.post('/api/wbdl/visibility/:_id', (req, res) => {
+    try {
+        if (!/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i.test(req.params._id) || !WBDL.index.get(req.params._id))
+            throw 406; // 406 Not Acceptable
+
+        let node = WBDL.index.get(req.params._id),
+            status = req.body;
+
+        node.visibility[status.group.replace(/[^a-zA-Z]/g, '')] = status.visibility;
+        if (!status.visibility)
+            delete node.visibility[status.group];
+
+        res.json({ _id: req.params._id });
+
+    } catch (err) {
+        res.end(err);
+    }
+});
+app.post('/api/wbdl/:lang/:_id/:type?', (req, res) => {
     try {
         if (!/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i.test(req.params._id) || !WBDL.index.get(req.params._id))
             throw 406; // 406 Not Acceptable
@@ -133,10 +151,10 @@ app.post('/api/webbase/:lang/:_id/:type?', (req, res) => {
     }
 });
 
-app.get('/api/explorer(/:path)?', async (req, res) => {
+app.get('/api/fs(/:path)?', async (req, res) => {
     res.json(await getDir(req.params.path, (await git.status()).files));
 });
-app.post('/api/explorer(/*)', (req, res) => {
+app.post('/api/fs(/*)', (req, res) => {
     fs.writeFile(path.join(__dirname, req.params[1]), req.body, err => {
         if (err)
             throw 503; // 503 Service Unavailable

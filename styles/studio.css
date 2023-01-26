@@ -242,7 +242,8 @@ h1>span>i:hover {
     padding: 0 0 0.5em 0;
 }
 
-ul.stwT li.stwT:not([selected]) {
+ul.stwT li.stwT:not([selected])
+/*ul.stwT li:not(.stwT)>div*/ {
     display: none;
 }
 

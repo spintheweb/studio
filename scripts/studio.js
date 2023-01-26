@@ -58,7 +58,7 @@ const stwStudio = {
             event.preventDefault();
 
             let tab = document.activeElement.parentElement;
-            fetch(`/api/explorer/${tab.id}`,
+            fetch(`/api/fs/${tab.id}`,
                 {
                     method: 'POST',
                     body: tab.editor.getValue(),
@@ -104,7 +104,7 @@ const stwStudio = {
         if (data.hasOwnProperty('slug') && data.slug === '')
             data.slug = data.name.toLowerCase().replace(/[^a-z]/g, '');
 
-        fetch(`/api/webbase/${stwStudio.settings.lang}/${data._id}`,
+        fetch(`/api/wbdl/${stwStudio.settings.lang}/${data._id}`,
             {
                 method: 'POST',
                 body: JSON.stringify(data),
@@ -166,7 +166,7 @@ const stwStudio = {
     fillPanel: (panel, subpath) => {
         switch (panel) {
             case '/panels/webbase.html':
-                fetch(`/api/webbase${subpath ? '/' + subpath : ''}`)
+                fetch(`/api/wbdl${subpath ? '/' + subpath : ''}`)
                     .then(res => {
                         if (res.ok)
                             return res.json();
@@ -189,7 +189,7 @@ const stwStudio = {
                     });
                 break;
             case '/panels/explorer.html':
-                fetch('/api/explorer')
+                fetch('/api/fs')
                     .then(res => {
                         if (res.ok)
                             return res.json();
@@ -220,7 +220,7 @@ const stwStudio = {
                     });
                 break;
             case '/panels/groups.html':
-                fetch('/api/webbase/groups')
+                fetch('/api/wbdl/groups')
                     .then(res => {
                         if (res.ok)
                             return res.json();
@@ -304,13 +304,13 @@ const stwStudio = {
                     event.currentTarget.querySelector('ul').classList.toggle('stwT');
 
                 } else if (parent) {
-                    fetch(`/api/webbase/${stwStudio.settings.lang}/${parent.dataset.id}/${event.target.dataset.action}`,
+                    fetch(`/api/wbdl/${stwStudio.settings.lang}/${parent.dataset.id}/${event.target.dataset.action}`,
                         {
                             method: 'POST'
                         })
                         .then(res => res.json())
                         .then(node => {
-                            fetch(`/api/webbase/${node._idParent}`)
+                            fetch(`/api/wbdl/${node._idParent}`)
                                 .then(res => res.json())
                                 .then(parentNode => {
                                     let ul = parent.closest('ul');
@@ -336,7 +336,7 @@ const stwStudio = {
                     delete properties.dataset.idparent;
 
                     // Fetch node
-                    fetch(`/api/webbase/${properties.dataset.id}`)
+                    fetch(`/api/wbdl/${properties.dataset.id}`)
                         .then(res => {
                             if (res.ok)
                                 return res.json();
@@ -345,7 +345,7 @@ const stwStudio = {
                             stwStudio.loadForm(properties.querySelector('form'), node);
 
                             // Fetch node visibility
-                            fetch(`/api/webbase/groups/${node._id}`)
+                            fetch(`/api/wbdl/groups/${node._id}`)
                                 .then(res => {
                                     if (res.ok)
                                         return res.json();
@@ -420,7 +420,29 @@ const stwStudio = {
         }
     },
     manageVisibility: event => {
+        if (!event.target.closest('li'))
+            return;
 
+        let status = event.target.closest('div').querySelector('i').outerHTML;
+        for (let key in stwStudio.visibilityEnum)
+            if (status === stwStudio.visibilityEnum[key]) {
+                fetch(`/api/wbdl/visibility/${document.querySelector('#properties').dataset.id}`, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        group: event.target.closest('div').innerText,
+                        visibility: (key === 'LV') ? false : (key === 'LI') ? null : true
+                    }),
+                    headers: { 'Content-type': 'application/json' }
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        document.querySelector(`#webbase li[data-id="${data._id}"]>div`).click();
+                    })
+                    .catch(err => {
+                        console.log(err);
+                    });
+                break;
+            };
     },
     manageTab: event => {
         let target = event.target, currentTarget = event.currentTarget;
