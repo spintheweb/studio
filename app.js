@@ -8,7 +8,7 @@ const git = require('simple-git')();
 
 // Load WBDL from file, index for faster access and set parent hierarchy
 let WBDL = {};
-if (!fs.existsSync(path.join(__dirname, 'wbdl.json')))
+if (fs.existsSync(path.join(__dirname, 'wbdl.json')))
     WBDL = JSON.parse(fs.readFileSync(path.join(__dirname, 'wbdl.json')));
 else
     WBDL = JSON.parse(fs.readFileSync(path.join(__dirname, 'helloworld.json')));

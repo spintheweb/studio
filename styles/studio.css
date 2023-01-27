@@ -108,7 +108,7 @@ body {
 
 .stwPanel {
     display: grid;
-    /* resize: horizontal; */
+    resize: horizontal;
     overflow: hidden;
     grid-template-rows: 1fr auto auto;
     border-left: thin solid var(--light);
@@ -241,7 +241,6 @@ h1>span>i:hover {
     font-family: var(--font-family);
     font-size: inherit;
     min-height: calc(3 * var(--input-height));
-    padding: var(--padding);
     border: thin solid inherit;
 }
 
@@ -278,7 +277,7 @@ h1>span>i:hover {
 }
 
 ul.stwT li.stwT:not([selected])
-/*ul.stwT li:not(.stwT)>div*/ {
+ul.stwT li:not(.stwT)>div {
     display: none;
 }
 
@@ -330,7 +329,7 @@ li[data-type=group]>div>span:nth-child(2)::before {
 
 .stwMenu ul>li>ul {
     display: none;
-    border: thin solid;
+    border: thin solid inherit;
     position: absolute;
     left: 0;
 }
