@@ -65,7 +65,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use([/^\/(pki|node_modules)/, '/'], express.static(__dirname, { dotfiles: 'deny' })); // Needed for handling static files
+app.use([/^\/(\s*?\.js|\s*?\.json|pki|node_modules)/, '/'], express.static(__dirname, { dotfiles: 'deny' })); // Needed for handling static files
 app.use(express.json()); // Needed for parsing application/json
 app.use(express.text()); // Needed for parsing text/plain
 
