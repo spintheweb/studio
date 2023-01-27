@@ -20,33 +20,32 @@
             <i class="fa-solid fa-fw fa-expand" title="Expand (F2)" data-action="Expand"></i>
         </span>
     </h1>
-    <form name="content_properties" onchange="stwStudio.submitForm(event)">
+    <form class="stwHideLabels" onchange="stwStudio.submitForm(event)">
         <input type="hidden" name="_id">
         <input type="hidden" name="_idParent">
         <input type="hidden" name="type">
         <input type="hidden" name="status">
         <ul>
-            <li><label>Name<input type="text" name="name" placeholder="Name" title="Name" required></label></li>
-            <li><label>Slug<input type="text" name="slug" placeholder="Slug" title="Slug" required></label></li>
+            <li><label>Name</label><input type="text" name="name" placeholder="Name" title="Name" required></li>
+            <li><label>Slug</label><input type="text" name="slug" placeholder="Slug" title="Slug" required></li>
 
-            <li><label>URL<input type="text" name="url" placeholder="URL" title="URL" required></label></li>
-            <li><label>Icon<input type="text" name="icon" placeholder="icon" title="Icon"></label></li>
-            <li><label>Image<input type="text" name="image" placeholder="image" title="Image"></label></li>
+            <li><label>URL</label><input type="text" name="url" placeholder="URL" title="URL" required></li>
+            <li><label>Icon</label><input type="text" name="icon" placeholder="icon" title="Icon"></li>
+            <li><label>Image</label><input type="text" name="image" placeholder="image" title="Image"></li>
 
-            <li><label>Template<input type="text" name="template" placeholder="Template" title="Template" required></label></li>
+            <li><label>Template</label><input type="text" name="template" placeholder="Template" title="Template" required></li>
             <li><input type="text" name="visible"></li>
 
-            <li><label>Home page<input type="node" name="homepage" placeholder="homepage" title="Home page" readonly></label></li>
-            <li><label>Main page<input type="node" name="mainpage" placeholder="mainpage" title="Main page" readonly></label></li>
+            <li><label>Main page</label><input type="node" name="mainpage" placeholder="mainpage" title="Main page" readonly></li>
 
-            <li><label>Default language<select name="lang" title="Default language">
+            <li><label>Default language</label><select name="lang" title="Default language">
                 <option value="en">English</option>
                 <option value="fr">French</option>
                 <option value="de">German</option>
                 <option value="it">Italian</option>
                 <option value="es">Spanish</option>
-            </select></label></li>
-            <li><label>Documentation<textarea name="description" placeholder="description" title="Description"></textarea></label></li>
+            </select></li>
+            <li><label>Documentation</label><textarea name="description" placeholder="description" title="Description"></textarea></li>
             <li><input type="text" name="keywords" placeholder="keywords" title="Keywords"></li>
 
             <li>
@@ -56,8 +55,8 @@
                 </div>
             </li>
 
-            <li><label>CSS class<input type="text" name="cssclass" placeholder="CSS class" title="CSS class"></label></li>
-            <li><select name="subtype" title="Type">
+            <li><label>CSS class</label><input type="text" name="cssclass" placeholder="CSS class" title="CSS class"></li>
+            <li><label>Type</label><select name="subtype" title="Type">
                 <option value="text">Text</option>
                 <option value="form">Form</option>
                 <option value="table">Table</option>
@@ -78,13 +77,13 @@
                 <option value="clientsidecode">Client side code</option>
                 <option value="serversidecode">Server side code</option>
             </select></li>
-            <li><label>Data source<select name="dsn" title="Datasource">
+            <li><label>Data source</label><select name="dsn" title="Datasource">
                 <option></option>
                 <option value="webbase">Webbase</option>
-            </select></label></li>
+            </select></li>
             <li><textarea name="query" placeholder="Query" title="Query"></textarea></li>
             <li><input type="text" name="parameters" placeholder="key=value" title="Parameters"></li>
-            <li><label>Layout<textarea name="layout" placeholder="Layout" title="Layout"></textarea></label></li>
+            <li><label>Layout</label><textarea name="layout" placeholder="Layout" title="Layout"></textarea></li>
         </ul>
     </form>
 </div>

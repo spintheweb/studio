@@ -7,9 +7,13 @@ const uuid = require('uuid');
 const git = require('simple-git')();
 
 // Load WBDL from file, index for faster access and set parent hierarchy
-let WBDL = JSON.parse(fs.readFileSync(path.join(__dirname, `data/${process.argv[2] || 'wbdl.json'}`)) || '{}');
+let WBDL = {};
+if (!fs.existsSync(path.join(__dirname, 'wbdl.json')))
+    WBDL = JSON.parse(fs.readFileSync(path.join(__dirname, 'wbdl.json')));
+else
+    WBDL = JSON.parse(fs.readFileSync(path.join(__dirname, 'helloworld.json')));
+WBDL.path = 'wbdl.json';
 
-WBDL.path = `data/${process.argv[2] || 'wbdl.json'}`;
 WBDL.index = new Map();
 WBDL.createIndex = (obj, _idParent = null) => {
     obj._idParent = _idParent;
@@ -35,7 +39,6 @@ WBDL.get = (lang, key) => {
         return walk(slugs, node);
     })(key.split('/'), WBDL);
 };
-
 WBDL.createIndex(WBDL);
 
 let settings = JSON.parse(fs.readFileSync(path.join(__dirname, '.settings')));
@@ -62,7 +65,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use([/^\/(pki|data|node_modules)/, '/'], express.static(__dirname, { dotfiles: 'deny' })); // Needed for handling static files
+app.use([/^\/(pki|node_modules)/, '/'], express.static(__dirname, { dotfiles: 'deny' })); // Needed for handling static files
 app.use(express.json()); // Needed for parsing application/json
 app.use(express.text()); // Needed for parsing text/plain
 
@@ -181,14 +184,13 @@ app.get('/api/git/status', async (req, res) => {
     });
 
 async function getDir(dirpath = '.', gitStatus) {
-    // [TODO] Do not show root level .json
     let dir = { name: dirpath, type: 'dir', children: [] };
 
     const files = fs.readdirSync(dirpath);
     for (let file of files) {
         let ignore = await git.checkIgnore(path.join(dirpath, file));
 
-        if (ignore.length === 0 && file[0] !== '.') {
+        if (ignore.length === 0 && file[0] !== '.' && !(dirpath === '.' && (file.endsWith('.json') || file.endsWith('.js')))) {
             if (fs.lstatSync(path.join(dirpath, file)).isDirectory()) {
                 let status = gitStatus.find(element => element.path.startsWith(file + '/'));
                 dir.children.push({ name: file, type: 'dir', status: status ? '●' : '', children: (await getDir(path.join(dirpath, file), gitStatus)).children });
@@ -246,8 +248,6 @@ function createNode(lang = 'en', type) {
                 layout: {}
             };
         case 'shortcut':
-            return {};
-        case 'group':
             return {};
         default:
             throw 406; // 406 Not Accepatable

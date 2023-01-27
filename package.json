@@ -4,8 +4,8 @@
   "description": "Spin the Web Studio is designed to ease development of Spin the Web sites",
   "main": "app.js",
   "scripts": {
-    "start": "node . helloworld.wbdl",
-    "debug": "nodemon --watch app.js . helloworld.wbdl",
+    "start": "node .",
+    "debug": "nodemon --watch app.js .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

@@ -44,9 +44,10 @@ const stwStudio = {
             document.querySelectorAll('.ace_editor').forEach(ace => {
                 ace.editor.setTheme(event.target.value == 'stwDark' ? 'ace/theme/tomorrow_night' : '');
             });
-        } else if (event.target.name === 'specialColor') {
+        } else if (event.target.name === 'specialColor')
             document.querySelector(':root').style.setProperty('--specialColor', event.target.value);
-        }
+        else if (event.target.name === 'hideLabels')
+            document.querySelector(':root').style.setProperty('--hideLabels', event.target.value === 'true' ? 'none' : 'inherit');
     },
     keydown: event => {
         if (document.activeElement.className === 'ace_text-input' && event.key == 's' && event.ctrlKey) {
