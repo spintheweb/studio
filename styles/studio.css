@@ -1,13 +1,11 @@
 :root {
-    --specialColor: rgb(255, 0, 76);
-    --dark: rgba(127, 127, 127, 0.2);
-    --medium: rgba(127, 127, 127, 0.3);
-    --light: rgba(127, 127, 127, 0.4);
-    --highlight: rgba(127, 127, 127, 0.5);
-    --padding: 0.5em;
-
     font-family: sans-serif;
     font-size: 10pt;
+
+    --specialColor: rgb(255, 0, 76);
+    --light: rgba(127, 127, 127, 0.4);
+    --padding: 0.5em;
+    --input-height: 1.5em;
 }
 
 .stwDark,
@@ -126,7 +124,7 @@ body {
 }
 
 .stwPanel tr:hover {
-    background-color: var(--highlight);
+    background-color: var(--light);
     cursor: pointer;
 }
 
@@ -194,27 +192,60 @@ h1>span>i:hover {
     display: none;
 }
 
-.stwForm form {
-    display: grid;
-    grid-template-columns: 1fr;
-    padding-bottom: 0.5em;
-}
-
-.stwForm input,
-.stwForm select,
-.stwForm textarea,
-.stwForm button,
-.stwForm fieldset,
-.stwForm label>span {
-    margin: 0 0.5em 0.5em 0.5em;
-    padding: 0.25em;
-}
-
 .stwForm button {
     color: white;
     background-color: var(--specialColor);
     border: none;
 }
+
+.stwForm ul {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.stwForm li {
+    padding: var(--padding);
+    padding-top: 0;
+    break-inside: avoid;
+}
+
+.stwForm li select:not([multiple]) {
+    height: calc(var(--input-height) + 0.5em);
+}
+
+.stwForm li input,
+.stwForm li select,
+.stwForm li textarea,
+.stwForm li progress,
+.stwForm li meter,
+.stwForm li button {
+    line-height: var(--input-height);
+    width: -webkit-fill-available;
+    width: -moz-available;
+    width: fill-available;
+    font-size: inherit;
+}
+
+.stwForm input[type="checkbox"],
+.stwForm input[type="radio"] {
+    width: auto;
+}
+
+.stwForm textarea {
+    font-family: var(--font-family);
+    font-size: inherit;
+    min-height: calc(3 * var(--input-height));
+    padding: var(--padding);
+    border: thin solid inherit;
+}
+
+.stwForm li>label[for] {
+    display: inline-block;
+    line-height: var(--input-height);
+    vertical-align: top;
+}
+
 
 .fa-angle-right,
 .fa-angle-down {
@@ -237,9 +268,8 @@ h1>span>i:hover {
     float: right;
 }
 
-.stwTree ul:first-of-type {
+.stwTree>ul {
     overflow: auto;
-    padding: 0 0 0.5em 0;
 }
 
 ul.stwT li.stwT:not([selected])

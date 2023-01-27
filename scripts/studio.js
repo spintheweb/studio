@@ -37,12 +37,16 @@ const stwStudio = {
             });
         });
     },
-    toggleTheme: event => {
-        let theme = event.target.checked ? 'stwDark' : 'stwLight';
-        document.body.className = theme;
-        document.querySelectorAll('.ace_editor').forEach(ace => {
-            ace.editor.setTheme(theme == 'stwDark' ? 'ace/theme/tomorrow_night' : '');
-        });
+    manageSettings: event => {
+        // [TODO] Persist locally
+        if (event.target.name === 'theme') {
+            document.body.className = event.target.value;
+            document.querySelectorAll('.ace_editor').forEach(ace => {
+                ace.editor.setTheme(event.target.value == 'stwDark' ? 'ace/theme/tomorrow_night' : '');
+            });
+        } else if (event.target.name === 'specialColor') {
+            document.querySelector(':root').style.setProperty('--specialColor', event.target.value);
+        }
     },
     keydown: event => {
         if (document.activeElement.className === 'ace_text-input' && event.key == 's' && event.ctrlKey) {
@@ -113,12 +117,14 @@ const stwStudio = {
     },
     loadForm: (form, data) => {
         for (let input of form) {
+            let li = form.querySelector(`[name="${input.name}"]`).closest('li');
+
             if (data[input.name] === undefined) {
                 input.setAttribute('disabled', '');
-                input.style.display = 'none';
+                if (li) li.style.display = 'none';
             } else {
                 input.removeAttribute('disabled');
-                input.style.display = '';
+                if (li) li.style.display = '';
             }
 
             if (!data[input.name])
@@ -130,6 +136,8 @@ const stwStudio = {
         }
         if (form.slug && form.slug.value === '')
             form.slug.value = form.name.value.toLowerCase().replace(/[^a-z]/g, '');
+
+        document.querySelector('#properties .fa-trash-can').className = data.status === 'T' ? 'fa-solid fa-fw fa-trash-can' : 'fa-regular fa-fw fa-trash-can';
     },
     loadFile: (path, destination, callback) => {
         fetch(path)
@@ -232,6 +240,7 @@ const stwStudio = {
         }
     },
     renderTree: (node, depth = 0) => {
+        // [TODO] Remember open nodes
         let html = '';
 
         if (!depth && !node.type) {
@@ -244,7 +253,7 @@ const stwStudio = {
 
             if (node.children && node.children.length) {
                 if (!depth)
-                    html = `<li ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div tabindex="0" role="link"><span></span><span>${name}</span><span></span></div><ul>`;
+                    html = `<li ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div tabindex="0" role="link"><span></span><span>${name}</span><span>${node.status || ''}</span></div><ul>`;
                 else
                     html = `<li ${cssClass} ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div tabindex="0" role="link"><span>${'&emsp;'.repeat(depth - 1)}<i class="fa fa-fw fa-angle-right"></i></span><span>${name}</span><span>${node.status}</span></div><ul style="display:none">`;
                 for (let child of node.children)

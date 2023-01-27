@@ -181,6 +181,7 @@ app.get('/api/git/status', async (req, res) => {
     });
 
 async function getDir(dirpath = '.', gitStatus) {
+    // [TODO] Do not show root level .json
     let dir = { name: dirpath, type: 'dir', children: [] };
 
     const files = fs.readdirSync(dirpath);
@@ -235,6 +236,7 @@ function createNode(lang = 'en', type) {
         case 'content':
             return {
                 ...basenode,
+                cssclass: null,
                 section: null,
                 sequence: 1,
                 subtype: 'text',

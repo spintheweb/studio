@@ -1,10 +1,25 @@
-<div class="stwForm" id="settings" onclick="">
+<div class="stwTree" id="settings" onchange="stwStudio.manageSettings(event)">
     <h1><i class="fa fa-fw fa-nothing"></i> settings</h1>
 </div>
-<div class="stwForm">
-    <h1><i class="fa fa-fw fa-angle-down"></i> apparence</h1>
-    <form style="display: grid;">
-        Dark theme<input type="checkbox" name="theme" checked onclick="stwStudio.toggleTheme(event)">
-        Hightlight color <input type="color" name="specialColor" value="#ff004c">
+<div class="stwForm" onchange="stwStudio.manageSettings(event)">
+    <h1><i class="fa fa-fw fa-angle-right"></i> simulate active groups</h1>
+    <div class="stwLoading">
+        <i class="fa fa-sync fa-spin fa-2x"></i>
+    </div>
+</div>
+<div class="stwForm" onchange="stwStudio.manageSettings(event)">
+    <h1><i class="fa fa-fw fa-angle-right"></i> apparence</h1>
+    <form>
+        <ul>
+            <li><label>Theme<select name="theme">
+                <option value="stwDark">Dark</option>
+                <option value="stwLight">Light</option>
+            </select></label></li>
+            <li><label>Color <input type="color" name="specialColor" value="#ff004c"></label></li>
+            <li><label>Hide labels<select name="hidelabels">
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select></label></li>
+        </ul>
     </form>
 </div>
