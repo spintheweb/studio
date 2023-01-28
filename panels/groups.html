@@ -1,5 +1,5 @@
 <div class="stwTree" id="groups" onclick="stwStudio.manageGroups(event)">
-    <h1 onclick="stwStudio.manageGroups(event)"><i class="fa fa-fw fa-nothing"></i> groups
+    <h1><i class="fa fa-fw fa-nothing"></i> groups
         <span>
             <i class="fa fa-fw fa-arrow-rotate-right" title="Refresh" data-action="refresh"></i>
             <i class="fa fa-fw fa-plus" title="Add group" data-action="addGroup"></i>
@@ -9,9 +9,16 @@
         <i class="fa fa-sync fa-spin fa-2x"></i>
     </div>
 </div>
-<div class="stwForm" id="properties">
-    <h1><i class="fa fa-fw fa-angle-right"></i> properties</h1>
-    <form onchange="stwStudio.submitForm(event)">
-        <input type="text" name="name" placeholder="Name" title="Name" required>
+<div class="stwForm" id="properties" onclick="stwStudio.manageProperties(event, 'groups')" style="display:none">
+    <h1><i class="fa fa-fw fa-angle-right"></i> properties
+        <span>
+            <i class="fa-regular fa-fw fa-trash-can" title="Trash" data-action="trash"></i>
+        </span>
+    </h1>
+    <form class="stwHideLabels" onchange="stwStudio.submitForm(event)">
+        <ul>
+            <li><label>Name</label><input type="text" name="name" placeholder="Name" title="Name" required></li>
+        </ul>
     </form>
 </div>
+<div>&nbsp;</div>

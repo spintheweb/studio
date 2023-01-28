@@ -1,9 +1,9 @@
 const stwStudio = {
     visibilityEnum: {
-        'LV': '<i class="fa-solid fa-fw fa-eye"></i>', // Local visibility
-        'LI': '<i class="fa-solid fa-fw fa-eye-slash"></i>', // Local invisibility
-        'IV': '<i class="fa-regular fa-fw fa-eye"></i>', // Inherited visibility
-        'II': '<i class="fa-regular fa-fw fa-eye-slash"></i>' // Inherited invisibility
+        'LV': '<i class="fa-solid fa-fw fa-square-check" title="Local visibility"></i>',
+        'LI': '<i class="fa-solid fa-fw fa-square" title="Local invisibility"></i>',
+        'IV': '<i class="fa-regular fa-fw fa-square-check" title="Inherited visibility"></i>',
+        'II': '<i class="fa-regular fa-fw fa-square" title="Inherited invisibility"></i>'
     },
     setup: (settings = {}) => {
         if (window.getComputedStyle(document.body).getPropertyValue('color-scheme') === 'dark')
@@ -209,9 +209,9 @@ const stwStudio = {
                         if (res.ok)
                             return res.json();
                     })
-                    .then(json => {
+                    .then(files => {
                         let tree = { children: [] };
-                        json.files.forEach(file => tree.children.push({ name: file.path, type: 'file', status: file.working_dir }));
+                        files.forEach(file => tree.children.push({ name: file.path, type: 'file', status: file.working_dir }));
 
                         document.getElementById('sourcecontrol').lastElementChild.remove();
                         document.getElementById('sourcecontrol').insertAdjacentHTML('beforeend', `<ul>${stwStudio.renderTree(tree)}</ul>`);
@@ -320,6 +320,8 @@ const stwStudio = {
                                     parent.innerHTML = stwStudio.renderTree(parentNode, depth);
                                     if (parent.querySelector('div .fa-angle-right'))
                                         parent.querySelector('div .fa-angle-right').click();
+                                })
+                                .then(() => {
                                     document.querySelector(`[data-id="${node._id}"]>div`).click();
                                 });
                         })

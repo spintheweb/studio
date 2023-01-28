@@ -1,31 +1,34 @@
-<div class="stwTree" onclick="stwStudio.manageDatasource(event)">
+<div class="stwTree" id="datasources" onclick="stwStudio.manageDatasource(event)">
     <h1><i class="fa fa-fw fa-nothing"></i> datasources
         <span>
             <i class="fa fa-fw fa-arrow-rotate-right" title="Refresh" data-action="refresh"></i>
             <i class="fa fa-fw fa-plus" title="Add datasource" data-action="addSource"></i>
         </span>
     </h1>
-    <table>
-        <tbody>
-            <tr data-source="wbdl">
-                <td><i class="fa fa-fw fa-database"></i> WBDL</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="stwLoading">
+        <i class="fa fa-sync fa-spin fa-2x"></i>
+    </div>
 </div>
-<div class="stwForm">
-    <h1><i class="fa fa-fw fa-angle-right"></i> properties</h1>
-    <form name="properties">
-        <input type="text" name="name" placeholder="Name" title="Name">
-        <select name="type" title="Type">
+<div class="stwForm" style="display:none">
+    <h1><i class="fa fa-fw fa-angle-right"></i> properties
+        <span>
+            <i class="fa-regular fa-fw fa-clone" title="Clone" data-action="clone"></i>
+            <i class="fa-regular fa-fw fa-trash-can" title="Trash" data-action="trash"></i>
+            <i class="fa-solid fa-fw fa-expand" title="Expand (F2)" data-action="Expand"></i><!--[TODO] interact with datasource-->
+        </span>
+    </h1>
+    <form>
+        <ul>
+            <li><label>Name</label><input type="text" name="name" placeholder="Name" title="Name" required></li>
+            <li><label>Type</label><select name="type" title="Type"></li>
             <option>SQL</option>
             <option>No SQL</option>
             <option>Webservice</option>
-            <option>JSON</option>
-            <option>CSV</option>
-            <option>XML</option>
-        </select>
-        <textarea name="cnn" placeholder="Connection string" title="Connection string"></textarea>
-        <label><input type="checkbox" name="disabled"> Disabled</label>
+            </select></li>
+            <li><label>Connection string</label><textarea name="cnn" placeholder="Connection string"
+                    title="Connection string"></textarea></li>
+            <li><input type="checkbox" name="disabled"> Disabled</li>
+        </ul>
     </form>
 </div>
+<div>&nbsp;</div>

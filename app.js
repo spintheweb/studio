@@ -1,3 +1,5 @@
+// [TODO] This file contains a set of API that should managed by a Web Spinner, they're here temporarily, they will be moved
+
 const http = require('http');
 const https = require('https');
 const path = require('path');
@@ -6,13 +8,16 @@ const express = require('express');
 const uuid = require('uuid');
 const git = require('simple-git')();
 
-// Load WBDL from file, index for faster access and set parent hierarchy
+// [TODO] fetch site webbase and index it
 let WBDL = {};
-if (fs.existsSync(path.join(__dirname, 'wbdl.json')))
-    WBDL = JSON.parse(fs.readFileSync(path.join(__dirname, 'wbdl.json')));
-else
-    WBDL = JSON.parse(fs.readFileSync(path.join(__dirname, 'helloworld.json')));
-WBDL.path = 'wbdl.json';
+if (fs.existsSync(path.join(__dirname, 'dev/site.wbdl')))
+    WBDL = JSON.parse(fs.readFileSync(path.join(__dirname, 'dev/site.wbdl')));
+else {
+    if (!fs.existsSync('dev'))
+        fs.mkdirSync('dev');
+    WBDL = JSON.parse(fs.readFileSync(path.join(__dirname, 'helloworld.wbdl')));
+}
+WBDL.path = 'dev/site.wbdl';
 
 WBDL.index = new Map();
 WBDL.createIndex = (obj, _idParent = null) => {
@@ -42,18 +47,10 @@ WBDL.get = (lang, key) => {
 WBDL.createIndex(WBDL);
 
 let settings = JSON.parse(fs.readFileSync(path.join(__dirname, '.settings')));
-
-if (process.env.npm_lifecycle_event === 'debug')
-    settings = {
-        protocol: 'http',
-        hostname: '127.0.0.1',
-        port: 8080,
-        options: {}
-    };
-else
+if (settings.protocol === 'https')
     settings.options = {
-        key: fs.readFileSync(path.join(__dirname, settings.pki.key)),
-        cert: fs.readFileSync(path.join(__dirname, settings.pki.certificate))
+        key: settings.pki.key ? fs.readFileSync(path.join(__dirname, settings.pki.key)) : null,
+        cert: settings.pki.certificate ? fs.readFileSync(path.join(__dirname, settings.pki.certificate)) : null
     };
 
 const app = express();
@@ -65,11 +62,10 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use([/^\/(\s*?\.js|\s*?\.json|pki|node_modules)/, '/'], express.static(__dirname, { dotfiles: 'deny' })); // Needed for handling static files
+app.use([/^\/(\s*?\.js|\s*?\.json|pki|node_modules|dev)/, '/'], express.static(__dirname, { dotfiles: 'deny' })); // Needed for handling static files
 app.use(express.json()); // Needed for parsing application/json
 app.use(express.text()); // Needed for parsing text/plain
 
-// [TODO] These API should be in a Web Spinner, they're here temporarily for testing purposes
 app.get('/api/wbdl/datasources/:name?', (req, res) => {
     res.json({}); // [TODO]
 });
@@ -175,7 +171,11 @@ app.post('/api/fs(/*)', (req, res) => {
 });
 
 app.get('/api/git/status', async (req, res) => {
-    res.json(await git.status());
+    let files = (await git.status()).files;
+    for (let i = files.length - 1; i >= 0; --i)
+        if (/^[^/]*?\.(js|json|wbdl)$/.test(files[i].path))
+            files.splice(i, 1);
+    res.json(files);
 });
 
 (settings.protocol === 'http' ? http : https).createServer(settings.options, app)
