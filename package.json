@@ -2,10 +2,11 @@
   "name": "stwpstudio",
   "version": "1.0.0",
   "description": "Spin the Web Studio is designed to ease development of Spin the Web sites",
+  "type": "module",
   "main": "app.js",
   "scripts": {
     "start": "node .",
-    "debug": "nodemon --watch app.js .",
+    "debug": "nodemon .",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

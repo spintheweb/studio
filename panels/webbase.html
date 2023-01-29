@@ -27,15 +27,16 @@
         <input type="hidden" name="status">
         <ul>
             <li><label>Name</label><input type="text" name="name" placeholder="Name" title="Name" required></li>
-            <li><label>Slug</label><input type="text" name="slug" placeholder="Slug" title="Slug" required></li>
+            <li><label>Slug</label><input type="text" name="slug" placeholder="Slug" title="Slug"></li>
 
-            <li><label>URL</label><input type="text" name="url" placeholder="URL" title="URL" required></li>
+            <li><label>URL</label><input type="url" name="url" placeholder="URL" title="URL" required></li>
             <li><label>Icon</label><input type="text" name="icon" placeholder="icon" title="Icon"></li>
             <li><label>Image</label><input type="text" name="image" placeholder="image" title="Image"></li>
 
             <li><label>Template</label><input type="text" name="template" placeholder="Template" title="Template"
                     required></li>
-            <li><input type="text" name="visible"></li>
+            <li><label></label><input type="text" name="visible" placeholder="callback():Boolean"
+                    title="Programmatic visibility"></li>
 
             <li><label>Main page</label><input type="node" name="mainpage" placeholder="mainpage" title="Main page"
                     readonly></li>
@@ -77,7 +78,7 @@
                     <option value="arealinks">Area links</option>
                     <option value="indexedlinks">Indexed links</option>
                     <option value="breadcrumb">Breadcrumb</option>
-                    <option value="cliccableimage">Cliccable image</option>
+                    <option value="imagemap">Image map</option>
                     <option value="group">Group</option>
                     <option value="shortcut">Shortcut</option>
                     <option value="clientsidecode">Client side code</option>

@@ -91,6 +91,9 @@ const stwStudio = {
         }
     },
     submitForm: event => {
+        if (!event.target.form.reportValidity())
+            return;
+
         let data = {};
         for (let input of event.target.form)
             if (!input.hasAttribute('disabled'))
