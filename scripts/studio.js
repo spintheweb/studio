@@ -179,7 +179,7 @@ const stwStudio = {
                         if (subpath) {
                             let ul = document.querySelector(`[data-id="${subpath}"]`).parentElement.closest('ul');
                             for (var depth = -1; ul; ul = ul.parentElement.closest('ul'), ++depth);
-                            document.querySelector(`[data-id="${subpath}"]`).insertAdjacentHTML('afterend', stwStudio.renderTree(json, depth));
+                            document.querySelector(`[data-id="${subpath}"]`).insertAdjacentHTML('afterend', stwStudio.renderTree(json, depth, true));
                             document.querySelector(`[data-id="${subpath}"]`).remove();
                             document.querySelector(`[data-id="${subpath}"]>div`).click();
                         } else {
@@ -243,7 +243,7 @@ const stwStudio = {
                 break;
         }
     },
-    renderTree: (node, depth = 0) => {
+    renderTree: (node, depth = 0, show = false) => {
         // [TODO] Remember open nodes
         let html = '';
 
@@ -258,6 +258,8 @@ const stwStudio = {
             if (node.children && node.children.length) {
                 if (!depth)
                     html = `<li ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div tabindex="0" role="link"><span></span><span>${name}</span><span>${node.status || ''}</span></div><ul>`;
+                else if (show)
+                    show = false, html = `<li ${cssClass} ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div tabindex="0" role="link"><span>${'&emsp;'.repeat(depth - 1)}<i class="fa fa-fw fa-angle-down"></i></span><span>${name}</span><span>${node.status}</span></div><ul>`;
                 else
                     html = `<li ${cssClass} ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div tabindex="0" role="link"><span>${'&emsp;'.repeat(depth - 1)}<i class="fa fa-fw fa-angle-right"></i></span><span>${name}</span><span>${node.status}</span></div><ul style="display:none">`;
                 for (let child of node.children)
@@ -320,9 +322,9 @@ const stwStudio = {
                                 .then(parentNode => {
                                     let ul = parent.closest('ul');
                                     for (var depth = -1; ul; ul = ul.parentElement.closest('ul'), ++depth);
-                                    parent.innerHTML = stwStudio.renderTree(parentNode, depth);
-                                    if (parent.querySelector('div .fa-angle-right'))
-                                        parent.querySelector('div .fa-angle-right').click();
+
+                                    parent.insertAdjacentHTML('afterend', stwStudio.renderTree(parentNode, depth, true));
+                                    parent.remove();
                                 })
                                 .then(() => {
                                     document.querySelector(`[data-id="${node._id}"]>div`).click();
@@ -424,8 +426,12 @@ const stwStudio = {
                         stwStudio.submitForm({ target: { form: event.currentTarget.querySelector('form') } });
                     }
                     break;
+
                 case 'clone':
                     // [TODO] Deep clone node
+                    break;
+                case 'expand':
+                    document.getElementById('properties').classList.toggle('stwFullScreen');
                     break;
             }
         }

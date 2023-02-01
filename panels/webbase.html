@@ -17,7 +17,7 @@
         <span>
             <i class="fa-regular fa-fw fa-clone" title="Clone" data-action="clone"></i>
             <i class="fa-regular fa-fw fa-trash-can" title="Trash" data-action="trash"></i>
-            <i class="fa-solid fa-fw fa-expand" title="Expand (F2)" data-action="Expand"></i>
+            <i class="fa-solid fa-fw fa-expand" title="Expand (F2)" data-action="expand"></i>
         </span>
     </h1>
     <form class="stwHideLabels" onchange="stwStudio.submitForm(event)">
@@ -38,8 +38,10 @@
             <li><label></label><input type="text" name="visible" placeholder="callback():Boolean"
                     title="Programmatic visibility"></li>
 
-            <li><label>Main page</label><input type="node" name="mainpage" placeholder="mainpage" title="Main page"
-                    readonly></li>
+            <li><label>Main page</label><div style="display: flex; align-items: center;">
+                <input type="node" name="mainpage" placeholder="mainpage" title="Main page" readonly>
+                <i class="fa fa-fw fa-bars" style="margin-left: 0.25em; cursor: pointer;"></i>
+            </div></li>
 
             <li><label>Default language</label><select name="lang" title="Default language">
                     <option value="en">English</option>
@@ -84,14 +86,12 @@
                     <option value="clientsidecode">Client side code</option>
                     <option value="serversidecode">Server side code</option>
                 </select></li>
-            <li><label>Data source</label>
-                <select name="dsn" title="Datasource">
+            <li><label>Data source</label><select name="dsn" title="Datasource">
                     <option></option>
                     <option value="webbase">Webbase</option>
-                </select>
-                <textarea name="query" placeholder="Query" title="Query"></textarea>
-                <input type="text" name="parameters" placeholder="key=value" title="Parameters">
-            </li>
+                </select></li>
+            <li><textarea name="query" placeholder="Query" title="Query"></textarea>
+                <input type="text" name="parameters" placeholder="key=value" title="Parameters"></li>
             <li><label>Layout</label><textarea name="layout" placeholder="Layout" title="Layout"></textarea></li>
         </ul>
     </form>

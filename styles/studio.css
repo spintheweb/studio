@@ -11,7 +11,8 @@
 
 .stwDark,
 .stwDark .stwPanel,
-.stwDark .stwTabs {
+.stwDark .stwTabs,
+.stwDark .stwFullScreen {
     color: white;
     background-color: rgb(62, 62, 62);
     color-scheme: dark;
@@ -19,7 +20,8 @@
 
 .stwLight,
 .stwLight .stwPanel,
-.stwLight .stwTabs {
+.stwLight .stwTabs,
+.stwLight .stwFullScreen {
     color: black;
     background-color: rgb(243, 243, 243);
     color-scheme: light;
@@ -69,6 +71,12 @@ body {
     display: grid;
     grid-template-columns: auto auto 1fr;
     grid-template-rows: auto 2em;
+}
+
+.stwFullScreen {
+    position: absolute;
+    z-index: 10;
+    top: 0; bottom: 0; left: 0; right: 0;
 }
 
 .stwLoading {
