@@ -19,7 +19,7 @@ const stwStudio = {
         if (!document.querySelector('.stwPanels i[selected]'))
             document.querySelector('.stwPanels>i').click();
         document.querySelectorAll('.fa-angle-right').forEach(i => {
-            i.parentElement.nextElementSibling.style.display = 'none';
+            i.closest('div').nextElementSibling.style.display = 'none';
         });
 
         document.querySelectorAll('input[list]').forEach(dataListInput => {
@@ -50,6 +50,8 @@ const stwStudio = {
             document.querySelector(':root').style.setProperty('--hideLabels', event.target.value === 'true' ? 'none' : 'inherit');
     },
     keydown: event => {
+        console.log(event.key);
+
         if (document.activeElement.className === 'ace_text-input' && event.key == 's' && event.ctrlKey) {
             event.stopPropagation();
             event.preventDefault();
@@ -65,8 +67,14 @@ const stwStudio = {
                     console.log(err);
                 });
         }
-        if (event.key == 'e' && event.ctrlKey)
-            alert('[TODO] Expand properties');
+        if (event.key == 'e' && event.ctrlKey && document.getElementById('properties')) {
+            document.querySelector('#properties i[data-action="expand"]').click();
+            event.preventDefault();
+        }
+        if (event.key == 'Delete' && event.ctrlKey && document.getElementById('properties')) {
+            document.querySelector('#properties i[data-action="trash"]').click();
+            event.preventDefault();
+        }
     },
     click: event => {
         let target = event.target;

@@ -155,7 +155,7 @@ body {
     padding: 0.25em;
     display: grid;
     gap: 0.5em;
-    grid-template-columns: repeat(3, min-content) 1fr;
+    grid-template-columns: repeat(4, min-content) 1fr;
 }
 
 .stwBrowsebar i:hover,
