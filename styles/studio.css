@@ -2,7 +2,9 @@
     font-family: sans-serif;
     font-size: 10pt;
 
-    --specialColor: rgb(255, 0, 76);
+    --special: 255, 0, 76;
+    --specialColor: rgb(var(--special));
+    --specialHover: rgba(var(--special), 0.6);
     --light: rgba(127, 127, 127, 0.4);
     --padding: 0.5em;
     --input-height: 1.5em;
@@ -41,12 +43,16 @@ form.stwHideLabels label {
     display: var(--hideLabels);
 }
 
-[tabindex]:hover,
 .stwTabLabel[selected],
 li[selected]>div,
 i[selected] {
     color: white;
     background-color: var(--specialColor);
+}
+
+[tabindex]:hover {
+    color: white;
+    background-color: var(--specialHover);
 }
 
 textarea {

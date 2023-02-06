@@ -44,14 +44,13 @@ const stwStudio = {
             document.querySelectorAll('.ace_editor').forEach(ace => {
                 ace.editor.setTheme(event.target.value == 'stwDark' ? 'ace/theme/tomorrow_night' : '');
             });
-        } else if (event.target.name === 'specialColor')
-            document.querySelector(':root').style.setProperty('--specialColor', event.target.value);
-        else if (event.target.name === 'hideLabels')
+        } else if (event.target.name === 'specialColor') {
+            let color = parseInt(event.target.value.replace('#', ''), 16);
+            document.querySelector(':root').style.setProperty('--special', `${color >> 16 & 255},${color >> 8 & 255},${color & 255}`);
+        } else if (event.target.name === 'hideLabels')
             document.querySelector(':root').style.setProperty('--hideLabels', event.target.value === 'true' ? 'none' : 'inherit');
     },
     keydown: event => {
-        console.log(event.key);
-
         if (document.activeElement.className === 'ace_text-input' && event.key == 's' && event.ctrlKey) {
             event.stopPropagation();
             event.preventDefault();
@@ -250,6 +249,11 @@ const stwStudio = {
                         console.log(err);
                     });
                 break;
+            case '/panels/settings.html':
+                let color = '#';
+                document.querySelector(':root').style.getPropertyValue('--special').split(',').forEach(byte => color += parseInt(byte).toString(16));
+                document.getElementById('specialColor').value = color;
+                break;
         }
     },
     renderTree: (node, depth = 0, show = false) => {
@@ -277,7 +281,7 @@ const stwStudio = {
             } else
                 html = `<li ${cssClass} ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div tabindex="0" role="link"><span>${'&emsp;'.repeat(depth)}&nbsp;</span><span>${name}</span><span>${node.status || ''}</span></div>`;
         }
-        return `${html}</li>`;
+        return `${html || '<li>Nothing found'}</li>`;
     },
     managePanels: event => {
         let target = event.target;
@@ -383,7 +387,19 @@ const stwStudio = {
         }
     },
     manageSearch: event => {
-
+        let form = event.target.form;
+        fetch(`/api/wbdl/search/${stwStudio.settings.lang}/${form.search.value}`)
+            .then(res => {
+                if (res.ok)
+                    return res.json();
+            })
+            .then(json => {
+                document.getElementById('search').lastElementChild.remove();
+                document.getElementById('search').insertAdjacentHTML('beforeend', `<ul>${stwStudio.renderTree(json)}</ul>`);
+            })
+            .catch(err => {
+                console.log(err);
+            });
     },
     manageGroups: event => {
         let target = event.target.closest('h1') || (event.target.closest('ul') ? event.currentTarget.querySelector('ul') : event.target);

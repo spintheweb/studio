@@ -57,6 +57,21 @@ export default function api(app) {
     };
     WBDL.createIndex(WBDL);
 
+    app.get('/api/wbdl/search/:lang/:text', (req, res) => {
+        let found = [];
+        WBDL.index.forEach(obj => {
+            let search = {
+                name: obj.name,
+                keywords: obj.keywords,
+                description: obj.description,
+                layout: obj.layout
+            };
+            if (JSON.stringify(search).search(req.params.text) != -1)
+                found.push({ _id: obj._id, name: obj.name, type: obj.type });
+        });
+        res.json({ children: found });
+    });
+
     app.get('/api/wbdl/datasources/:name?', (req, res) => {
         res.json({}); // [TODO]
     });
@@ -156,7 +171,7 @@ export default function api(app) {
     app.get('/api/fs(/:path)?', async (req, res) => {
         res.json(await getDir(req.params.path, (await git().status()).files));
     });
-    
+
     app.post('/api/fs(/*)', (req, res) => {
         fs.writeFile(path.join(__dirname, req.params[1]), req.body, err => {
             if (err)
