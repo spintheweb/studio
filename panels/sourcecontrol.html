@@ -1,10 +1,10 @@
-<div class="stwForm stwTree" id="sourcecontrol" onclick="stwStudio.manageFiles(event)">
+<article class="stwForm" id="sourcecontrol" onclick="stwStudio.manageFiles(event)">
     <h1><i class="fa fa-fw fa-nothing"></i> source control
         <span>
             <i class="fa fa-fw fa-arrow-rotate-right" title="Refresh" data-action="refresh"></i>
         </span>
     </h1>
-    <form name="commit">
+    <form>
         <ul>
             <li><input type="text" name="message" placeholder="Message"></li>
             <li><button name="commit">Commit</button></li>
@@ -14,8 +14,8 @@
         <option value="git/commit/sync">Commit & Sync</option-->
         </ul>
     </form>
-    <div class="stwLoading">
-        <i class="fa fa-sync fa-spin fa-2x"></i>
-    </div>
-</div>
+</article>
+<article class="stwLoading">
+    <i class="fa fa-sync fa-spin fa-2x"></i>
+</article>
 <div>&nbsp;</div>

@@ -1,9 +1,9 @@
 const stwStudio = {
     visibilityEnum: {
-        'LV': '<i class="fa-solid fa-fw fa-square-check" title="Local visibility"></i>',
-        'LI': '<i class="fa-solid fa-fw fa-square" title="Local invisibility"></i>',
-        'IV': '<i class="fa-regular fa-fw fa-square-check" title="Inherited visibility"></i>',
-        'II': '<i class="fa-regular fa-fw fa-square" title="Inherited invisibility"></i>'
+        'LV': '<i class="fas fa-fw fa-square-check" title="Local visibility"></i>',
+        'LI': '<i class="fas fa-fw fa-square" title="Local invisibility"></i>',
+        'IV': '<i class="far fa-fw fa-square-check" title="Inherited visibility"></i>',
+        'II': '<i class="far fa-fw fa-square" title="Inherited invisibility"></i>'
     },
     setup: (settings = {}) => {
         if (window.getComputedStyle(document.body).getPropertyValue('color-scheme') === 'dark')
@@ -18,8 +18,8 @@ const stwStudio = {
 
         if (!document.querySelector('.stwPanels i[selected]'))
             document.querySelector('.stwPanels>i').click();
-        document.querySelectorAll('.fa-angle-right').forEach(i => {
-            i.closest('div').nextElementSibling.style.display = 'none';
+        document.querySelectorAll('h1 .fa-angle-right').forEach(i => {
+            i.closest('h1').nextElementSibling.style.display = 'none';
         });
 
         document.querySelectorAll('input[list]').forEach(dataListInput => {
@@ -139,12 +139,13 @@ const stwStudio = {
                 if (li) li.style.display = '';
             }
 
-            if (!data[input.name])
+            let obj = data[input.name];
+            if (!obj)
                 input.value = null;
-            else if (typeof data[input.name] === 'object')
-                input.value = data[input.name][stwStudio.settings.lang] || data[input.name][0] || null;
+            else if (typeof obj === 'object')
+                input.value = obj[stwStudio.settings.lang] || obj[Object.keys(obj)[0]] || null;
             else
-                input.value = data[input.name];
+                input.value = obj;
         }
         if (form.slug && form.slug.value === '')
             form.slug.value = form.name.value.toLowerCase().replace(/[^a-z]/g, '');
@@ -260,7 +261,7 @@ const stwStudio = {
                 html += stwStudio.renderTree(child, depth);
 
         } else {
-            let name = typeof (node.name) === 'string' ? node.name : node.name[stwStudio.settings.lang],
+            let name = typeof (node.name) === 'string' ? node.name : (node.name[stwStudio.settings.lang] || node.name[Object.keys(node.name)[0]]),
                 cssClass = node.status === 'T' ? 'class="stwT"' : '';
 
             if (node.children && node.children.length) {
@@ -343,7 +344,7 @@ const stwStudio = {
                 break;
             case 'UL':
                 let div = event.target.closest('div');
-                if (!div.parentElement.hasAttribute('selected') || !event.isTrusted) {
+                if (div && (!div.parentElement.hasAttribute('selected') || !event.isTrusted)) {
                     if (target.querySelector('li[selected]'))
                         target.querySelector('li[selected]').removeAttribute('selected');
                     div.parentElement.setAttribute('selected', '');
@@ -385,8 +386,36 @@ const stwStudio = {
 
     },
     manageGroups: event => {
-        let target = event.target;
+        let target = event.target.closest('h1') || (event.target.closest('ul') ? event.currentTarget.querySelector('ul') : event.target);
 
+        if (event.target.tagName === 'H1') {
+            event.preventDefault();
+            event.stopPropagation();
+            return;
+        }
+        switch (target.tagName) {
+            case 'H1':
+                if (event.target.dataset.action === 'refresh') {
+                    stwStudio.renderPanel('/panels/groups.html');
+
+                } else if (event.target.dataset.action === 'addGroup') {
+                    alert('add group');
+                }
+                break;
+            case 'UL':
+                // [TODO] Properties visible
+                let div = event.target.closest('div');
+                if (div && (!div.parentElement.hasAttribute('selected') || !event.isTrusted)) {
+                    if (target.querySelector('li[selected]'))
+                        target.querySelector('li[selected]').removeAttribute('selected');
+                    div.parentElement.setAttribute('selected', '');
+
+                    let properties = document.getElementById('properties');
+                    properties.querySelector('input[name]').value = div.children[1].innerText;
+                    properties.style.display = '';
+                }
+                break;
+        }
         /*
         if (target.classList.contains('fa-plus')) {
             let tr = `<li><i class="fa fa-fw fa-users"></i> New group</li>`;

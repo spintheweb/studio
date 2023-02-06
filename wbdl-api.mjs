@@ -20,14 +20,14 @@ export default function api(app) {
 
     // [TODO] fetch remote site webbase and index it
     let WBDL = {};
-    if (fs.existsSync(path.join(__dirname, 'dev/site.wbdl')))
-        WBDL = JSON.parse(fs.readFileSync(path.join(__dirname, 'dev/site.wbdl')));
+    if (fs.existsSync(path.join(__dirname, 'dev/site.json')))
+        WBDL = JSON.parse(fs.readFileSync(path.join(__dirname, 'dev/site.json')));
     else {
         if (!fs.existsSync('dev'))
             fs.mkdirSync('dev');
-        WBDL = JSON.parse(fs.readFileSync(path.join(__dirname, 'helloworld.wbdl')));
+        WBDL = createNode('en', 'site');
     }
-    WBDL.path = 'dev/site.wbdl';
+    WBDL.path = 'dev/site.json';
     WBDL.url = `${settings.protocol}://${settings.hostname}${settings.port ? ':' + settings.port : ''}`;
 
     WBDL.index = new Map();
@@ -46,7 +46,7 @@ export default function api(app) {
             return WBDL.index.get(key);
 
         return (function walk(slugs, node) {
-            node = node.children.find(child => child.slug[lang] === slugs.shift());
+            node = node.children.find(child => (child.slug[lang] || child.slug[WBDL.lang] || child.slug[0]) === slugs.shift());
             if (!node || !slugs.length) {
                 let clone = { ...node };
                 delete clone.children;
@@ -181,7 +181,7 @@ export default function api(app) {
         for (let file of files) {
             let ignore = await git().checkIgnore(path.join(dirpath, file));
 
-            if (ignore.length === 0 && file[0] !== '.' && !(dirpath === '.' && (file.endsWith('.json') || file.endsWith('.js')))) {
+            if (ignore.length === 0 && file[0] !== '.' && !(dirpath === '.' && (file.endsWith('.json') || file.endsWith('.js') || file.endsWith('.mjs')))) {
                 if (fs.lstatSync(path.join(dirpath, file)).isDirectory()) {
                     let status = gitStatus.find(element => element.path.startsWith(file + '/'));
                     dir.children.push({ name: file, type: 'dir', status: status ? '●' : '', children: (await getDir(path.join(dirpath, file), gitStatus)).children });
@@ -210,6 +210,19 @@ export default function api(app) {
         };
 
         switch (type) {
+            case 'site':
+                return {
+                    ...basenode,
+                    lang: lang,
+                    visibility: {
+                        guests: null,
+                        users: null,
+                        administrators: null,
+                        translators: null,
+                        developers: null,
+                        webmasters: null
+                    }
+                };
             case 'area':
                 return {
                     ...basenode,

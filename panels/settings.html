@@ -1,13 +1,16 @@
-<div class="stwTree" id="settings" onchange="stwStudio.manageSettings(event)">
+<article class="stwTree" id="settings" onchange="stwStudio.manageSettings(event)">
     <h1><i class="fa fa-fw fa-nothing"></i> settings</h1>
-</div>
-<div class="stwForm" onchange="stwStudio.manageSettings(event)">
-    <h1><i class="fa fa-fw fa-angle-right"></i> simulate active groups</h1>
-    <div class="stwLoading">
-        <i class="fa fa-sync fa-spin fa-2x"></i>
-    </div>
-</div>
-<div class="stwForm" onchange="stwStudio.manageSettings(event)">
+</article>
+<article class="stwTree" onchange="stwStudio.manageSettings(event)">
+    <h1><i class="fa fa-fw fa-angle-right"></i> emulate active groups</h1>
+    <header>
+        <ul>
+            <li><div><span></span><span>Enable</span><span><i class="fa fa-fw fa-toggle-off" onclick="this.className = this.classList.contains('fa-toggle-off') ? 'fa fa-fw fa-toggle-on' : 'fa -fa fa-toggle-off'"></i></span></div></li>
+        </ul>
+    </header>
+    <div></div>
+</article>
+<article class="stwForm" onchange="stwStudio.manageSettings(event)">
     <h1><i class="fa fa-fw fa-angle-right"></i> apparence</h1>
     <form>
         <ul>
@@ -22,5 +25,5 @@
             </select></label></li>
         </ul>
     </form>
-</div>
+</article>
 <div>&nbsp;</div>

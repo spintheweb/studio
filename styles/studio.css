@@ -73,6 +73,10 @@ body {
     grid-template-rows: auto 2em;
 }
 
+.fa-toggle-on {
+    color: var(--specialColor);
+}
+
 .stwFullScreen {
     position: absolute;
     z-index: 10;
@@ -96,6 +100,10 @@ body {
     padding: 0.5em 0.35em;
     cursor: pointer;
     font-size: 1.6em;
+}
+
+.stwPanel:empty {
+    width: 0px !important;
 }
 
 .stwPanel h1:not(:has(i.fa-nothing)) {
@@ -258,10 +266,15 @@ h1>span>i:hover {
     vertical-align: top;
 }
 
-
 .fa-angle-right,
 .fa-angle-down {
     cursor: pointer;
+}
+
+article:has(h1) {
+    display: grid;
+    grid-template-rows: 3em auto;
+    overflow: auto;
 }
 
 .stwTree ul {
@@ -272,11 +285,11 @@ h1>span>i:hover {
 }
 
 .stwTree li>div {
-    padding: 0.25em;
+    padding: 0 0.5em;
+    line-height: 1.75em;
 }
 
 .stwTree li>div>span:last-child {
-    padding-right: 0.25em;
     float: right;
 }
 
