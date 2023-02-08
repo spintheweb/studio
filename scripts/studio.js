@@ -81,6 +81,11 @@ const stwStudio = {
         if (!event.isTrusted && target.classList.contains('fa-angle-down'))
             return;
 
+        if (target.tagName === 'SPAN' && target.parentElement.id === 'searchMode') {
+            target.toggleAttribute('selected');
+            return;
+        }
+
         let parent = target.closest('h1') || target.closest('div');
 
         if (target.classList.contains('fa-angle-down')) {
@@ -281,7 +286,7 @@ const stwStudio = {
             } else
                 html = `<li ${cssClass} ${node._id ? `data-id="${node._id}" ` : ''}data-type="${node.type}"><div tabindex="0" role="link"><span>${'&emsp;'.repeat(depth)}&nbsp;</span><span>${name}</span><span>${node.status || ''}</span></div>`;
         }
-        return `${html || '<li>Nothing found'}</li>`;
+        return `${html || '<li data-type="nothing"><div><span></span><span>Empty</span><span></span></div>'}</li>`;
     },
     managePanels: event => {
         let target = event.target;
@@ -387,8 +392,17 @@ const stwStudio = {
         }
     },
     manageSearch: event => {
-        let form = event.target.form;
-        fetch(`/api/wbdl/search/${stwStudio.settings.lang}/${form.search.value}`)
+        let form = event.target.form, settings = form.querySelector('#searchMode');
+        fetch(`/api/wbdl/search/${stwStudio.settings.lang}`, {
+            method: 'POST',
+            body: JSON.stringify({ 
+                text: form.search.value, 
+                ignoreCase: settings.children[0].hasAttribute('selected'),
+                wholeWord: settings.children[1].hasAttribute('selected'),
+                regExp: settings.children[2].hasAttribute('selected')
+            }),
+            headers: { 'Content-type': 'application/json' }
+        })
             .then(res => {
                 if (res.ok)
                     return res.json();

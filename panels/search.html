@@ -1,11 +1,15 @@
-<article class="stwForm" id="search" onchange="stwStudio.manageSearch(event)">
-    <h1><i class="fa fa-fw fa-nothing"></i> search</h1>
-    <form name="search">
-        <ul>
-            <li><input type="search" name="search" placeholder="Search"></li>
-            <li><input type="replace" name="replace" placeholder="Replace"></li>
-        </ul>
-    </form>
+<article class="stwTree" id="search" onchange="stwStudio.manageSearch(event)">
+    <h1><i class="fa fa-fw fa-nothing"></i> search webbase</h1>
+    <header>
+        <article class="stwForm">
+            <form name="search">
+                <ul>
+                    <li><input type="text" name="search" placeholder="Search"><span id="searchMode"><span title="Ignore case">Aa</span><span title="Whole word">ab</span><span title="Regular expression">.*</span></span></li>
+                    <li><input type="text" name="replace" placeholder="Replace"></li>
+                </ul>
+            </form>
+        </article>
+    </header>
     <div></div>
 </article>
 <div>&nbsp;</div>

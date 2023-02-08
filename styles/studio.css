@@ -79,14 +79,17 @@ body {
     grid-template-rows: auto 2em;
 }
 
-.fa-toggle-on {
+.fa-toggle-on, .fas.fa-square-check, .fas.fa-square {
     color: var(--specialColor);
 }
 
 .stwFullScreen {
     position: absolute;
     z-index: 10;
-    top: 0; bottom: 0; left: 0; right: 0;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
 }
 
 .stwLoading {
@@ -120,7 +123,7 @@ body {
     font-size: 1.1em;
     font-variant: small-caps;
     font-weight: lighter;
-    padding: 0.5em;
+    padding: var(--padding);
     margin: 0;
 }
 
@@ -129,15 +132,16 @@ body {
 }
 
 .stwPanel {
+    position: relative;
     display: grid;
-    resize: horizontal;
-    overflow: hidden;
     grid-template-rows: 1fr auto auto;
     border-left: thin solid var(--light);
     border-right: thin solid var(--light);
 }
 
 .stwPanel:not(:empty) {
+    resize: horizontal;
+    overflow: hidden;
     min-width: 25em;
 }
 
@@ -277,10 +281,22 @@ h1>span>i:hover {
     cursor: pointer;
 }
 
-article:has(h1) {
+article {
     display: grid;
-    grid-template-rows: 3em auto;
+    grid-auto-rows: min-content;
     overflow: auto;
+}
+
+article:has(> :last-child:nth-child(2)) {
+    grid-template-rows: min-content auto;
+}
+
+article:has(> :last-child:nth-child(3)) {
+    grid-template-rows: min-content min-content auto;
+}
+
+article:has(> :last-child:nth-child(4)) {
+    grid-template-rows: min-content min-content auto min-content;
 }
 
 .stwTree ul {
@@ -303,8 +319,7 @@ article:has(h1) {
     overflow: auto;
 }
 
-ul.stwT li.stwT:not([selected])
-ul.stwT li:not(.stwT)>div {
+ul.stwT li.stwT:not([selected]) ul.stwT li:not(.stwT)>div {
     display: none;
 }
 
@@ -409,4 +424,22 @@ li[data-type=group]>div>span:nth-child(2)::before {
     background-color: var(--menu-background-color);
     color: var(--menu-color);
     opacity: 1;
+}
+
+#searchMode {
+    position: absolute;
+    right: var(--padding);
+    line-height: 1.5em;
+}
+#searchMode span {
+    display: inline-block;
+    width: 1.4em;
+    text-align: center;
+    padding: 0.25em;
+}
+#searchMode span[selected] {
+    color: var(--specialColor);
+}
+#searchMode span:hover {
+    background-color: var(--light);
 }

@@ -57,8 +57,11 @@ export default function api(app) {
     };
     WBDL.createIndex(WBDL);
 
-    app.get('/api/wbdl/search/:lang/:text', (req, res) => {
-        let found = [];
+    app.post('/api/wbdl/search/:lang', (req, res) => {
+        let found = [], 
+            pattern = new RegExp(`"\\w+?":".*?${req.body.text}.*?"`, 
+                (req.body.ignoreCase ? 'i' : ''));
+
         WBDL.index.forEach(obj => {
             let search = {
                 name: obj.name,
@@ -66,7 +69,7 @@ export default function api(app) {
                 description: obj.description,
                 layout: obj.layout
             };
-            if (JSON.stringify(search).search(req.params.text) != -1)
+            if (JSON.stringify(search).search(pattern) != -1)
                 found.push({ _id: obj._id, name: obj.name, type: obj.type });
         });
         res.json({ children: found });
