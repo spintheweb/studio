@@ -1,6 +1,6 @@
 # Spin the Web Studio&trade;
 
-Spin the Web Studio&trade; is a Spin the Web project for managing Spin the Web projects. In this context, a project may be web sites, portals, intranet, extranets, web apps or web services here collectively referred to as _webos_.
+Spin the Web Studio&trade; is a software for managing Spin the Web projects. In this context, a project may be web sites, portals, intranet, extranets, web apps or web services here collectively referred to as _webos_.
 
 The difference between a regular site and a webo is the presence of a *WBDL* file (Webbase Description Language) and, naturally, the webo is hosted in a server running a Web Spinner. The WBDL file describes the webo: its contents, routing, authorization and internationalization.
 
