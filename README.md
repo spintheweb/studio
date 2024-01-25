@@ -1,4 +1,4 @@
-# Spin the Web Studio
+# Spin the Web Studio&trade;
 
 Spin the Web Studio is a software for managing Spin the Web sites. In this context, sites may be web sites, portals, intranet, extranets, web apps or web services here collectively referred to as _webos_.
 
